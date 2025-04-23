@@ -2,7 +2,7 @@ import { auth } from '@/auth/better-auth'
 
 const cookiesMap = new Map<string, string>()
 
-export async function signedInAs(email: string, password: string) {
+export async function signedInAs(email: string, password = 'password') {
   if (cookiesMap.has(email)) {
     return { Cookie: cookiesMap.get(email) || '' }
   }

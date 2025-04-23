@@ -1,0 +1,58 @@
+---
+description: 
+globs: tests/**/*.test.ts
+alwaysApply: false
+---
+# Integration Testing Guide
+
+## Test File Organization
+- Tests are located in `tests/integration/{feature}/*.test.ts`
+- Group related endpoints under a single test file
+- Use descriptive `describe` blocks to group related test cases
+- Reference example: [tests/integration/tickets/my-tickets.test.ts](mdc:tests/integration/tickets/my-tickets.test.ts)
+
+## Authentication Testing
+- Use the `signedInAs` helper to handle authentication in tests:
+```typescript
+const headers = await signedInAs('user.email@tk.local')
+```
+- Every protected endpoint should include an unauthorized test case:
+```typescript
+it('should return 401 when not signed in', async () => {
+  const res = await app.request('/api/endpoint')
+  expect(res.status).toBe(401)
+})
+```
+
+## Test Coverage Patterns
+For each endpoint, test both happy and unhappy paths:
+
+1. Happy Path
+   - Test successful operation with valid input
+   - Only validate critical response fields, not every single field
+   - Use `expect.any()` for non-deterministic values (timestamps, auto-generated IDs)
+
+2. Unhappy Paths
+   - Authentication failures (401)
+   - Not found resources (404)
+   - Invalid input data (400)
+   - Test error response structure:
+   ```typescript
+   {
+     status: 'error',
+     message: string,
+     code: string
+   }
+   ```
+
+## Request Patterns
+For POST/PUT/PATCH requests:
+- Include required headers:
+```typescript
+headers: {
+  ...(await signedInAs('user@email.com')),
+  'Content-Type': 'application/json'
+}
+```
+- Structure nested data appropriately in request body
+- Use `JSON.stringify()` for request body
