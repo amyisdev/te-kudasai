@@ -1,0 +1,126 @@
+---
+description: 
+globs: src/**/*.routes.ts
+alwaysApply: false
+---
+# Route Handler Guide
+
+## Basic Structure
+Reference implementation: [src/tickets/tickets.routes.ts](mdc:src/tickets/tickets.routes.ts)
+
+```typescript
+const routes = new Hono()
+
+routes
+  .use('*', middleware)  // Apply middleware to all routes
+  .get('/path', handler) // Define routes
+  .post('/path', validator, handler)
+```
+
+## Route Handler Patterns
+
+### 1. GET List Handler
+```typescript
+.get('/', sValidator('query', paginationSchema), async (c) => {
+  const pagination = c.req.valid('query')
+  const { data, total } = await service.getList(pagination)
+  return c.json(paginatedResponse(data, { ...pagination, total }))
+})
+```
+
+### 2. GET Single Item Handler
+```typescript
+.get('/:id', sValidator('param', idSchema), async (c) => {
+  const id = c.req.valid('param').id
+  const item = await service.getById(id)
+  
+  if (!item) {
+    throw new NotFoundError('Item not found')
+  }
+  
+  return c.json(successResponse(item))
+})
+```
+
+### 3. POST Create Handler
+```typescript
+.post('/', sValidator('json', createSchema), async (c) => {
+  const data = c.req.valid('json')
+  
+  // Validate related resources if needed
+  if (needsExternalValidation) {
+    const resource = await validateResource(data)
+    if (!resource) {
+      throw new NotFoundError('Resource not found')
+    }
+  }
+  
+  const item = await service.create(data)
+  return c.json(successResponse(item))
+})
+```
+
+### 4. PATCH Update Handler
+```typescript
+.patch('/:id', sValidator('param', idSchema), sValidator('json', updateSchema), async (c) => {
+  const id = c.req.valid('param').id
+  const data = c.req.valid('json')
+
+  // Check existence first
+  const existing = await service.getById(id)
+  if (!existing) {
+    throw new NotFoundError('Item not found')
+  }
+
+  const updated = await service.update(id, data)
+  return c.json(successResponse(updated))
+})
+```
+
+### 5. DELETE Handler
+```typescript
+.delete('/:id', sValidator('param', idSchema), async (c) => {
+  const id = c.req.valid('param').id
+
+  // Check existence first
+  const existing = await service.getById(id)
+  if (!existing) {
+    throw new NotFoundError('Item not found')
+  }
+
+  const deleted = await service.delete(id)
+  return c.json(successResponse(deleted))
+})
+```
+
+## Best Practices
+
+1. **Input Validation**
+   - Use `sValidator` from `@hono/standard-validator` for query, params, and body validation
+   - Define validation schemas in a separate file (e.g., `*.validation.ts`)
+   - Validate all inputs before processing
+
+2. **Response Format**
+   - Use `successResponse` for single items
+   - Use `paginatedResponse` for lists
+   - Let error middleware handle errors (throw instead of returning)
+
+3. **Error Handling**
+   - Throw specific error types (`NotFoundError`, `BadRequestError`, etc.)
+   - Include meaningful error messages and codes
+   - Let the error middleware handle the response format
+
+4. **Middleware Usage**
+   - Group routes with common middleware using `.use('*', middleware)`
+   - Apply authentication/authorization before route handlers
+   - Chain multiple middleware when needed
+
+5. **Service Layer**
+   - Keep route handlers thin
+   - Move business logic to service layer
+   - DO NOT put database operations in route handlers
+
+6. **Resource Validation**
+   - Check existence of referenced resources
+   - Validate user permissions if needed
+   - Check resource ownership when applicable

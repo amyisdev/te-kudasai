@@ -11,23 +11,34 @@ describe('List my tickets', () => {
     expect(res.status).toBe(200)
 
     const body = await res.json()
-    expect(body).toEqual([
-      {
-        id: 3,
-        reporterId: 'jane.doe',
-        assigneeId: null,
-        title: 'Ticket 3',
-        description: 'Ticket 3 description',
-        status: 'open',
-        formId: 'sample-form',
-        form: {
-          NAME: 'Jane Doe',
-          EMAIL: 'jane.doe@tk.local',
+    expect(body).toEqual({
+      status: 'success',
+      data: [
+        {
+          id: 3,
+          reporterId: 'jane.doe',
+          assigneeId: null,
+          title: 'Ticket 3',
+          description: 'Ticket 3 description',
+          status: 'open',
+          formId: 'sample-form',
+          form: {
+            NAME: 'Jane Doe',
+            EMAIL: 'jane.doe@tk.local',
+          },
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
         },
-        createdAt: expect.any(String),
-        updatedAt: expect.any(String),
+      ],
+      meta: {
+        pagination: {
+          page: 1,
+          limit: 10,
+          total: 1,
+          totalPages: 1,
+        },
       },
-    ])
+    })
   })
 
   it('should return 401 when not signed in', async () => {
@@ -59,19 +70,22 @@ describe('Create ticket', () => {
 
     const body = await res.json()
     expect(body).toEqual({
-      id: expect.any(Number),
-      reporterId: 'jane.doe',
-      assigneeId: null,
-      title: 'New Ticket',
-      description: 'New ticket description',
-      status: 'open',
-      formId: 'sample-form',
-      form: {
-        NAME: 'Jane Doe',
-        EMAIL: 'jane.doe@tk.local',
+      status: 'success',
+      data: {
+        id: expect.any(Number),
+        reporterId: 'jane.doe',
+        assigneeId: null,
+        title: 'New Ticket',
+        description: 'New ticket description',
+        status: 'open',
+        formId: 'sample-form',
+        form: {
+          NAME: 'Jane Doe',
+          EMAIL: 'jane.doe@tk.local',
+        },
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
       },
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String),
     })
   })
 
@@ -134,19 +148,8 @@ describe('Get ticket by id', () => {
 
     const body = await res.json()
     expect(body).toEqual({
-      id: 3,
-      reporterId: 'jane.doe',
-      assigneeId: null,
-      title: 'Ticket 3',
-      description: 'Ticket 3 description',
-      status: 'open',
-      formId: 'sample-form',
-      form: {
-        NAME: 'Jane Doe',
-        EMAIL: 'jane.doe@tk.local',
-      },
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String),
+      status: 'success',
+      data: expect.objectContaining({ id: 3 }),
     })
   })
 

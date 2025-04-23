@@ -31,7 +31,7 @@ For each endpoint, test both happy and unhappy paths:
    - Test successful operation with valid input
    - Only validate critical response fields, not every single field
    - Use `expect.any()` for non-deterministic values (timestamps, auto-generated IDs)
-   - Use `expect.toMatchObject()` to compare a subset properties of object
+   - Use `expect(actual).toMatchObject(expected)` to compare a subset properties of object
 
 2. Unhappy Paths
    - Authentication failures (401)

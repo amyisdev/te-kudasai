@@ -1,9 +1,18 @@
+import { withPagination } from '@/db/builder-utils'
 import { db } from '@/db/client'
-import { and, desc, eq } from 'drizzle-orm'
+import type { PaginationParams } from '@/shared/validation'
+import { and, count, desc, eq } from 'drizzle-orm'
 import { ticketsTable } from './tickets.schema'
 
-export async function getMyTickets(userId: string) {
-  return await db.select().from(ticketsTable).where(eq(ticketsTable.reporterId, userId)).orderBy(desc(ticketsTable.id))
+export async function getMyTickets(userId: string, { page = 1, limit = 10 }: PaginationParams) {
+  const [{ total }] = await db.select({ total: count() }).from(ticketsTable).where(eq(ticketsTable.reporterId, userId))
+
+  const query = db.select().from(ticketsTable).where(eq(ticketsTable.reporterId, userId))
+
+  return {
+    data: await withPagination(query.$dynamic(), desc(ticketsTable.id), page, limit),
+    total,
+  }
 }
 
 export async function getMyTicketById(userId: string, ticketId: number) {
@@ -21,8 +30,15 @@ export async function createTicket(data: typeof ticketsTable.$inferInsert) {
   return ticket
 }
 
-export async function getAllTickets() {
-  return await db.select().from(ticketsTable).orderBy(desc(ticketsTable.id))
+export async function getAllTickets({ page = 1, limit = 10 }: PaginationParams) {
+  const [{ total }] = await db.select({ total: count() }).from(ticketsTable)
+
+  const query = db.select().from(ticketsTable).orderBy(desc(ticketsTable.id))
+
+  return {
+    data: await withPagination(query.$dynamic(), desc(ticketsTable.id), page, limit),
+    total,
+  }
 }
 
 export async function getTicketById(ticketId: number) {

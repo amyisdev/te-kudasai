@@ -1,6 +1,8 @@
 import { adminOnly, needAuth } from '@/auth/auth.middleware'
 import forms from '@/forms'
 import { BadRequestError, NotFoundError } from '@/shared/app-error'
+import { paginatedResponse, successResponse } from '@/shared/response'
+import { paginationSchema } from '@/shared/validation'
 import { sValidator } from '@hono/standard-validator'
 import { Hono } from 'hono'
 import * as service from './tickets.service'
@@ -13,17 +15,21 @@ ticketsRoutes
 
   .get('/forms', (c) => {
     return c.json(
-      Object.values(forms).map((form) => ({
-        id: form.id,
-        name: form.name,
-      })),
+      successResponse(
+        Object.values(forms).map((form) => ({
+          id: form.id,
+          name: form.name,
+        })),
+      ),
     )
   })
 
-  .get('/my', async (c) => {
+  .get('/my', sValidator('query', paginationSchema), async (c) => {
     const userId = c.var.user.id
-    const tickets = await service.getMyTickets(userId)
-    return c.json(tickets)
+    const pagination = c.req.valid('query')
+
+    const { data, total } = await service.getMyTickets(userId, pagination)
+    return c.json(paginatedResponse(data, { ...pagination, total }))
   })
 
   .post('/my', sValidator('json', createTicketSchema), async (c) => {
@@ -46,7 +52,7 @@ ticketsRoutes
       form: validatedForm.data,
     })
 
-    return c.json(ticket)
+    return c.json(successResponse(ticket))
   })
 
   .get('/my/:id', sValidator('param', ticketIdSchema), async (c) => {
@@ -57,14 +63,15 @@ ticketsRoutes
       throw new NotFoundError('Ticket not found')
     }
 
-    return c.json(ticket)
+    return c.json(successResponse(ticket))
   })
 
   .use('*', adminOnly)
 
-  .get('/', async (c) => {
-    const tickets = await service.getAllTickets()
-    return c.json(tickets)
+  .get('/', sValidator('query', paginationSchema), async (c) => {
+    const pagination = c.req.valid('query')
+    const { data, total } = await service.getAllTickets(pagination)
+    return c.json(paginatedResponse(data, { ...pagination, total }))
   })
 
   .get('/:id', sValidator('param', ticketIdSchema), async (c) => {
@@ -73,7 +80,7 @@ ticketsRoutes
     if (!ticket) {
       throw new NotFoundError('Ticket not found')
     }
-    return c.json(ticket)
+    return c.json(successResponse(ticket))
   })
 
   .patch('/:id', sValidator('param', ticketIdSchema), sValidator('json', updateTicketSchema), async (c) => {
@@ -86,7 +93,7 @@ ticketsRoutes
     }
 
     const ticket = await service.updateTicket(ticketId, data)
-    return c.json(ticket)
+    return c.json(successResponse(ticket))
   })
 
   .delete('/:id', sValidator('param', ticketIdSchema), async (c) => {
@@ -98,7 +105,7 @@ ticketsRoutes
     }
 
     const ticket = await service.deleteTicket(ticketId)
-    return c.json(ticket)
+    return c.json(successResponse(ticket))
   })
 
 export default ticketsRoutes

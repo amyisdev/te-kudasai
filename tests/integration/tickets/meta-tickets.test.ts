@@ -10,11 +10,14 @@ describe('List available forms', () => {
 
     expect(res.status).toBe(200)
     const body = await res.json()
-    expect(body).toEqual([
-      {
-        id: 'sample-form',
-        name: 'Sample Form',
-      },
-    ])
+    expect(body).toEqual({
+      status: 'success',
+      data: [
+        {
+          id: 'sample-form',
+          name: 'Sample Form',
+        },
+      ],
+    })
   })
 })

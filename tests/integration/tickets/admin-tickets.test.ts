@@ -11,9 +11,19 @@ describe('Admin: List all tickets', () => {
 
     expect(res.status).toBe(200)
     const body = await res.json()
-    expect(body).toHaveLength(3)
+    expect(body).toMatchObject({
+      status: 'success',
+      meta: {
+        pagination: {
+          page: 1,
+          limit: 10,
+          total: expect.any(Number),
+          totalPages: expect.any(Number),
+        },
+      },
+    })
 
-    expect(body[0]).toEqual({
+    expect(body.data[0]).toMatchObject({
       id: 3,
       reporterId: 'jane.doe',
       assigneeId: null,
@@ -52,7 +62,10 @@ describe('Admin: Get ticket by id', () => {
 
     expect(res.status).toBe(200)
     const body = await res.json()
-    expect(body).toMatchObject({ id: 1 })
+    expect(body).toEqual({
+      status: 'success',
+      data: expect.objectContaining({ id: 1 }),
+    })
   })
 
   it('should return 404 when ticket not found', async () => {
@@ -67,6 +80,14 @@ describe('Admin: Get ticket by id', () => {
       message: 'Ticket not found',
       code: 'NOT_FOUND',
     })
+  })
+
+  it('should return 404 when not admin', async () => {
+    const res = await app.request('/api/tickets/1', {
+      headers: await signedInAs('jane.doe@tk.local'),
+    })
+
+    expect(res.status).toBe(404)
   })
 })
 
@@ -86,10 +107,14 @@ describe('Admin: Update ticket', () => {
 
     expect(res.status).toBe(200)
     const body = await res.json()
-    expect(body).toMatchObject({
-      id: 1,
-      status: TICKET_STATUS.IN_PROGRESS,
-      assigneeId: 'admin',
+    expect(body).toEqual({
+      status: 'success',
+      data: expect.objectContaining({
+        id: 1,
+        status: TICKET_STATUS.IN_PROGRESS,
+        assigneeId: 'admin',
+        updatedAt: expect.any(String),
+      }),
     })
   })
 
@@ -122,6 +147,21 @@ describe('Admin: Update ticket', () => {
 
     expect(res.status).toBe(400)
   })
+
+  it('should return 404 when not admin', async () => {
+    const res = await app.request('/api/tickets/1', {
+      method: 'PATCH',
+      headers: {
+        ...(await signedInAs('jane.doe@tk.local')),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        status: TICKET_STATUS.IN_PROGRESS,
+      }),
+    })
+
+    expect(res.status).toBe(404)
+  })
 })
 
 describe('Admin: Delete ticket', () => {
@@ -133,13 +173,27 @@ describe('Admin: Delete ticket', () => {
 
     expect(res.status).toBe(200)
     const body = await res.json()
-    expect(body).toMatchObject({ id: 2 })
+    expect(body).toEqual({
+      status: 'success',
+      data: expect.objectContaining({
+        id: 2,
+      }),
+    })
   })
 
   it('should return 404 when ticket not found', async () => {
     const res = await app.request('/api/tickets/999', {
       method: 'DELETE',
       headers: await signedInAs('admin@tk.local'),
+    })
+
+    expect(res.status).toBe(404)
+  })
+
+  it('should return 404 when not admin', async () => {
+    const res = await app.request('/api/tickets/1', {
+      method: 'DELETE',
+      headers: await signedInAs('jane.doe@tk.local'),
     })
 
     expect(res.status).toBe(404)
