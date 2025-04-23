@@ -1,5 +1,5 @@
-import { AppError, errorHandler, NotFoundError, UnauthorizedError, BadRequestError } from '@/shared/app-error'
-import { describe, expect, it, vi, beforeEach } from 'vitest'
+import { AppError, BadRequestError, NotFoundError, UnauthorizedError, errorHandler } from '@/shared/app-error'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('Error Handler', () => {
   const mockResponse = vi.fn()

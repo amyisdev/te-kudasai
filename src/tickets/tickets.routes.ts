@@ -1,11 +1,10 @@
 import { adminOnly, needAuth } from '@/auth/auth.middleware'
-import { Hono } from 'hono'
-import { sValidator } from '@hono/standard-validator'
-import * as service from './tickets.service'
-import { createTicketSchema, ticketIdSchema } from './tickets.validation'
-import { BadRequestError, NotFoundError } from '@/shared/app-error'
 import forms from '@/forms'
-import z from 'zod'
+import { BadRequestError, NotFoundError } from '@/shared/app-error'
+import { sValidator } from '@hono/standard-validator'
+import { Hono } from 'hono'
+import * as service from './tickets.service'
+import { createTicketSchema, ticketIdSchema, updateTicketSchema } from './tickets.validation'
 
 const ticketsRoutes = new Hono()
 
@@ -63,20 +62,43 @@ ticketsRoutes
 
   .use('*', adminOnly)
 
-  .get('/', (c) => {
-    return c.json({ message: 'TODO: get all tickets' })
+  .get('/', async (c) => {
+    const tickets = await service.getAllTickets()
+    return c.json(tickets)
   })
 
-  .get('/:id', (c) => {
-    return c.json({ message: 'TODO: get ticket by id' })
+  .get('/:id', sValidator('param', ticketIdSchema), async (c) => {
+    const ticketId = c.req.valid('param').id
+    const ticket = await service.getTicketById(ticketId)
+    if (!ticket) {
+      throw new NotFoundError('Ticket not found')
+    }
+    return c.json(ticket)
   })
 
-  .patch('/:id', (c) => {
-    return c.json({ message: 'TODO: update ticket by id' })
+  .patch('/:id', sValidator('param', ticketIdSchema), sValidator('json', updateTicketSchema), async (c) => {
+    const ticketId = c.req.valid('param').id
+    const data = c.req.valid('json')
+
+    const existingTicket = await service.getTicketById(ticketId)
+    if (!existingTicket) {
+      throw new NotFoundError('Ticket not found')
+    }
+
+    const ticket = await service.updateTicket(ticketId, data)
+    return c.json(ticket)
   })
 
-  .delete('/:id', (c) => {
-    return c.json({ message: 'TODO: delete ticket by id' })
+  .delete('/:id', sValidator('param', ticketIdSchema), async (c) => {
+    const ticketId = c.req.valid('param').id
+
+    const existingTicket = await service.getTicketById(ticketId)
+    if (!existingTicket) {
+      throw new NotFoundError('Ticket not found')
+    }
+
+    const ticket = await service.deleteTicket(ticketId)
+    return c.json(ticket)
   })
 
 export default ticketsRoutes

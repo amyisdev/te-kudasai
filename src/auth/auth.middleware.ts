@@ -1,6 +1,6 @@
+import { auth } from '@/auth/better-auth'
 import { NotFoundError, UnauthorizedError } from '@/shared/app-error'
 import { createMiddleware } from 'hono/factory'
-import { auth } from '@/auth/better-auth'
 
 export const needAuth = createMiddleware<{
   Variables: {
