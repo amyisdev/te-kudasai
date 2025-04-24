@@ -15,12 +15,8 @@ export function RootLayout() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-40 border-b bg-background">
-        <div className="container flex h-16 items-center justify-between py-4">
-          <MainNav />
-        </div>
-      </header>
+    <div className="relative flex min-h-screen flex-col">
+      <MainNav user={session.user} />
       <main className="flex-1 py-6 px-4 md:px-6 lg:px-8">
         <Outlet />
       </main>

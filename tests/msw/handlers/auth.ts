@@ -11,11 +11,11 @@ export const unauthenticated = http.get('http://localhost:3000/api/auth/get-sess
 })
 
 export const authenticated = http.get('http://localhost:3000/api/auth/get-session', () => {
-  return HttpResponse.json({ data: { user, session: { id: '1' } } })
+  return HttpResponse.json({ user, session: { id: '1' } })
 })
 
 export const loginSuccess = http.post('http://localhost:3000/api/auth/sign-in/email', () => {
-  return HttpResponse.json({ data: { user } })
+  return HttpResponse.json({ user })
 })
 
 export const loginFailed = http.post('http://localhost:3000/api/auth/sign-in/email', () => {
@@ -29,7 +29,7 @@ export const loginFailed = http.post('http://localhost:3000/api/auth/sign-in/ema
 })
 
 export const signUpSuccess = http.post('http://localhost:3000/api/auth/sign-up/email', () => {
-  return HttpResponse.json({ data: { user } })
+  return HttpResponse.json({ user })
 })
 
 export const signUpFailed = http.post('http://localhost:3000/api/auth/sign-up/email', () => {

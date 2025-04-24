@@ -6,7 +6,7 @@ import { authenticated, signUpFailed, unauthenticated } from '../../msw/handlers
 import { server } from '../../msw/server'
 import { renderWithRouter } from '../../utils'
 
-describe('Home', () => {
+describe('Signup', () => {
   beforeEach(() => {
     server.use(unauthenticated)
   })
@@ -21,7 +21,7 @@ describe('Home', () => {
     expect(screen.getByRole('button', { name: 'Sign up' })).toBeInTheDocument()
   })
 
-  it('can signup and redirect to home', async () => {
+  it('can signup and redirect to my tickets', async () => {
     const { user } = renderWithRouter(<App />, { route: '/auth/signup' })
 
     await waitFor(() => {
@@ -41,7 +41,7 @@ describe('Home', () => {
     await user.click(signUpButton)
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual('Home')
+      expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual('My Tickets')
     })
   })
 
@@ -63,13 +63,13 @@ describe('Home', () => {
     expect(screen.getByText('User already exists')).toBeInTheDocument()
   })
 
-  it('redirects to home when user is authenticated', async () => {
+  it('redirects to my tickets when user is authenticated', async () => {
     server.use(authenticated)
 
     renderWithRouter(<App />, { route: '/auth/signup' })
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual('Home')
+      expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual('My Tickets')
     })
   })
 })

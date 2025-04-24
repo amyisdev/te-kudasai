@@ -6,7 +6,7 @@ import { authenticated, loginFailed, unauthenticated } from '../../msw/handlers/
 import { server } from '../../msw/server'
 import { renderWithRouter } from '../../utils'
 
-describe('Home', () => {
+describe('Login', () => {
   beforeEach(() => {
     server.use(unauthenticated)
   })
@@ -20,7 +20,7 @@ describe('Home', () => {
     expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
   })
 
-  it('can login and redirect to home', async () => {
+  it('can login and redirect to my tickets', async () => {
     const { user } = renderWithRouter(<App />)
 
     await waitFor(() => {
@@ -38,7 +38,7 @@ describe('Home', () => {
     await user.click(loginButton)
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual('Home')
+      expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual('My Tickets')
     })
   })
 
@@ -58,13 +58,13 @@ describe('Home', () => {
     expect(screen.getByText('Invalid email or password')).toBeInTheDocument()
   })
 
-  it('redirects to home when user is authenticated', async () => {
+  it('redirects to my tickets when user is authenticated', async () => {
     server.use(authenticated)
 
     renderWithRouter(<App />)
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual('Home')
+      expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual('My Tickets')
     })
   })
 })
