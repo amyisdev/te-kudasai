@@ -4,7 +4,7 @@ import { signedInAs } from 'tests/utils/auth'
 import { describe, expect, it } from 'vitest'
 
 describe('Admin: List all tickets', () => {
-  it('should list all tickets', async () => {
+  it('should list all tickets ordered descending by id', async () => {
     const res = await app.request('/api/tickets', {
       headers: await signedInAs('admin@tk.local'),
     })
@@ -24,11 +24,11 @@ describe('Admin: List all tickets', () => {
     })
 
     expect(body.data[0]).toMatchObject({
-      id: 3,
+      id: 5,
       reporterId: 'jane.doe',
       assigneeId: null,
-      title: 'Ticket 3',
-      description: 'Ticket 3 description',
+      title: 'Feature Request',
+      description: 'New feature for better UX',
       status: 'open',
       formId: 'sample-form',
       form: {
@@ -51,6 +51,51 @@ describe('Admin: List all tickets', () => {
   it('should return 401 when not signed in', async () => {
     const res = await app.request('/api/tickets')
     expect(res.status).toBe(401)
+  })
+
+  it('should filter tickets by search term', async () => {
+    const res = await app.request('/api/tickets?search=Feature', {
+      headers: await signedInAs('admin@tk.local'),
+    })
+
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.data).toHaveLength(2)
+    expect(body.data[0].title).toContain('Feature')
+    expect(body.meta.pagination.total).toBe(2)
+  })
+
+  it('should filter tickets by status', async () => {
+    const res = await app.request('/api/tickets?status=open', {
+      headers: await signedInAs('admin@tk.local'),
+    })
+
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.data).toHaveLength(2)
+    expect(body.data[0].status).toBe('open')
+    expect(body.meta.pagination.total).toBe(2)
+  })
+
+  it('should return 400 when invalid status', async () => {
+    const res = await app.request('/api/tickets?status=invalid', {
+      headers: await signedInAs('admin@tk.local'),
+    })
+
+    expect(res.status).toBe(400)
+  })
+
+  it('should filter tickets by both search and status', async () => {
+    const res = await app.request('/api/tickets?search=Feature&status=open', {
+      headers: await signedInAs('admin@tk.local'),
+    })
+
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.data).toHaveLength(1)
+    expect(body.data[0].title).toContain('Feature')
+    expect(body.data[0].status).toBe('open')
+    expect(body.meta.pagination.total).toBe(1)
   })
 })
 

@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { TICKET_STATUS } from './tickets.schema'
+import { paginationSchema } from '@/shared/validation'
 
 export const ticketIdSchema = z.object({
   id: z.coerce.number(),
@@ -16,13 +17,13 @@ export const updateTicketSchema = z.object({
   assigneeId: z.string().optional(),
   title: z.string().optional(),
   description: z.string().optional(),
+  status: z.enum(Object.values(TICKET_STATUS)).optional(),
+})
+
+export const listTicketsSchema = paginationSchema.extend({
+  search: z.string().optional(),
   status: z
-    .enum([
-      TICKET_STATUS.OPEN,
-      TICKET_STATUS.IN_PROGRESS,
-      TICKET_STATUS.PENDING,
-      TICKET_STATUS.CLOSED,
-      TICKET_STATUS.RESOLVED,
-    ])
-    .optional(),
+    .enum([...Object.values(TICKET_STATUS), 'all'])
+    .optional()
+    .transform((val) => (val === 'all' ? undefined : val)),
 })

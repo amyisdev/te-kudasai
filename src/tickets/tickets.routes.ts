@@ -2,11 +2,10 @@ import { adminOnly, needAuth } from '@/auth/auth.middleware'
 import forms from '@/forms'
 import { BadRequestError, NotFoundError } from '@/shared/app-error'
 import { paginatedResponse, successResponse } from '@/shared/response'
-import { paginationSchema } from '@/shared/validation'
 import { sValidator } from '@hono/standard-validator'
 import { Hono } from 'hono'
 import * as service from './tickets.service'
-import { createTicketSchema, ticketIdSchema, updateTicketSchema } from './tickets.validation'
+import { createTicketSchema, listTicketsSchema, ticketIdSchema, updateTicketSchema } from './tickets.validation'
 
 const ticketsRoutes = new Hono()
 
@@ -24,7 +23,7 @@ ticketsRoutes
     )
   })
 
-  .get('/my', sValidator('query', paginationSchema), async (c) => {
+  .get('/my', sValidator('query', listTicketsSchema), async (c) => {
     const userId = c.var.user.id
     const pagination = c.req.valid('query')
 
@@ -68,7 +67,7 @@ ticketsRoutes
 
   .use('*', adminOnly)
 
-  .get('/', sValidator('query', paginationSchema), async (c) => {
+  .get('/', sValidator('query', listTicketsSchema), async (c) => {
     const pagination = c.req.valid('query')
     const { data, total } = await service.getAllTickets(pagination)
     return c.json(paginatedResponse(data, { ...pagination, total }))

@@ -5,11 +5,9 @@ const rawTickets = [
     id: 1,
     reporterId: 'john.doe',
     assigneeId: null,
-
-    title: 'Ticket 1',
-    description: 'Ticket 1 description',
+    title: 'Billing Issue',
+    description: 'I am unable to pay for my subscription',
     status: 'open',
-
     formId: 'sample-form',
     form: '{ "NAME": "John Doe", "EMAIL": "john.doe@tk.local" }',
   },
@@ -17,23 +15,39 @@ const rawTickets = [
     id: 2,
     reporterId: 'john.doe',
     assigneeId: 'admin',
-
-    title: 'Ticket 2',
-    description: 'Ticket 2 description',
+    title: 'Account Suspension',
+    description: 'For some reason my account was suspended',
     status: 'resolved',
-
     formId: 'sample-form',
     form: '{ "NAME": "John Doe", "EMAIL": "john.doe@tk.local" }',
   },
   {
     id: 3,
+    reporterId: 'john.doe',
+    assigneeId: 'admin',
+    title: 'Feature Request',
+    description: 'I want to add a new feature to the app',
+    status: 'in_progress',
+    formId: 'sample-form',
+    form: '{ "NAME": "John Doe", "EMAIL": "john.doe@tk.local" }',
+  },
+  {
+    id: 4,
+    reporterId: 'jane.doe',
+    assigneeId: 'admin',
+    title: 'Bug Report',
+    description: 'Critical bug in production',
+    status: 'in_progress',
+    formId: 'sample-form',
+    form: '{ "NAME": "Jane Doe", "EMAIL": "jane.doe@tk.local" }',
+  },
+  {
+    id: 5,
     reporterId: 'jane.doe',
     assigneeId: null,
-
-    title: 'Ticket 3',
-    description: 'Ticket 3 description',
+    title: 'Feature Request',
+    description: 'New feature for better UX',
     status: 'open',
-
     formId: 'sample-form',
     form: '{ "NAME": "Jane Doe", "EMAIL": "jane.doe@tk.local" }',
   },
@@ -63,5 +77,5 @@ export async function seed() {
     ${rawTickets.map((ticket) => `(${ticket.id}, '${ticket.reporterId}', ${ticket.assigneeId ? `'${ticket.assigneeId}'` : 'NULL'}, '${ticket.title}', '${ticket.description}', '${ticket.status}', '${ticket.formId}', '${ticket.form}')`).join(',')};
   `)
 
-  await db.execute('ALTER SEQUENCE tickets_id_seq RESTART WITH 4')
+  await db.execute('ALTER SEQUENCE tickets_id_seq RESTART WITH 6')
 }
