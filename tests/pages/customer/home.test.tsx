@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest'
-import { renderWithRouter } from '../utils'
-import Home from '@/pages/home'
+import Home from '@/pages/customer/home'
 import { screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+import { renderWithRouter } from '../../utils'
 
 describe('Home', () => {
   it('should render', () => {
