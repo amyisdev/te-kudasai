@@ -25,7 +25,7 @@ describe('List my tickets', () => {
       data: expect.arrayContaining([
         expect.objectContaining({
           id: 4,
-          title: 'Bug Report',
+          summary: 'Bug Report',
         }),
       ]),
     })
@@ -44,7 +44,7 @@ describe('List my tickets', () => {
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(body.data).toHaveLength(1)
-    expect(body.data[0].title).toContain('Feature')
+    expect(body.data[0].summary).toContain('Feature')
     expect(body.meta.pagination.total).toBe(1)
   })
 
@@ -89,8 +89,7 @@ describe('Create ticket', () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        title: 'New Ticket',
-        description: 'New ticket description',
+        summary: 'New Ticket',
         formId: 'sample-form',
         form: {
           NAME: 'Jane Doe',
@@ -108,8 +107,7 @@ describe('Create ticket', () => {
         id: expect.any(Number),
         reporterId: 'jane.doe',
         assigneeId: null,
-        title: 'New Ticket',
-        description: 'New ticket description',
+        summary: 'New Ticket',
         status: 'open',
         formId: 'sample-form',
         form: {
@@ -131,8 +129,7 @@ describe('Create ticket', () => {
       },
       body: JSON.stringify({
         formId: 'non-existent-form',
-        title: 'New Ticket',
-        description: 'New ticket description',
+        summary: 'New Ticket',
         form: {
           NAME: 'Jane Doe',
           EMAIL: 'jane.doe@tk.local',
@@ -158,8 +155,7 @@ describe('Create ticket', () => {
       },
       body: JSON.stringify({
         formId: 'sample-form',
-        title: 'New Ticket',
-        description: 'New ticket description',
+        summary: 'New Ticket',
         form: {
           NAME: 'Jane Doe',
           // missing EMAIL

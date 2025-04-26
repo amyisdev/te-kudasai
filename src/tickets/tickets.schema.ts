@@ -19,8 +19,7 @@ export const ticketsTable = pgTable(
       .references(() => users.id),
     assigneeId: text('assignee_id').references(() => users.id),
 
-    title: text('title').notNull(),
-    description: text('description').notNull(),
+    summary: text('summary').notNull(),
     status: text('status')
       .notNull()
       .$default(() => TICKET_STATUS.OPEN),

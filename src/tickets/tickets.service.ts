@@ -11,7 +11,7 @@ export async function getMyTickets(
   const conditions = [eq(ticketsTable.reporterId, userId)]
 
   if (search) {
-    conditions.push(ilike(ticketsTable.title, `%${search}%`))
+    conditions.push(ilike(ticketsTable.summary, `%${search}%`))
   }
 
   if (status) {
@@ -58,7 +58,7 @@ export async function getAllTickets({
   const conditions: SQL[] = []
 
   if (search) {
-    conditions.push(ilike(ticketsTable.title, `%${search}%`))
+    conditions.push(ilike(ticketsTable.summary, `%${search}%`))
   }
 
   if (status) {

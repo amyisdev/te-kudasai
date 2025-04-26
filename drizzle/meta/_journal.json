@@ -15,6 +15,13 @@
       "when": 1745338048797,
       "tag": "0001_unique_ma_gnuci",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1745657958000,
+      "tag": "0002_bitter_silk_fever",
+      "breakpoints": true
     }
   ]
 }

@@ -8,15 +8,14 @@ export const ticketIdSchema = z.object({
 
 export const createTicketSchema = z.object({
   formId: z.string(),
-  title: z.string(),
-  description: z.string(),
+  summary: z.string(),
   form: z.unknown(), // Will be validated by the form validator
 })
 
 export const updateTicketSchema = z.object({
   assigneeId: z.string().optional(),
-  title: z.string().optional(),
-  description: z.string().optional(),
+  summary: z.string().optional(),
+  form: z.unknown().optional(),
   status: z.enum(Object.values(TICKET_STATUS)).optional(),
 })
 
