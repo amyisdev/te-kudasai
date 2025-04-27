@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router'
 import { PageLoader } from '../loader'
 import { MainNav } from '../main-nav'
 
-export function RootLayout() {
+export default function RootLayout({ agentOnly }: { agentOnly?: boolean }) {
   const { data: session, isPending } = authClient.useSession()
 
   if (isPending) {
@@ -12,6 +12,10 @@ export function RootLayout() {
 
   if (!session) {
     return <Navigate to="/auth/login" />
+  }
+
+  if (agentOnly && session.user.role !== 'admin') {
+    return <Navigate to="/" />
   }
 
   return (

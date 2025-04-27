@@ -101,4 +101,14 @@ export const getTicketNotFound = http.get('http://localhost:3000/api/tickets/my/
   )
 })
 
-export const handlers = [listMyTickets, createTicket, getTicket]
+export const listAllTickets = http.get('http://localhost:3000/api/tickets', ({ request }) => {
+  const { filteredTickets, totalPages, page } = filterTickets(request.url)
+
+  return HttpResponse.json({
+    data: filteredTickets,
+    status: 'success',
+    meta: { pagination: { total: filteredTickets.length, page, limit: perPage, totalPages } },
+  })
+})
+
+export const handlers = [listMyTickets, createTicket, getTicket, listAllTickets]

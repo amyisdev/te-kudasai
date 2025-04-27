@@ -2,7 +2,7 @@ import { authClient } from '@/lib/auth-client'
 import { Navigate, Outlet } from 'react-router'
 import { PageLoader } from '../loader'
 
-export function AuthLayout() {
+export default function AuthLayout() {
   const { data: session, isPending } = authClient.useSession()
 
   if (isPending) {

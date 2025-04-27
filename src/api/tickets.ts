@@ -10,18 +10,22 @@ interface TicketFilters {
   page: number
 }
 
-export const useTickets = (filters: TicketFilters) => {
+export const useTickets = (filters: TicketFilters, isAgent = false) => {
+  const path = isAgent ? '/api/tickets' : '/api/tickets/my'
+
   return useQuery({
-    queryKey: ['tickets', filters],
-    queryFn: () => $fetch<PaginatedResponse<Ticket[]>>('/api/tickets/my', { params: filters }),
+    queryKey: [path, filters],
+    queryFn: () => $fetch<PaginatedResponse<Ticket[]>>(path, { params: filters }),
     placeholderData: keepPreviousData,
   })
 }
 
-export const useTicket = (id: string) => {
+export const useTicket = (id: string, isAgent = false) => {
+  const path = isAgent ? '/api/tickets' : '/api/tickets/my'
+
   return useQuery({
-    queryKey: ['ticket', id],
-    queryFn: () => $fetch<SuccessResponse<Ticket>>(`/api/tickets/my/${id}`),
+    queryKey: [path, id],
+    queryFn: () => $fetch<SuccessResponse<Ticket>>(`${path}/${id}`),
     enabled: !!id,
   })
 }

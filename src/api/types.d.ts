@@ -28,3 +28,9 @@ export interface Ticket {
   formId: string
   form: Record<string, string>
 }
+
+export interface TicketFilters {
+  search: string
+  status: string
+  page: number
+}

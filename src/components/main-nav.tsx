@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useTheme } from '@/hooks/use-theme'
-import type { User } from 'better-auth/types'
+import type { authClient } from '@/lib/auth-client'
 import { LogOut, Moon, Sun, UserIcon } from 'lucide-react'
 import { Link, useLocation } from 'react-router'
 
@@ -25,10 +25,16 @@ const navItems = {
       description: 'Create a new support ticket',
     },
   ],
-  agent: [],
-} as const
+  agent: [
+    {
+      title: 'All Tickets',
+      href: '/agent',
+      description: 'View all tickets and status',
+    },
+  ],
+}
 
-export function MainNav({ user }: { user: User }) {
+export function MainNav({ user }: { user: typeof authClient.$Infer.Session.user }) {
   const { pathname } = useLocation()
   const userType = pathname.includes('agent') ? 'agent' : 'customer'
   const { theme, setTheme } = useTheme()

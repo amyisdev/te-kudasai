@@ -82,7 +82,7 @@ function LoginForm() {
   )
 }
 
-export function Login() {
+export default function Login() {
   return (
     <div className="flex flex-col gap-6">
       <Card>
