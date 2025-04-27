@@ -1,4 +1,3 @@
-import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 import { Route, Routes } from 'react-router'
 import { AuthLayout } from './components/layouts/auth-layout'
 import { RootLayout } from './components/layouts/root-layout'
@@ -13,22 +12,20 @@ import ViewTicket from './pages/customer/view-ticket'
 function App() {
   return (
     <ThemeProvider storageKey="ui-theme">
-      <NuqsAdapter>
-        <Routes>
-          <Route path="auth" element={<AuthLayout />}>
-            <Route path="login" element={<Login />} />
-            <Route path="signup" element={<SignUp />} />
-          </Route>
+      <Routes>
+        <Route path="auth" element={<AuthLayout />}>
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<SignUp />} />
+        </Route>
 
-          <Route path="/" element={<RootLayout />}>
-            <Route index element={<MyTickets />} />
-            <Route path="new-ticket" element={<NewTicket />} />
-            <Route path="tickets/:id" element={<ViewTicket />} />
-          </Route>
-        </Routes>
+        <Route path="/" element={<RootLayout />}>
+          <Route index element={<MyTickets />} />
+          <Route path="new-ticket" element={<NewTicket />} />
+          <Route path="tickets/:id" element={<ViewTicket />} />
+        </Route>
+      </Routes>
 
-        <Toaster />
-      </NuqsAdapter>
+      <Toaster />
     </ThemeProvider>
   )
 }

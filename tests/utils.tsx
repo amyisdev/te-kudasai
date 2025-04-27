@@ -3,6 +3,7 @@ import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type React from 'react'
 import { BrowserRouter } from 'react-router'
+import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,9 +15,11 @@ const queryClient = new QueryClient({
 
 function wrapper({ children }: { children: React.ReactNode }) {
   return (
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </BrowserRouter>
+    <NuqsTestingAdapter>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      </BrowserRouter>
+    </NuqsTestingAdapter>
   )
 }
 
