@@ -42,7 +42,7 @@ describe('New Ticket', () => {
     await user.click(submitButton)
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1, name: 'View Ticket 1' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 1, name: 'View Ticket' })).toBeInTheDocument()
     })
   })
 

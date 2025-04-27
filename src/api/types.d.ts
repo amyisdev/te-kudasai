@@ -26,5 +26,5 @@ export interface Ticket {
   updatedAt: string
 
   formId: string
-  form: unknown
+  form: Record<string, string>
 }

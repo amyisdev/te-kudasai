@@ -18,6 +18,14 @@ export const useTickets = (filters: TicketFilters) => {
   })
 }
 
+export const useTicket = (id: string) => {
+  return useQuery({
+    queryKey: ['ticket', id],
+    queryFn: () => $fetch<SuccessResponse<Ticket>>(`/api/tickets/my/${id}`),
+    enabled: !!id,
+  })
+}
+
 interface CreateTicket {
   summary: string
   formId: string

@@ -83,4 +83,22 @@ export const createTicketFailed = http.post('http://localhost:3000/api/tickets/m
   )
 })
 
-export const handlers = [listMyTickets, createTicket]
+export const getTicket = http.get('http://localhost:3000/api/tickets/my/:id', ({ params }) => {
+  return HttpResponse.json({
+    data: ticketFactory({ id: Number(params.id) }),
+    status: 'success',
+  })
+})
+
+export const getTicketNotFound = http.get('http://localhost:3000/api/tickets/my/:id', () => {
+  return HttpResponse.json(
+    {
+      code: 'NOT_FOUND',
+      message: 'Ticket not found',
+      status: 'error',
+    },
+    { status: 404 },
+  )
+})
+
+export const handlers = [listMyTickets, createTicket, getTicket]

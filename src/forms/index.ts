@@ -3,4 +3,4 @@ import type { FormType } from './types'
 
 export default {
   'sample-form': sampleForm,
-} satisfies Record<string, FormType>
+} as Record<string, FormType>
