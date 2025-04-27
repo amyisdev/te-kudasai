@@ -5,6 +5,9 @@ import { ThemeProvider } from './hooks/use-theme'
 import { Login } from './pages/auth/login'
 import { SignUp } from './pages/auth/signup'
 import MyTickets from './pages/customer/my-tickets'
+import NewTicket from './pages/customer/new-ticket'
+import ViewTicket from './pages/customer/view-ticket'
+import { Toaster } from './components/ui/sonner'
 
 function App() {
   return (
@@ -17,8 +20,12 @@ function App() {
 
         <Route path="/" element={<RootLayout />}>
           <Route index element={<MyTickets />} />
+          <Route path="new-ticket" element={<NewTicket />} />
+          <Route path="tickets/:id" element={<ViewTicket />} />
         </Route>
       </Routes>
+
+      <Toaster />
     </ThemeProvider>
   )
 }

@@ -46,7 +46,7 @@ function TicketList({ filters, onPageChange }: { filters: TicketFilters; onPageC
                 <div className="flex-1 min-w-0 pr-4">
                   <div className="flex items-start justify-between sm:items-center gap-2">
                     <h3 className="font-medium text-sm sm:text-base truncate group-hover:text-primary transition-colors">
-                      {ticket.title}
+                      {ticket.summary}
                     </h3>
                   </div>
                   <div className="flex flex-row items-center gap-1 sm:gap-3 text-xs text-muted-foreground mt-1">

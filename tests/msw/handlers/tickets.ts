@@ -4,8 +4,7 @@ import { http, HttpResponse } from 'msw'
 function ticketFactory(overrides: Partial<Ticket> = {}): Ticket {
   return {
     id: 1,
-    title: 'Test Ticket',
-    description: 'Test Description',
+    summary: 'Test Ticket',
     status: 'open',
     createdAt: '2021-01-01',
     updatedAt: '2021-01-01',
@@ -18,11 +17,11 @@ function ticketFactory(overrides: Partial<Ticket> = {}): Ticket {
 }
 
 const tickets = [
-  ticketFactory({ id: 5, title: 'Bug Report', status: 'open' }),
-  ticketFactory({ id: 4, title: 'Feature Request', status: 'in_progress' }),
-  ticketFactory({ id: 3, title: 'Support Request', status: 'resolved' }),
-  ticketFactory({ id: 2, title: 'Ticket 4', status: 'resolved' }),
-  ticketFactory({ id: 1, title: 'Ticket 5', status: 'resolved' }),
+  ticketFactory({ id: 5, summary: 'Bug Report', status: 'open' }),
+  ticketFactory({ id: 4, summary: 'Feature Request', status: 'in_progress' }),
+  ticketFactory({ id: 3, summary: 'Support Request', status: 'resolved' }),
+  ticketFactory({ id: 2, summary: 'Ticket 4', status: 'resolved' }),
+  ticketFactory({ id: 1, summary: 'Ticket 5', status: 'resolved' }),
 ]
 
 const perPage = 3
@@ -36,7 +35,7 @@ const filterTickets = (urlStr: string) => {
   const filteredTickets = tickets.slice((page - 1) * perPage, page * perPage).filter((ticket) => {
     let matches = true
     if (status && status !== 'all') matches = ticket.status === status
-    if (matches && search) matches = ticket.title.includes(search)
+    if (matches && search) matches = ticket.summary.includes(search)
     return matches
   })
 
@@ -63,4 +62,25 @@ export const listMyTicketsEmpty = http.get('http://localhost:3000/api/tickets/my
   })
 })
 
-export const handlers = [listMyTickets]
+export const createTicket = http.post('http://localhost:3000/api/tickets/my', ({ request }) => {
+  return HttpResponse.json({
+    data: {
+      ...ticketFactory(),
+      ...request.json(),
+    },
+    status: 'success',
+  })
+})
+
+export const createTicketFailed = http.post('http://localhost:3000/api/tickets/my', () => {
+  return HttpResponse.json(
+    {
+      code: 'INVALID_FORM_DATA',
+      message: 'Invalid form data',
+      status: 'error',
+    },
+    { status: 400 },
+  )
+})
+
+export const handlers = [listMyTickets, createTicket]

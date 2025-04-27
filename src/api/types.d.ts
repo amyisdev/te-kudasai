@@ -1,6 +1,6 @@
 export interface SuccessResponse<T> {
   status: 'success'
-  data: T[]
+  data: T
 }
 
 export interface PaginatedResponse<T> extends SuccessResponse<T> {
@@ -20,8 +20,7 @@ export interface Ticket {
   id: number
   reporterId: string
   assigneeId: string | null
-  title: string
-  description: string
+  summary: string
   status: TicketStatus
   createdAt: string
   updatedAt: string
