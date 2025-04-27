@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
 import type React from 'react'
 import { BrowserRouter } from 'react-router'
-import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
 
 const queryClient = new QueryClient({
   defaultOptions: {

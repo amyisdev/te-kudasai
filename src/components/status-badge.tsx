@@ -10,5 +10,9 @@ const statusColors = {
 } as const
 
 export function StatusBadge({ status }: { status: TicketStatus }) {
-  return <Badge className='text-xs' variant={statusColors[status]}>{status}</Badge>
+  return (
+    <Badge className="text-xs" variant={statusColors[status]}>
+      {status}
+    </Badge>
+  )
 }

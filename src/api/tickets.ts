@@ -1,8 +1,8 @@
 import { type UseMutationOptions, keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
+import { FetchError } from 'ofetch'
 import { toast } from 'sonner'
 import { $fetch } from './client'
 import type { PaginatedResponse, SuccessResponse, Ticket } from './types'
-import { FetchError } from 'ofetch'
 
 interface TicketFilters {
   search: string
