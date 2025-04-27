@@ -1,5 +1,7 @@
+import { db } from '@/db/client'
 import app from '@/index'
-import { TICKET_STATUS } from '@/tickets/tickets.schema'
+import { TICKET_STATUS, ticketsTable } from '@/tickets/tickets.schema'
+import { eq } from 'drizzle-orm'
 import { signedInAs } from 'tests/utils/auth'
 import { describe, expect, it } from 'vitest'
 
@@ -26,7 +28,6 @@ describe('Admin: List all tickets', () => {
     expect(body.data[0]).toMatchObject({
       id: 5,
       reporterId: 'jane.doe',
-      assigneeId: null,
       summary: 'Feature Request',
       status: 'open',
       formId: 'sample-form',
@@ -132,7 +133,7 @@ describe('Admin: Update ticket', () => {
       },
       body: JSON.stringify({
         status: TICKET_STATUS.IN_PROGRESS,
-        assigneeId: 'admin',
+        assigneeId: 'admin', // Should not update this field
       }),
     })
 
@@ -143,7 +144,7 @@ describe('Admin: Update ticket', () => {
       data: expect.objectContaining({
         id: 1,
         status: TICKET_STATUS.IN_PROGRESS,
-        assigneeId: 'admin',
+        assigneeId: null,
         updatedAt: expect.any(String),
       }),
     })
@@ -195,6 +196,22 @@ describe('Admin: Delete ticket', () => {
         id: 2,
       }),
     })
+
+    // Cleanup: readd the ticket
+    await db.insert(ticketsTable).values({
+      id: 2,
+      reporterId: 'john.doe',
+      assigneeId: 'admin',
+      summary: 'Account Suspension',
+      status: TICKET_STATUS.RESOLVED,
+      formId: 'sample-form',
+      form: {
+        NAME: 'John Doe',
+        EMAIL: 'john.doe@tk.local',
+      },
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
   })
 
   it('should return 404 when ticket not found', async () => {
@@ -203,6 +220,60 @@ describe('Admin: Delete ticket', () => {
       headers: await signedInAs('admin@tk.local'),
     })
 
+    expect(res.status).toBe(404)
+  })
+})
+
+describe('Admin: Toggle ticket assignment', () => {
+  it('should assign the ticket to the current admin if unassigned', async () => {
+    // Use unassigned ticket id
+    const resAssign = await app.request('/api/tickets/1/assign-toggle', {
+      method: 'POST',
+      headers: await signedInAs('admin@tk.local'),
+    })
+
+    expect(resAssign.status).toBe(200)
+
+    const bodyAssign = await resAssign.json()
+    expect(bodyAssign).toMatchObject({
+      status: 'success',
+      data: expect.objectContaining({
+        id: 1,
+        assigneeId: 'admin',
+      }),
+    })
+
+    // Cleanup
+    await db.update(ticketsTable).set({ assigneeId: null }).where(eq(ticketsTable.id, 1))
+  })
+
+  it('should unassign the ticket if already assigned', async () => {
+    // Use assigned ticket id
+    const resUnassign = await app.request('/api/tickets/2/assign-toggle', {
+      method: 'POST',
+      headers: await signedInAs('admin@tk.local'),
+    })
+
+    expect(resUnassign.status).toBe(200)
+
+    const bodyUnassign = await resUnassign.json()
+    expect(bodyUnassign).toMatchObject({
+      status: 'success',
+      data: expect.objectContaining({
+        id: 2,
+        assigneeId: null,
+      }),
+    })
+
+    // Cleanup
+    await db.update(ticketsTable).set({ assigneeId: 'admin' }).where(eq(ticketsTable.id, 2))
+  })
+
+  it('should return 404 when ticket not found', async () => {
+    const res = await app.request('/api/tickets/9999/assign-toggle', {
+      method: 'POST',
+      headers: await signedInAs('admin@tk.local'),
+    })
     expect(res.status).toBe(404)
   })
 })

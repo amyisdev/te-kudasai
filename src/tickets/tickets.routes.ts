@@ -107,4 +107,18 @@ ticketsRoutes
     return c.json(successResponse(ticket))
   })
 
+  .post('/:id/assign-toggle', sValidator('param', ticketIdSchema), async (c) => {
+    const ticketId = c.req.valid('param').id
+    const ticket = await service.getTicketById(ticketId)
+    if (!ticket) {
+      throw new NotFoundError('Ticket not found')
+    }
+
+    const updatedTicket = await service.updateTicket(ticketId, {
+      assigneeId: ticket.assigneeId ? null : c.var.user.id,
+    })
+
+    return c.json(successResponse(updatedTicket))
+  })
+
 export default ticketsRoutes

@@ -13,7 +13,6 @@ export const createTicketSchema = z.object({
 })
 
 export const updateTicketSchema = z.object({
-  assigneeId: z.string().optional(),
   summary: z.string().optional(),
   form: z.unknown().optional(),
   status: z.enum(Object.values(TICKET_STATUS)).optional(),
