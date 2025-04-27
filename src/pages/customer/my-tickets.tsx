@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import useDebounce from '@/hooks/use-debounce'
 import { formatDistanceToNow } from 'date-fns'
 import { Filter, FolderSearch, Search } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { parseAsInteger, useQueryState } from 'nuqs'
+import { useCallback, useEffect } from 'react'
 import { Link } from 'react-router'
 
 interface TicketFilters {
@@ -145,11 +146,18 @@ function TicketFilters({
 }
 
 export default function CustomerDashboard() {
-  const [filters, setFilters] = useState<TicketFilters>({
-    search: '',
-    status: 'all',
-    page: 1,
-  })
+  const [search, setSearch] = useQueryState('search', { defaultValue: '' })
+  const [status, setStatus] = useQueryState('status', { defaultValue: 'all' })
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))
+
+  const setFilters = useCallback(
+    (filters: TicketFilters) => {
+      setSearch(filters.search)
+      setStatus(filters.status)
+      setPage(filters.page)
+    },
+    [setSearch, setStatus, setPage],
+  )
 
   return (
     <div className="py-6 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -160,8 +168,8 @@ export default function CustomerDashboard() {
         </Link>
       </div>
 
-      <TicketFilters filters={filters} onFiltersChange={setFilters} />
-      <TicketList filters={filters} onPageChange={(page) => setFilters((prev) => ({ ...prev, page }))} />
+      <TicketFilters filters={{ search, status, page }} onFiltersChange={setFilters} />
+      <TicketList filters={{ search, status, page }} onPageChange={(page) => setPage(page)} />
     </div>
   )
 }
