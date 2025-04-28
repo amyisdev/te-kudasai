@@ -1,7 +1,7 @@
 import App from '@/App'
 import { screen, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { getTicketNotFound } from '../../msw/handlers/tickets'
+import { getMyTicketNotFound } from '../../msw/handlers/tickets'
 import { server } from '../../msw/server'
 import { renderWithRouter } from '../../utils'
 
@@ -17,7 +17,7 @@ describe('View Ticket', () => {
   })
 
   it('should render empty state when ticket is not found', async () => {
-    server.use(getTicketNotFound)
+    server.use(getMyTicketNotFound)
 
     renderWithRouter(<App />, { route: '/tickets/2' })
 

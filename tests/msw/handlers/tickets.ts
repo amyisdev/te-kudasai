@@ -62,11 +62,12 @@ export const listMyTicketsEmpty = http.get('http://localhost:3000/api/tickets/my
   })
 })
 
-export const createTicket = http.post('http://localhost:3000/api/tickets/my', ({ request }) => {
+export const createTicket = http.post('http://localhost:3000/api/tickets/my', async ({ request }) => {
+  const body = (await request.json()) as Partial<Ticket>
   return HttpResponse.json({
     data: {
       ...ticketFactory(),
-      ...request.json(),
+      ...body,
     },
     status: 'success',
   })
@@ -83,14 +84,14 @@ export const createTicketFailed = http.post('http://localhost:3000/api/tickets/m
   )
 })
 
-export const getTicket = http.get('http://localhost:3000/api/tickets/my/:id', ({ params }) => {
+export const getMyTicket = http.get('http://localhost:3000/api/tickets/my/:id', ({ params }) => {
   return HttpResponse.json({
     data: ticketFactory({ id: Number(params.id) }),
     status: 'success',
   })
 })
 
-export const getTicketNotFound = http.get('http://localhost:3000/api/tickets/my/:id', () => {
+export const getMyTicketNotFound = http.get('http://localhost:3000/api/tickets/my/:id', () => {
   return HttpResponse.json(
     {
       code: 'NOT_FOUND',
@@ -111,4 +112,74 @@ export const listAllTickets = http.get('http://localhost:3000/api/tickets', ({ r
   })
 })
 
-export const handlers = [listMyTickets, createTicket, getTicket, listAllTickets]
+export const getTicket = http.get('http://localhost:3000/api/tickets/:id', ({ params }) => {
+  return HttpResponse.json({
+    data: ticketFactory({ id: Number(params.id) }),
+    status: 'success',
+  })
+})
+
+export const getTicketAssigned = http.get('http://localhost:3000/api/tickets/:id', ({ params }) => {
+  return HttpResponse.json({
+    data: ticketFactory({ id: Number(params.id), assigneeId: 'assigned-to-agent' }),
+    status: 'success',
+  })
+})
+
+export const getTicketNotFound = http.get('http://localhost:3000/api/tickets/:id', () => {
+  return HttpResponse.json(
+    {
+      code: 'NOT_FOUND',
+      message: 'Ticket not found',
+      status: 'error',
+    },
+    { status: 404 },
+  )
+})
+
+export const updateTicket = http.patch('http://localhost:3000/api/tickets/:id', async ({ params, request }) => {
+  const body = (await request.json()) as Partial<Ticket>
+  return HttpResponse.json({
+    data: ticketFactory({ id: Number(params.id), ...body }),
+    status: 'success',
+  })
+})
+
+export const updateTicketFailed = http.patch('http://localhost:3000/api/tickets/:id', () => {
+  return HttpResponse.json(
+    {
+      code: 'UNKNOWN_ERROR',
+      message: 'Unknown error',
+      status: 'error',
+    },
+    { status: 500 },
+  )
+})
+
+export const toggleAssignment = http.post('http://localhost:3000/api/tickets/:id/assign-toggle', ({ params }) => {
+  return HttpResponse.json({
+    data: ticketFactory({ id: Number(params.id) }),
+    status: 'success',
+  })
+})
+
+export const toggleAssignmentFailed = http.post('http://localhost:3000/api/tickets/:id/assign-toggle', () => {
+  return HttpResponse.json(
+    {
+      code: 'UNKNOWN_ERROR',
+      message: 'Unknown error',
+      status: 'error',
+    },
+    { status: 500 },
+  )
+})
+
+export const handlers = [
+  listMyTickets,
+  createTicket,
+  getMyTicket,
+  listAllTickets,
+  getTicket,
+  updateTicket,
+  toggleAssignment,
+]

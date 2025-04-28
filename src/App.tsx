@@ -4,6 +4,7 @@ import RootLayout from './components/layouts/root-layout'
 import { Toaster } from './components/ui/sonner'
 import { ThemeProvider } from './hooks/use-theme'
 import AllTickets from './pages/agent/all-tickets'
+import ManageTicket from './pages/agent/manage-ticket'
 import Login from './pages/auth/login'
 import SignUp from './pages/auth/signup'
 import MyTickets from './pages/customer/my-tickets'
@@ -27,6 +28,7 @@ function App() {
 
         <Route path="/agent" element={<RootLayout agentOnly={true} />}>
           <Route index element={<AllTickets />} />
+          <Route path="tickets/:id" element={<ManageTicket />} />
         </Route>
       </Routes>
 

@@ -20,7 +20,7 @@ export const useTickets = (filters: TicketFilters, isAgent = false) => {
   })
 }
 
-export const useTicket = (id: string, isAgent = false) => {
+export const useTicket = (id: number, isAgent = false) => {
   const path = isAgent ? '/api/tickets' : '/api/tickets/my'
 
   return useQuery({
@@ -46,5 +46,32 @@ export const useCreateTicket = (props?: UseMutationOptions<Ticket, unknown, Crea
         toast.error(error.data.message)
       }
     },
+  })
+}
+
+interface UpdateTicket {
+  id: number
+  status?: string
+  summary?: string
+  form?: unknown
+}
+
+export const useUpdateTicket = (props?: UseMutationOptions<Ticket, unknown, UpdateTicket>) => {
+  return useMutation({
+    ...props,
+    mutationFn: (data: UpdateTicket) =>
+      $fetch<SuccessResponse<Ticket>>(`/api/tickets/${data.id}`, { method: 'PATCH', body: data }).then(
+        (res) => res.data,
+      ),
+  })
+}
+
+export const useToggleAssignment = (props?: UseMutationOptions<Ticket, unknown, UpdateTicket>) => {
+  return useMutation({
+    ...props,
+    mutationFn: (data: UpdateTicket) =>
+      $fetch<SuccessResponse<Ticket>>(`/api/tickets/${data.id}/assign-toggle`, { method: 'POST', body: data }).then(
+        (res) => res.data,
+      ),
   })
 }

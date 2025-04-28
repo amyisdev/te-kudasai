@@ -1,5 +1,5 @@
 import App from '@/App'
-import { Login } from '@/pages/auth/login'
+import Login from '@/pages/auth/login'
 import { screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { authenticated, loginFailed, unauthenticated } from '../../msw/handlers/auth'

@@ -14,6 +14,10 @@ export const authenticated = http.get('http://localhost:3000/api/auth/get-sessio
   return HttpResponse.json({ user, session: { id: '1' } })
 })
 
+export const authenticatedAgent = http.get('http://localhost:3000/api/auth/get-session', () => {
+  return HttpResponse.json({ user: { ...user, role: 'admin' }, session: { id: '1' } })
+})
+
 export const loginSuccess = http.post('http://localhost:3000/api/auth/sign-in/email', () => {
   return HttpResponse.json({ user })
 })
