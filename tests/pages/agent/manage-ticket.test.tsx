@@ -1,6 +1,7 @@
 import App from '@/App'
 import { screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { authenticatedAgent } from '../../msw/handlers/auth'
 import {
   getTicketAssigned,
   getTicketFormOpen,
@@ -11,7 +12,6 @@ import {
 } from '../../msw/handlers/tickets'
 import { server } from '../../msw/server'
 import { renderWithRouter } from '../../utils'
-import { authenticatedAgent } from '../../msw/handlers/auth'
 
 describe('Manage Ticket', () => {
   beforeEach(() => server.use(authenticatedAgent))
