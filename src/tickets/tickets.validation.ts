@@ -1,6 +1,6 @@
+import { paginationSchema } from '@/shared/validation'
 import { z } from 'zod'
 import { TICKET_STATUS } from './tickets.schema'
-import { paginationSchema } from '@/shared/validation'
 
 export const ticketIdSchema = z.object({
   id: z.coerce.number(),

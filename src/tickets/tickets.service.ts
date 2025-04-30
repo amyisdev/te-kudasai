@@ -1,9 +1,9 @@
+import { users } from '@/auth/auth.schema'
 import { withPagination } from '@/db/builder-utils'
 import { db } from '@/db/client'
 import type { PaginationParams } from '@/shared/validation'
 import { type SQL, aliasedTable, and, count, desc, eq, ilike } from 'drizzle-orm'
 import { ticketsTable } from './tickets.schema'
-import { users } from '@/auth/auth.schema'
 
 export async function getMyTickets(
   userId: string,
