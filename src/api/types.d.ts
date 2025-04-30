@@ -27,6 +27,7 @@ export interface Ticket {
 
   formId: string
   form: Record<string, string>
+  formOpen: boolean
 }
 
 export interface TicketFilters {

@@ -1,4 +1,4 @@
-import { useCreateTicket } from '@/api/tickets'
+import { useCreateTicket, useUpdateTicket } from '@/api/tickets'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -26,16 +26,29 @@ const defaultValues = {
   },
 }
 
-export function render({ onSuccess, onError }: BaseRenderProps) {
-  const { mutate, isPending } = useCreateTicket({ onSuccess, onError })
+// When ticket is provided, it will be used to prefill the form
+export function render({ onSuccess, onError, ticket }: BaseRenderProps) {
+  const { mutate: createTicket, isPending } = useCreateTicket({ onSuccess, onError })
+  const { mutate: updateTicket } = useUpdateTicket({ onSuccess, onError })
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      summary: ticket?.summary ?? defaultValues.summary,
+      form: {
+        NAME: ticket?.form?.NAME ?? defaultValues.form.NAME,
+        EMAIL: ticket?.form?.EMAIL ?? defaultValues.form.EMAIL,
+      },
+    },
   })
 
   const onSubmit = (data: FormValues) => {
-    mutate({ ...data, formId: id })
+    if (ticket) {
+      updateTicket({ ...data, id: ticket.id })
+    } else {
+      createTicket({ ...data, formId: id })
+    }
   }
 
   return (

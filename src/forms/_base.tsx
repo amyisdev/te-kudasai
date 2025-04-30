@@ -12,4 +12,5 @@ export const baseValues = {
 export interface BaseRenderProps {
   onSuccess?: (data: Ticket) => void
   onError?: (error: unknown) => void
+  ticket?: Ticket
 }

@@ -75,3 +75,13 @@ export const useToggleAssignment = (props?: UseMutationOptions<Ticket, unknown, 
       ),
   })
 }
+
+export const useOpenForm = (props?: UseMutationOptions<Ticket, unknown, UpdateTicket>) => {
+  return useMutation({
+    ...props,
+    mutationFn: (data: UpdateTicket) =>
+      $fetch<SuccessResponse<Ticket>>(`/api/tickets/${data.id}/open-form`, { method: 'POST', body: data }).then(
+        (res) => res.data,
+      ),
+  })
+}

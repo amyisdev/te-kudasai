@@ -1,4 +1,4 @@
-import { useTicket, useToggleAssignment, useUpdateTicket } from '@/api/tickets'
+import { useOpenForm, useTicket, useToggleAssignment, useUpdateTicket } from '@/api/tickets'
 import type { Ticket } from '@/api/types'
 import { EmptyState } from '@/components/empty-state'
 import { PageLoader } from '@/components/loader'
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import forms from '@/forms'
 import { useQueryClient } from '@tanstack/react-query'
 import { ArrowLeft, FolderX, X } from 'lucide-react'
 import { FetchError } from 'ofetch'
@@ -40,8 +41,23 @@ function TicketStatusCard({ ticket }: { ticket: Ticket }) {
     },
   })
 
+  const { mutate: openForm } = useOpenForm({
+    onSuccess() {
+      toast.success('Ticket form has been opened')
+      queryClient.invalidateQueries({ queryKey: ['/api/tickets', ticket.id] })
+    },
+    onError(error) {
+      if (error instanceof FetchError) {
+        toast.error(error.data.message)
+      }
+    },
+  })
+
   const onStatusChange = (status: string) => updateTicket({ id: ticket.id, status })
   const onToggleAssign = () => updateTicketAssignment({ id: ticket.id })
+  const onOpenForm = () => openForm({ id: ticket.id })
+
+  const canUpdateForm = ticket.formOpen === false && ['open', 'pending'].includes(ticket.status)
 
   return (
     <Card>
@@ -87,6 +103,15 @@ function TicketStatusCard({ ticket }: { ticket: Ticket }) {
             </Button>
           )}
         </div>
+
+        {canUpdateForm && (
+          <div>
+            <Label className="mb-2">Form</Label>
+            <Button onClick={onOpenForm} variant="outline" className="w-full">
+              Open form for update
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   )
@@ -116,6 +141,27 @@ function CustomerDetail({ ticket }: { ticket: Ticket }) {
   )
 }
 
+function UpdateForm({ ticket }: { ticket: Ticket }) {
+  const Form = forms[ticket.formId as keyof typeof forms]
+
+  const queryClient = useQueryClient()
+  const onSuccess = (ticket: Ticket) => {
+    toast.success('Ticket has been updated')
+    queryClient.invalidateQueries({ queryKey: ['/api/tickets', ticket.id] })
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Update Form</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form.render ticket={ticket} onSuccess={onSuccess} />
+      </CardContent>
+    </Card>
+  )
+}
+
 export default function ManageTicket() {
   const { id } = useParams()
   const { data: ticket, isPending } = useTicket(Number(id!), true)
@@ -136,8 +182,9 @@ export default function ManageTicket() {
 
       {ticket ? (
         <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
             <TicketDetail ticket={ticket.data} />
+            {ticket.data.formOpen && <UpdateForm ticket={ticket.data} />}
           </div>
           <div className="space-y-6">
             <TicketStatusCard ticket={ticket.data} />

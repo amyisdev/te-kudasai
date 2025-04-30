@@ -3,7 +3,9 @@ import { screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it } from 'vitest'
 import {
   getTicketAssigned,
+  getTicketFormOpen,
   getTicketNotFound,
+  openFormFailed,
   toggleAssignmentFailed,
   updateTicketFailed,
 } from '../../msw/handlers/tickets'
@@ -93,6 +95,47 @@ describe('Manage Ticket', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Unknown error')).toBeInTheDocument()
+    })
+  })
+
+  it('should allow agent to open form for update', async () => {
+    const { user } = renderWithRouter(<App />, { route: '/agent/tickets/1' })
+
+    const assignmentButton = await screen.findByRole('button', { name: 'Open form for update' })
+    await user.click(assignmentButton)
+
+    await waitFor(() => {
+      expect(screen.getByText('Ticket form has been opened')).toBeInTheDocument()
+    })
+  })
+
+  it('should display error message when opening form for update fails', async () => {
+    server.use(openFormFailed)
+
+    const { user } = renderWithRouter(<App />, { route: '/agent/tickets/1' })
+
+    const assignmentButton = await screen.findByRole('button', { name: 'Open form for update' })
+    await user.click(assignmentButton)
+
+    await waitFor(() => {
+      expect(screen.getByText('Unknown error')).toBeInTheDocument()
+    })
+  })
+
+  it('should allow agent to update form when form is open', async () => {
+    server.use(getTicketFormOpen)
+
+    const { user } = renderWithRouter(<App />, { route: '/agent/tickets/1' })
+
+    await waitFor(() => {
+      expect(screen.getByText('Update Form')).toBeInTheDocument()
+    })
+
+    const submit = await screen.findByRole('button', { name: 'Submit' })
+    await user.click(submit)
+
+    await waitFor(() => {
+      expect(screen.getByText('Ticket has been updated')).toBeInTheDocument()
     })
   })
 })

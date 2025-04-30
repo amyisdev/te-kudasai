@@ -30,7 +30,7 @@ export default function TicketDetail({ ticket }: { ticket: Ticket }) {
 
         {Object.keys(ticket.form).length > 0 && (
           <div>
-            <h3 className="font-medium mb-2">Additional Information</h3>
+            <h3 className="font-medium mb-2">Form Answers</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {Object.entries(ticket.form).map(([key, value]) => (
                 <div key={key}>

@@ -12,6 +12,7 @@ function ticketFactory(overrides: Partial<Ticket> = {}): Ticket {
     form: { NAME: 'Jane Doe', EMAIL: 'jane.doe@tk.local' },
     reporterId: 'jane.doe',
     assigneeId: null,
+    formOpen: false,
     ...overrides,
   }
 }
@@ -126,6 +127,13 @@ export const getTicketAssigned = http.get('http://localhost:3000/api/tickets/:id
   })
 })
 
+export const getTicketFormOpen = http.get('http://localhost:3000/api/tickets/:id', ({ params }) => {
+  return HttpResponse.json({
+    data: ticketFactory({ id: Number(params.id), formOpen: true }),
+    status: 'success',
+  })
+})
+
 export const getTicketNotFound = http.get('http://localhost:3000/api/tickets/:id', () => {
   return HttpResponse.json(
     {
@@ -174,6 +182,24 @@ export const toggleAssignmentFailed = http.post('http://localhost:3000/api/ticke
   )
 })
 
+export const openForm = http.post('http://localhost:3000/api/tickets/:id/open-form', ({ params }) => {
+  return HttpResponse.json({
+    data: ticketFactory({ id: Number(params.id), formOpen: true }),
+    status: 'success',
+  })
+})
+
+export const openFormFailed = http.post('http://localhost:3000/api/tickets/:id/open-form', () => {
+  return HttpResponse.json(
+    {
+      code: 'UNKNOWN_ERROR',
+      message: 'Unknown error',
+      status: 'error',
+    },
+    { status: 500 },
+  )
+})
+
 export const handlers = [
   listMyTickets,
   createTicket,
@@ -182,4 +208,5 @@ export const handlers = [
   getTicket,
   updateTicket,
   toggleAssignment,
+  openForm,
 ]
