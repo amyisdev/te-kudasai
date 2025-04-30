@@ -1,9 +1,9 @@
 import { useOpenForm, useTicket, useToggleAssignment, useUpdateTicket } from '@/api/tickets'
-import type { Ticket } from '@/api/types'
+import type { Ticket, TicketWithUsers } from '@/api/types'
 import { EmptyState } from '@/components/empty-state'
 import { PageLoader } from '@/components/loader'
 import TicketDetail from '@/components/tickets/ticket-detail'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarDiceBear, AvatarFallbackInitials } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
@@ -15,7 +15,7 @@ import { FetchError } from 'ofetch'
 import { Link, useParams } from 'react-router'
 import { toast } from 'sonner'
 
-function TicketStatusCard({ ticket }: { ticket: Ticket }) {
+function TicketStatusCard({ ticket }: { ticket: TicketWithUsers }) {
   const queryClient = useQueryClient()
   const { mutate: updateTicket } = useUpdateTicket({
     onSuccess({ status }) {
@@ -85,12 +85,13 @@ function TicketStatusCard({ ticket }: { ticket: Ticket }) {
 
         <div>
           <Label className="mb-2">Assignment</Label>
-          {ticket.assigneeId ? (
+          {ticket.assignee ? (
             <div className="flex items-center gap-2 p-2 border rounded-md">
               <Avatar className="h-6 w-6">
-                <AvatarFallback>{ticket.assigneeId.substring(0, 2)}</AvatarFallback>
+                <AvatarDiceBear seed={ticket.assignee.id} />
+                <AvatarFallbackInitials name={ticket.assignee.name} />
               </Avatar>
-              <span className="flex-1 truncate">{ticket.assigneeId}</span>
+              <span className="flex-1 truncate">{ticket.assignee.name}</span>
 
               <Button onClick={onToggleAssign} variant="ghost" size="icon" className="rounded-full">
                 <X className="h-4 w-4" />
@@ -117,7 +118,7 @@ function TicketStatusCard({ ticket }: { ticket: Ticket }) {
   )
 }
 
-function CustomerDetail({ ticket }: { ticket: Ticket }) {
+function CustomerDetail({ ticket }: { ticket: TicketWithUsers }) {
   return (
     <Card>
       <CardHeader>
@@ -130,11 +131,11 @@ function CustomerDetail({ ticket }: { ticket: Ticket }) {
         </div>
         <div>
           <Label className="text-sm">Name</Label>
-          <p>Unknown</p>
+          <p>{ticket.reporter.name}</p>
         </div>
         <div>
           <Label className="text-sm">Email</Label>
-          <p>Unknown</p>
+          <p>{ticket.reporter.email}</p>
         </div>
       </CardContent>
     </Card>

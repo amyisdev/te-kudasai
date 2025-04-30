@@ -48,4 +48,38 @@ function AvatarFallback({
   )
 }
 
-export { Avatar, AvatarImage, AvatarFallback }
+function AvatarDiceBear({
+  className,
+  variant = 'bottts',
+  seed = '',
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Image> & {
+  variant?: 'bottts' | 'icons' | 'identicon' | 'rings'
+  seed?: string
+}) {
+  return (
+    <AvatarPrimitive.Image
+      data-slot="avatar-image"
+      className={cn('aspect-square size-full', className)}
+      src={`https://api.dicebear.com/9.x/${variant}/svg?seed=${seed}`}
+      {...props}
+    />
+  )
+}
+
+function AvatarFallbackInitials({
+  className,
+  name = '',
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Fallback> & {
+  name?: string
+}) {
+  const initials = name.split(' ').map((n) => n[0]).join('')
+  return (
+    <AvatarPrimitive.Fallback className={cn(className)} {...props}>
+      {initials}
+    </AvatarPrimitive.Fallback>
+  )
+}
+
+export { Avatar, AvatarImage, AvatarFallback, AvatarDiceBear, AvatarFallbackInitials }

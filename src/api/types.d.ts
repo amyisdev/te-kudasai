@@ -1,3 +1,5 @@
+import type { User } from 'better-auth/types'
+
 export interface SuccessResponse<T> {
   status: 'success'
   data: T
@@ -28,6 +30,11 @@ export interface Ticket {
   formId: string
   form: Record<string, string>
   formOpen: boolean
+}
+
+export interface TicketWithUsers extends Ticket {
+  reporter: User
+  assignee: User | null
 }
 
 export interface TicketFilters {

@@ -14,8 +14,9 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useTheme } from '@/hooks/use-theme'
 import type { authClient } from '@/lib/auth-client'
-import { Laptop, LogOut, Moon, Palette, Sun, UserIcon } from 'lucide-react'
+import { Laptop, LogOut, Moon, Palette, Sun } from 'lucide-react'
 import { Link, useLocation } from 'react-router'
+import { Avatar, AvatarDiceBear, AvatarFallbackInitials } from './ui/avatar'
 
 const navItems = {
   customer: [
@@ -72,7 +73,10 @@ export function MainNav({ user }: { user: typeof authClient.$Infer.Session.user 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" className="rounded-full" aria-label="User menu">
-                <UserIcon className="h-8 w-8" />
+                <Avatar className="h-6 w-6">
+                  <AvatarDiceBear seed={user.id} />
+                  <AvatarFallbackInitials name={user.name} />
+                </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end">

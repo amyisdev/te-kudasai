@@ -1,7 +1,7 @@
-import type { Ticket } from '@/api/types'
+import type { Ticket, TicketWithUsers } from '@/api/types'
 import { http, HttpResponse } from 'msw'
 
-function ticketFactory(overrides: Partial<Ticket> = {}): Ticket {
+function ticketFactory(overrides: Partial<TicketWithUsers> = {}): TicketWithUsers {
   return {
     id: 1,
     summary: 'Test Ticket',
@@ -13,6 +13,16 @@ function ticketFactory(overrides: Partial<Ticket> = {}): Ticket {
     reporterId: 'jane.doe',
     assigneeId: null,
     formOpen: false,
+    assignee: null,
+    reporter: {
+      id: 'jane.doe',
+      name: 'Jane Doe',
+      email: 'jane.doe@tk.local',
+      emailVerified: true,
+      image: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
     ...overrides,
   }
 }

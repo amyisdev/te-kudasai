@@ -2,7 +2,7 @@ import { type UseMutationOptions, keepPreviousData, useMutation, useQuery } from
 import { FetchError } from 'ofetch'
 import { toast } from 'sonner'
 import { $fetch } from './client'
-import type { PaginatedResponse, SuccessResponse, Ticket } from './types'
+import type { PaginatedResponse, SuccessResponse, Ticket, TicketWithUsers } from './types'
 
 interface TicketFilters {
   search: string
@@ -25,7 +25,7 @@ export const useTicket = (id: number, isAgent = false) => {
 
   return useQuery({
     queryKey: [path, id],
-    queryFn: () => $fetch<SuccessResponse<Ticket>>(`${path}/${id}`),
+    queryFn: () => $fetch<SuccessResponse<TicketWithUsers>>(`${path}/${id}`),
     enabled: !!id,
   })
 }
