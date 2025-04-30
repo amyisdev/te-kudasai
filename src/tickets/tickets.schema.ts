@@ -1,5 +1,5 @@
 import { users } from '@/auth/auth.schema'
-import { index, jsonb, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
+import { boolean, index, jsonb, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
 
 export const TICKET_STATUS = {
   OPEN: 'open',
@@ -26,6 +26,7 @@ export const ticketsTable = pgTable(
 
     formId: text('form_id').notNull(),
     form: jsonb('form').notNull(),
+    formOpen: boolean('form_open').notNull().default(false),
 
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at').notNull().defaultNow(),

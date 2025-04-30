@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest'
 
 describe('Admin: List all tickets', () => {
   it('should list all tickets ordered descending by id', async () => {
-    const res = await app.request('/api/tickets', {
+    const res = await app.request('/api/tickets?status=all', {
       headers: await signedInAs('admin@tk.local'),
     })
 
@@ -150,6 +150,33 @@ describe('Admin: Update ticket', () => {
     })
   })
 
+  it('should set openForm to false after ticket updated', async () => {
+    await db.update(ticketsTable).set({ formOpen: true }).where(eq(ticketsTable.id, 1))
+
+    const res = await app.request('/api/tickets/1', {
+      method: 'PATCH',
+      headers: {
+        ...(await signedInAs('admin@tk.local')),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        status: TICKET_STATUS.IN_PROGRESS,
+      }),
+    })
+
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body).toEqual({
+      status: 'success',
+      data: expect.objectContaining({
+        id: 1,
+        status: TICKET_STATUS.IN_PROGRESS,
+        formOpen: false,
+        updatedAt: expect.any(String),
+      }),
+    })
+  })
+
   it('should return 404 when ticket not found', async () => {
     const res = await app.request('/api/tickets/999', {
       method: 'PATCH',
@@ -271,6 +298,36 @@ describe('Admin: Toggle ticket assignment', () => {
 
   it('should return 404 when ticket not found', async () => {
     const res = await app.request('/api/tickets/9999/assign-toggle', {
+      method: 'POST',
+      headers: await signedInAs('admin@tk.local'),
+    })
+    expect(res.status).toBe(404)
+  })
+})
+
+describe('Admin: Open ticket form', () => {
+  it('should open the ticket form for a given ticket', async () => {
+    // Ensure ticket 1 exists and formOpen is false
+    await db.update(ticketsTable).set({ formOpen: false }).where(eq(ticketsTable.id, 1))
+
+    const res = await app.request('/api/tickets/1/open-form', {
+      method: 'POST',
+      headers: await signedInAs('admin@tk.local'),
+    })
+
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body).toMatchObject({
+      status: 'success',
+      data: expect.objectContaining({ id: 1, formOpen: true }),
+    })
+
+    // Cleanup
+    await db.update(ticketsTable).set({ formOpen: false }).where(eq(ticketsTable.id, 1))
+  })
+
+  it('should return 404 when ticket not found', async () => {
+    const res = await app.request('/api/tickets/9999/open-form', {
       method: 'POST',
       headers: await signedInAs('admin@tk.local'),
     })

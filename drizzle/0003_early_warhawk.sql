@@ -1,0 +1,1 @@
+ALTER TABLE "tickets" ADD COLUMN "form_open" boolean DEFAULT false NOT NULL;

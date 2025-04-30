@@ -114,6 +114,7 @@ describe('Create ticket', () => {
           NAME: 'Jane Doe',
           EMAIL: 'jane.doe@tk.local',
         },
+        formOpen: false,
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
       },
