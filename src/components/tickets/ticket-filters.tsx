@@ -35,9 +35,9 @@ export function TicketFilterFields({ filters, onFiltersChange }: Props) {
 
         <div className="w-full sm:w-[180px]">
           <Select
-            value={immediateFilters.status}
+            value={filters.status}
             onValueChange={(value) => {
-              setImmediateFilters({ ...immediateFilters, status: value, page: 1 })
+              onFiltersChange({ ...filters, status: value, page: 1 })
             }}
           >
             <SelectTrigger className="w-full">
@@ -57,7 +57,7 @@ export function TicketFilterFields({ filters, onFiltersChange }: Props) {
           variant="outline"
           className="sm:w-auto"
           onClick={() => {
-            setImmediateFilters({ search: '', status: 'all', page: 1 })
+            onFiltersChange({ search: '', status: 'all', page: 1 })
           }}
         >
           <Filter className="mr-2 h-4 w-4" />
