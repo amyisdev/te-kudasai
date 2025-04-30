@@ -13,9 +13,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useTheme } from '@/hooks/use-theme'
-import type { authClient } from '@/lib/auth-client'
-import { Laptop, LogOut, Moon, Palette, Sun } from 'lucide-react'
-import { Link, useLocation } from 'react-router'
+import { authClient } from '@/lib/auth-client'
+import { Laptop, LogOut, Moon, Palette, ShieldUser, Sun } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router'
+import { toast } from 'sonner'
 import { Avatar, AvatarDiceBear, AvatarFallbackInitials } from './ui/avatar'
 
 const navItems = {
@@ -44,6 +45,17 @@ export function MainNav({ user }: { user: typeof authClient.$Infer.Session.user 
   const { pathname } = useLocation()
   const userType = pathname.includes('agent') ? 'agent' : 'customer'
   const { colorScheme, setColorScheme, themeMode, setThemeMode } = useTheme()
+  const navigate = useNavigate()
+
+  const handleSignOut = () =>
+    authClient.signOut({
+      fetchOptions: {
+        onSuccess() {
+          toast.success('You have been signed out')
+          navigate('/auth/login')
+        },
+      },
+    })
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-brand/95 backdrop-blur supports-[backdrop-filter]:bg-brand/60 shadow-sm">
@@ -88,7 +100,7 @@ export function MainNav({ user }: { user: typeof authClient.$Infer.Session.user 
               {/* Theme Selector Sub-menu */}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
-                  <Palette className="mr-2 h-4 w-4" />
+                  <Palette className="mr-4 h-4 w-4" />
                   <span>Theme</span>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
@@ -123,9 +135,9 @@ export function MainNav({ user }: { user: typeof authClient.$Infer.Session.user 
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>TODO: Sign Out</span>
+                <span>Sign Out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
