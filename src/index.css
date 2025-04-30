@@ -44,8 +44,6 @@
 }
 
 :root {
-  --radius: 0.5rem;
-
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -80,6 +78,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
+  --radius: 0.5rem;
   --brand: oklch(0.95 0.03 14.61);
 }
 
@@ -121,13 +120,161 @@
   --brand: oklch(0.145 0 0);
 }
 
+.theme-pastel {
+  --background: oklch(98.3% 0.006 106.5);
+  --foreground: oklch(24.4% 0.027 108.2);
+  --card: oklch(98.9% 0.004 106.5);
+  --card-foreground: oklch(24.4% 0.027 108.2);
+  --popover: oklch(98.9% 0.004 106.5);
+  --popover-foreground: oklch(24.4% 0.027 108.2);
+  --primary: oklch(80% 0.098 8.6);
+  --primary-foreground: oklch(20.1% 0.067 15.4);
+  --secondary: oklch(89.8% 0.062 196.1);
+  --secondary-foreground: oklch(25.8% 0.036 195.2);
+  --muted: oklch(93.6% 0.014 106.7);
+  --muted-foreground: oklch(57% 0.058 108.1);
+  --accent: oklch(78.9% 0.106 307);
+  --accent-foreground: oklch(18.5% 0.07 303.3);
+  --destructive: oklch(79.6% 0.097 19.4);
+  --destructive-foreground: oklch(19.9% 0.067 25.8);
+  --border: oklch(91.3% 0.031 107);
+  --input: oklch(91.3% 0.031 107);
+  --ring: oklch(80% 0.098 8.6);
+
+  --chart-1: oklch(80% 0.098 8.6);
+  --chart-2: oklch(89.8% 0.062 196.1);
+  --chart-3: oklch(78.9% 0.106 307);
+  --chart-4: oklch(88.2% 0.104 144.6);
+  --chart-5: oklch(87% 0.071 66.7);
+
+  --sidebar: oklch(20.1% 0.067 15.4);
+  --sidebar-foreground: oklch(24.4% 0.027 108.2);
+  --sidebar-primary: oklch(80% 0.098 8.6);
+  --sidebar-primary-foreground: oklch(20.1% 0.067 15.4);
+  --sidebar-accent: oklch(78.9% 0.106 307);
+  --sidebar-accent-foreground: oklch(18.5% 0.07 303.3);
+  --sidebar-border: oklch(91.3% 0.031 107);
+  --sidebar-ring: oklch(80% 0.098 8.6);
+}
+
+.theme-pastel.dark {
+  --background: oklch(19.9% 0.032 306.6);
+  --foreground: oklch(98.3% 0.006 106.5);
+  --card: oklch(21.8% 0.037 306.5);
+  --card-foreground: oklch(98.3% 0.006 106.5);
+  --popover: oklch(21.8% 0.037 306.5);
+  --popover-foreground: oklch(98.3% 0.006 106.5);
+  --primary: oklch(71.1% 0.151 11.3);
+  --primary-foreground: oklch(20.1% 0.067 15.4);
+  --secondary: oklch(85.1% 0.088 195.6);
+  --secondary-foreground: oklch(25.8% 0.036 195.2);
+  --muted: oklch(34.6% 0.046 306.9);
+  --muted-foreground: oklch(80.5% 0.042 107.3);
+  --accent: oklch(68.6% 0.16 305.7);
+  --accent-foreground: oklch(18.5% 0.07 303.3);
+  --destructive: oklch(70.6% 0.151 21.7);
+  --destructive-foreground: oklch(19.9% 0.067 25.8);
+  --border: oklch(37.8% 0.08 306);
+  --input: oklch(37.8% 0.08 306);
+  --ring: oklch(71.1% 0.151 11.3);
+
+  --chart-1: oklch(71.1% 0.151 11.3);
+  --chart-2: oklch(85.1% 0.088 195.6);
+  --chart-3: oklch(68.6% 0.16 305.7);
+  --chart-4: oklch(82.8% 0.153 144);
+  --chart-5: oklch(80.9% 0.106 65.4);
+
+  --sidebar: oklch(20.1% 0.067 15.4);
+  --sidebar-foreground: oklch(98.3% 0.006 106.5);
+  --sidebar-primary: oklch(71.1% 0.151 11.3);
+  --sidebar-primary-foreground: oklch(20.1% 0.067 15.4);
+  --sidebar-accent: oklch(68.6% 0.16 305.7);
+  --sidebar-accent-foreground: oklch(18.5% 0.07 303.3);
+  --sidebar-border: oklch(37.8% 0.08 306 / 10%);
+  --sidebar-ring: oklch(71.1% 0.151 11.3);
+}
+
+.theme-pink {
+  --background: oklch(0.99 0.0067 325.63);
+  --foreground: oklch(0.22 0.0095 17.88);
+  --card: oklch(0.99 0.0067 325.63);
+  --card-foreground: oklch(0.22 0.0095 17.88);
+  --popover: oklch(0.99 0.0067 325.63);
+  --popover-foreground: oklch(0.22 0.0095 17.88);
+  --primary: oklch(0.5 0.1219 13.24);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.49 0.0427 12.52);
+  --secondary-foreground: oklch(0.22 0.0095 17.88);
+  --muted: oklch(0.92 0.0254 14.61);
+  --muted-foreground: oklch(0.4 0.0207 13.53);
+  --accent: oklch(0.96 0.0141 17.4);
+  --accent-foreground: oklch(0.31 0.0102 17.71);
+  --destructive: oklch(0.51 0.1927 27.7);
+  --border: oklch(0.92 0.0254 14.61);
+  --input: oklch(0.92 0.0254 14.61);
+  --ring: oklch(0.92 0.0425 12.57);
+
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.22 0.0095 17.88);
+  --sidebar-primary: oklch(0.22 0.0095 17.88);
+  --sidebar-primary-foreground: oklch(0.22 0.0095 17.88);
+  --sidebar-accent: oklch(0.96 0.0141 17.4);
+  --sidebar-accent-foreground: oklch(0.22 0.0095 17.88);
+  --sidebar-border: oklch(0.92 0.0254 14.61);
+  --sidebar-ring: oklch(0.92 0.0425 12.57);
+}
+
+.theme-pink.dark {
+  --background: oklch(0.22 0.0095 17.88);
+  --foreground: oklch(0.92 0.0131 17.4);
+  --card: oklch(0.22 0.0095 17.88);
+  --card-foreground: oklch(0.92 0.0131 17.4);
+  --popover: oklch(0.22 0.0095 17.88);
+  --popover-foreground: oklch(0.92 0.0131 17.4);
+  --primary: oklch(0.84 0.0904 12.33);
+  --primary-foreground: oklch(0.32 0.1088 13.48);
+  --secondary: oklch(0.83 0.046 14.73);
+  --secondary-foreground: oklch(0.92 0.0131 17.4);
+  --muted: oklch(0.4 0.0207 13.53);
+  --muted-foreground: oklch(0.83 0.025 14.52);
+  --accent: oklch(0.31 0.0102 17.71);
+  --accent-foreground: oklch(0.92 0.0131 17.4);
+  --destructive: oklch(0.84 0.0891 26.76);
+  --border: oklch(0.4 0.0207 13.53);
+  --input: oklch(0.4 0.0207 13.53);
+  --ring: oklch(0.41 0.1163 13.24);
+
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+
+  --sidebar: oklch(0.32 0.1088 13.48);
+  --sidebar-foreground: oklch(0.92 0.0131 17.4);
+  --sidebar-primary: oklch(0.84 0.0904 12.33);
+  --sidebar-primary-foreground: oklch(0.32 0.1088 13.48);
+  --sidebar-accent: oklch(0.31 0.0102 17.71);
+  --sidebar-accent-foreground: oklch(0.92 0.0131 17.4);
+  --sidebar-border: oklch(0.4 0.0207 13.53);
+  --sidebar-ring: oklch(0.41 0.1163 13.24);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;

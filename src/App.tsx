@@ -13,7 +13,7 @@ import ViewTicket from './pages/customer/view-ticket'
 
 function App() {
   return (
-    <ThemeProvider storageKey="ui-theme">
+    <ThemeProvider defaultColorScheme="pink">
       <Routes>
         <Route path="auth" element={<AuthLayout />}>
           <Route path="login" element={<Login />} />

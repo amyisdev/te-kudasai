@@ -4,12 +4,17 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useTheme } from '@/hooks/use-theme'
 import type { authClient } from '@/lib/auth-client'
-import { LogOut, Moon, Sun, UserIcon } from 'lucide-react'
+import { Laptop, LogOut, Moon, Palette, Sun, UserIcon } from 'lucide-react'
 import { Link, useLocation } from 'react-router'
 
 const navItems = {
@@ -37,7 +42,7 @@ const navItems = {
 export function MainNav({ user }: { user: typeof authClient.$Infer.Session.user }) {
   const { pathname } = useLocation()
   const userType = pathname.includes('agent') ? 'agent' : 'customer'
-  const { theme, setTheme } = useTheme()
+  const { colorScheme, setColorScheme, themeMode, setThemeMode } = useTheme()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-brand/95 backdrop-blur supports-[backdrop-filter]:bg-brand/60 shadow-sm">
@@ -76,19 +81,43 @@ export function MainNav({ user }: { user: typeof authClient.$Infer.Session.user 
                 <p className="text-xs font-normal text-muted-foreground">{user.email}</p>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-                {theme === 'dark' ? (
-                  <>
-                    <Sun className="mr-2 h-4 w-4" />
-                    <span>Light Mode</span>
-                  </>
-                ) : (
-                  <>
-                    <Moon className="mr-2 h-4 w-4" />
-                    <span>Dark Mode</span>
-                  </>
-                )}
-              </DropdownMenuItem>
+              {/* Theme Selector Sub-menu */}
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <Palette className="mr-2 h-4 w-4" />
+                  <span>Theme</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  {/* Color Scheme Group */}
+                  <DropdownMenuLabel>Color Scheme</DropdownMenuLabel>
+                  <DropdownMenuRadioGroup
+                    value={colorScheme}
+                    onValueChange={(v) => setColorScheme(v as typeof colorScheme)}
+                  >
+                    <DropdownMenuRadioItem value="neutral">Neutral</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="pastel">Pastel</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="pink">Pink</DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                  <DropdownMenuSeparator />
+
+                  {/* Mode Group */}
+                  <DropdownMenuLabel>Mode</DropdownMenuLabel>
+                  <DropdownMenuRadioGroup value={themeMode} onValueChange={(v) => setThemeMode(v as typeof themeMode)}>
+                    <DropdownMenuRadioItem value="light">
+                      <Sun className="mr-2 h-4 w-4" />
+                      Light
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="dark">
+                      <Moon className="mr-2 h-4 w-4" />
+                      Dark
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="system">
+                      <Laptop className="mr-2 h-4 w-4" />
+                      System
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <LogOut className="mr-2 h-4 w-4" />

@@ -41,9 +41,9 @@ export function TicketList({ filters, onPageChange, isAgent = false }: Props) {
               <div className="group flex flex-col sm:flex-row items-start sm:items-center border rounded-md p-3 hover:bg-muted/50 transition-colors">
                 <div className="flex-1 min-w-0 pr-4">
                   <div className="flex items-start justify-between sm:items-center gap-2">
-                    <h3 className="font-medium text-sm sm:text-base truncate group-hover:text-primary transition-colors">
+                    <p className="font-medium text-sm sm:text-base truncate group-hover:text-primary transition-colors">
                       {ticket.summary}
-                    </h3>
+                    </p>
                   </div>
                   <div className="flex flex-row items-center gap-1 sm:gap-3 text-xs text-muted-foreground mt-1">
                     <span className="inline-flex items-center">ID: #{ticket.id}</span>
