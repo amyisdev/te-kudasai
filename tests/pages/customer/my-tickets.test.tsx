@@ -36,7 +36,7 @@ describe('My Tickets', () => {
     await user.click(resetButton)
 
     await waitFor(() => {
-      expect(screen.queryByText('Bug Report')).toBeInTheDocument()
+      expect(screen.getByText('Bug Report')).toBeInTheDocument()
     })
   })
 
