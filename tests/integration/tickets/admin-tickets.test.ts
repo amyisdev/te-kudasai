@@ -106,6 +106,11 @@ describe('Admin: Get ticket by id', () => {
       status: 'success',
       data: expect.objectContaining({ id: 1 }),
     })
+
+    const ticket = body.data
+    expect(ticket).toMatchObject({
+      reporter: expect.objectContaining({ name: 'John Doe' }),
+    })
   })
 
   it('should return 404 when ticket not found', async () => {

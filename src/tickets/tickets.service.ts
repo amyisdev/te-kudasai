@@ -1,8 +1,9 @@
 import { withPagination } from '@/db/builder-utils'
 import { db } from '@/db/client'
 import type { PaginationParams } from '@/shared/validation'
-import { type SQL, and, count, desc, eq, ilike } from 'drizzle-orm'
+import { type SQL, aliasedTable, and, count, desc, eq, ilike } from 'drizzle-orm'
 import { ticketsTable } from './tickets.schema'
+import { users } from '@/auth/auth.schema'
 
 export async function getMyTickets(
   userId: string,
@@ -81,8 +82,27 @@ export async function getAllTickets({
   }
 }
 
-export async function getTicketById(ticketId: number) {
+export async function getTicketById(ticketId: number, withUsers = false) {
   const [ticket] = await db.select().from(ticketsTable).where(eq(ticketsTable.id, ticketId))
+  return ticket
+}
+
+export async function getTicketByIdWithUsers(ticketId: number) {
+  const assigneeTable = aliasedTable(users, 'assignee')
+  const reporterTable = aliasedTable(users, 'reporter')
+
+  const [ticket] = await db
+    .select({
+      tickets: ticketsTable,
+      assignee: assigneeTable,
+      reporter: reporterTable,
+    })
+    .from(ticketsTable)
+    .where(eq(ticketsTable.id, ticketId))
+    .leftJoin(assigneeTable, eq(ticketsTable.assigneeId, assigneeTable.id))
+    .leftJoin(reporterTable, eq(ticketsTable.reporterId, reporterTable.id))
+    .limit(1)
+
   return ticket
 }
 

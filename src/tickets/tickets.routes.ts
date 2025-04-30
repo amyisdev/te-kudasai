@@ -75,11 +75,11 @@ ticketsRoutes
 
   .get('/:id', sValidator('param', ticketIdSchema), async (c) => {
     const ticketId = c.req.valid('param').id
-    const ticket = await service.getTicketById(ticketId)
+    const ticket = await service.getTicketByIdWithUsers(ticketId)
     if (!ticket) {
       throw new NotFoundError('Ticket not found')
     }
-    return c.json(successResponse(ticket))
+    return c.json(successResponse({ ...ticket.tickets, assignee: ticket.assignee, reporter: ticket.reporter }))
   })
 
   .patch('/:id', sValidator('param', ticketIdSchema), sValidator('json', updateTicketSchema), async (c) => {
