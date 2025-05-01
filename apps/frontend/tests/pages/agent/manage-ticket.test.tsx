@@ -34,7 +34,7 @@ describe('Manage Ticket', () => {
     renderWithRouter(<App />, { route: '/agent/tickets/2' })
 
     await screen.findByText('Ticket #2')
-    expect(screen.getByText('assigned-to-agent')).toBeInTheDocument()
+    expect(screen.getByText('Assigned Agent')).toBeInTheDocument()
   })
 
   it('should render empty state when ticket is not found', async () => {
