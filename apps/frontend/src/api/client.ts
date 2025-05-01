@@ -1,0 +1,7 @@
+import { ofetch } from 'ofetch'
+
+export const $fetch = ofetch.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  retry: 0,
+  credentials: 'include',
+})
