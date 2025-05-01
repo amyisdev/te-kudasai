@@ -1,15 +1,15 @@
 ---
 description: 
-globs: tests/**/*.test.ts
+globs: apps/backend/tests/**/*.test.ts
 alwaysApply: false
 ---
-# Integration Testing Guide
+# Backend Integration Testing Guide
 
 ## Test File Organization
-- Tests are located in `tests/integration/{feature}/*.test.ts`
+- Tests are located in `apps/backend/tests/integration/{feature}/*.test.ts`
 - Group related endpoints under a single test file
 - Use descriptive `describe` blocks to group related test cases
-- Reference example: [tests/integration/tickets/my-tickets.test.ts](mdc:tests/integration/tickets/my-tickets.test.ts)
+- Reference example: [apps/backend/tests/integration/tickets/my-tickets.test.ts](mdc:apps/backend/tests/integration/tickets/my-tickets.test.ts)
 
 ## Authentication Testing
 - Use the `signedInAs` helper to handle authentication in tests:

@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-.env
+coverage
 
 # Editor directories and files
 .vscode/*
@@ -24,5 +24,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# Coverage
-coverage/
+# Turborepo
+.turbo
+.cache

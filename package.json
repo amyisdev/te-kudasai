@@ -1,0 +1,20 @@
+{
+  "name": "te-kudasai",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "bun@1.2.12",
+  "type": "module",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "turbo": "^2.5.2",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "coverage": "turbo run coverage"
+  },
+  "workspaces": ["apps/*"]
+}

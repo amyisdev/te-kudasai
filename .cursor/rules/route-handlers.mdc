@@ -1,12 +1,12 @@
 ---
 description: 
-globs: src/**/*.routes.ts
+globs: apps/backend/src/**/*.routes.ts
 alwaysApply: false
 ---
-# Route Handler Guide
+# Backend Route Handler Guide
 
 ## Basic Structure
-Reference implementation: [src/tickets/tickets.routes.ts](mdc:src/tickets/tickets.routes.ts)
+Reference implementation: [apps/backend/src/tickets/tickets.routes.ts](mdc:apps/backend/src/tickets/tickets.routes.ts)
 
 ```typescript
 const routes = new Hono()

@@ -6,6 +6,6 @@ export default {
   name: 'Sample Form',
   validator: z.object({
     NAME: z.string().min(1),
-    EMAIL: z.email().min(1),
+    EMAIL: z.string().email().min(1),
   }),
 } satisfies FormType
