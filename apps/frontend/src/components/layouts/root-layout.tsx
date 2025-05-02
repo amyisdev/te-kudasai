@@ -2,6 +2,7 @@ import { authClient } from '@/lib/auth-client'
 import { Navigate, Outlet } from 'react-router'
 import { PageLoader } from '../loader'
 import { MainNav } from '../main-nav'
+import { NavigateCommand } from '../navigate-command'
 
 export default function RootLayout({ agentOnly }: { agentOnly?: boolean }) {
   const { data: session, isPending } = authClient.useSession()
@@ -24,6 +25,8 @@ export default function RootLayout({ agentOnly }: { agentOnly?: boolean }) {
       <main className="flex-1 py-6 px-4 md:px-6 lg:px-8">
         <Outlet />
       </main>
+
+      <NavigateCommand isAgent={session.user.role === 'admin'} />
     </div>
   )
 }

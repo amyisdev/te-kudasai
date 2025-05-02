@@ -27,4 +27,20 @@ describe('All Tickets', () => {
       expect(screen.getByRole('heading', { level: 1, name: 'My Tickets' })).toBeInTheDocument()
     })
   })
+
+  it('should provide command+k interface to navigate pages', async () => {
+    const { user } = renderWithRouter(<App />, { route: '/agent' })
+
+    await user.keyboard('{Control>}{k}{/Control}')
+
+    await waitFor(() => {
+      expect(screen.getByText('Navigate to')).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('option', { name: 'New Ticket' }))
+
+    await waitFor(() => {
+      expect(screen.getByText('New Ticket')).toBeInTheDocument()
+    })
+  })
 })
