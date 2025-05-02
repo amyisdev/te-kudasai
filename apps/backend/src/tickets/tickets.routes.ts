@@ -1,5 +1,5 @@
 import { adminOnly, needAuth } from '@/auth/auth.middleware'
-import forms from '@/forms'
+import forms from '@te-kudasai/forms'
 import { BadRequestError, NotFoundError } from '@/shared/app-error'
 import { paginatedResponse, successResponse } from '@/shared/response'
 import { sValidator } from '@hono/standard-validator'
@@ -11,17 +11,6 @@ const ticketsRoutes = new Hono()
 
 ticketsRoutes
   .use('*', needAuth)
-
-  .get('/forms', (c) => {
-    return c.json(
-      successResponse(
-        Object.values(forms).map((form) => ({
-          id: form.id,
-          name: form.name,
-        })),
-      ),
-    )
-  })
 
   .get('/my', sValidator('query', listTicketsSchema), async (c) => {
     const userId = c.var.user.id

@@ -1,9 +1,12 @@
-import type { z } from 'zod'
-import type { BaseRenderProps } from './_base'
+import type { Ticket } from '@/api/types'
+import type { FormType } from '@te-kudasai/forms'
 
-export interface FormType {
-  id: string
-  name: string
-  validator: z.ZodObject
-  render: <T extends BaseRenderProps>(props: T) => React.ReactNode
+export interface RenderProps {
+  onSuccess?: (data: Ticket) => void
+  onError?: (error: unknown) => void
+  ticket?: Ticket
+}
+
+export interface FormTypeWithRender extends FormType {
+  render: <T extends RenderProps>(props: T) => React.ReactNode
 }

@@ -16,5 +16,5 @@
     "test:watch": "turbo run test:watch",
     "coverage": "turbo run coverage"
   },
-  "workspaces": ["apps/*"]
+  "workspaces": ["apps/*", "packages/*"]
 }

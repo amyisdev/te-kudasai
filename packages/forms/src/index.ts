@@ -1,4 +1,4 @@
-import sampleForm from './sample-form'
+import * as sampleForm from './forms/sample-form'
 import type { FormType } from './types'
 
 export default {

@@ -1,0 +1,16 @@
+{
+  "name": "@te-kudasai/forms",
+  "type": "module",
+  "main": "dist/index.js",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "zod": "^3.24.3"
+  },
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc"
+  }
+}

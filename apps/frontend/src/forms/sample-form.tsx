@@ -4,20 +4,17 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { objectKeys } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { id, name, validator } from '@te-kudasai/forms/dist/forms/sample-form'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { type BaseRenderProps, baseSchema, baseValues } from './_base'
+import type { z } from 'zod'
+import { baseSchema, baseValues } from './_base'
+import type { RenderProps } from './types'
 
-export const id = 'sample-form'
-export const name = 'Sample Form'
-export const validator = z.object({
-  NAME: z.string().min(1),
-  EMAIL: z.string().email().min(1),
-})
+export * from '@te-kudasai/forms/dist/forms/sample-form'
 
 const formSchema = baseSchema.extend({ form: validator })
 type FormValues = z.infer<typeof formSchema>
-const defaultValues = {
+const defaultValues: FormValues = {
   ...baseValues,
   summary: name,
   form: {
@@ -27,7 +24,7 @@ const defaultValues = {
 }
 
 // When ticket is provided, it will be used to prefill the form
-export function render({ onSuccess, onError, ticket }: BaseRenderProps) {
+export function render({ onSuccess, onError, ticket }: RenderProps) {
   const { mutate: createTicket, isPending } = useCreateTicket({ onSuccess, onError })
   const { mutate: updateTicket } = useUpdateTicket({ onSuccess, onError })
 
