@@ -1,6 +1,6 @@
 import FormCard from '@/components/form-card'
-import forms from '@/forms'
 import { objectKeys } from '@/lib/utils'
+import formTypes from '@te-kudasai/forms'
 
 export default function NewTicket() {
   return (
@@ -9,8 +9,8 @@ export default function NewTicket() {
       <p className="text-muted-foreground dark:text-gray-400 mb-8">Select the type of ticket you'd like to create</p>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {objectKeys(forms).map((formId, i) => (
-          <FormCard key={formId} type={forms[formId]} variant={i} />
+        {objectKeys(formTypes).map((formId, i) => (
+          <FormCard key={formId} type={formTypes[formId]} variant={i} />
         ))}
       </div>
     </div>

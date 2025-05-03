@@ -1,14 +1,7 @@
-import type { LucideIcon } from 'lucide-react'
-import type { z } from 'zod'
 import * as sampleForm from './forms/sample-form'
+import type { FormType } from './types'
 
-export interface FormType {
-  id: string
-  name: string
-  description: string
-  icon: LucideIcon
-  validator: z.ZodObject<z.ZodRawShape>
-}
+export * from './types'
 
 export default {
   'sample-form': sampleForm,

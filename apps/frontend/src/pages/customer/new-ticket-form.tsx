@@ -1,16 +1,24 @@
+import type { Ticket } from '@/api/types'
+import { RenderForm } from '@/components/render-form'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import forms from '@/forms'
+import formTypes from '@te-kudasai/forms'
 import { ArrowLeft } from 'lucide-react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router'
+import { toast } from 'sonner'
 
 export default function NewTicketForm() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const formId = searchParams.get('type')
-  const Form = forms[formId!]
+  const formType = formTypes[formId!]
 
-  if (!Form) return <Navigate to="/new-ticket" />
+  const onSuccess = (ticket: Ticket) => {
+    toast.success('Ticket submitted successfully')
+    navigate(`/tickets/${ticket.id}`)
+  }
+
+  if (!formType) return <Navigate to="/new-ticket" />
 
   return (
     <div className="py-6 px-4 md:px-6 lg:px-8 max-w-3xl mx-auto">
@@ -21,7 +29,7 @@ export default function NewTicketForm() {
             <span className="sr-only">Back to select ticket type</span>
           </Link>
         </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{Form.name}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{formType.name}</h1>
       </div>
 
       <Card>
@@ -30,7 +38,7 @@ export default function NewTicketForm() {
           <CardDescription>Provide details about your request.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form.render onSuccess={(data) => navigate(`/tickets/${data.id}`)} />
+          <RenderForm formType={formType} onSuccess={onSuccess} />
         </CardContent>
       </Card>
     </div>

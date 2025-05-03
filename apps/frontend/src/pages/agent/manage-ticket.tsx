@@ -2,14 +2,15 @@ import { useOpenForm, useTicket, useToggleAssignment, useUpdateTicket } from '@/
 import type { Ticket, TicketWithUsers } from '@/api/types'
 import { EmptyState } from '@/components/empty-state'
 import { PageLoader } from '@/components/loader'
+import { RenderForm } from '@/components/render-form'
 import TicketDetail from '@/components/tickets/ticket-detail'
 import { Avatar, AvatarDiceBear, AvatarFallbackInitials } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import forms from '@/forms'
 import { useQueryClient } from '@tanstack/react-query'
+import formTypes from '@te-kudasai/forms'
 import { ArrowLeft, FolderX, X } from 'lucide-react'
 import { FetchError } from 'ofetch'
 import { Link, useParams } from 'react-router'
@@ -143,7 +144,7 @@ function CustomerDetail({ ticket }: { ticket: TicketWithUsers }) {
 }
 
 function UpdateForm({ ticket }: { ticket: Ticket }) {
-  const Form = forms[ticket.formId as keyof typeof forms]
+  const formType = formTypes[ticket.formId]
 
   const queryClient = useQueryClient()
   const onSuccess = (ticket: Ticket) => {
@@ -157,7 +158,7 @@ function UpdateForm({ ticket }: { ticket: Ticket }) {
         <CardTitle>Update Form</CardTitle>
       </CardHeader>
       <CardContent>
-        <Form.render ticket={ticket} onSuccess={onSuccess} />
+        <RenderForm formType={formType} ticket={ticket} onSuccess={onSuccess} />
       </CardContent>
     </Card>
   )
