@@ -113,6 +113,24 @@ describe('Admin: Get ticket by id', () => {
     })
   })
 
+  it('should get ticket by id (assigned)', async () => {
+    const res = await app.request('/api/tickets/2', {
+      headers: await signedInAs('admin@tk.local'),
+    })
+
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body).toEqual({
+      status: 'success',
+      data: expect.objectContaining({ id: 2 }),
+    })
+
+    const ticket = body.data
+    expect(ticket).toMatchObject({
+      assignee: expect.objectContaining({ name: 'Admin' }),
+    })
+  })
+
   it('should return 404 when ticket not found', async () => {
     const res = await app.request('/api/tickets/999', {
       headers: await signedInAs('admin@tk.local'),

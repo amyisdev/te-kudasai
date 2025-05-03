@@ -5,6 +5,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { admin } from 'better-auth/plugins'
 import { nanoid } from 'nanoid'
 import * as schema from './auth.schema'
+import encryptedAuth from './plugins/encrypted-auth'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -13,7 +14,7 @@ export const auth = betterAuth({
     usePlural: true,
   }),
 
-  plugins: [admin()],
+  plugins: [admin(), encryptedAuth()],
   emailAndPassword: {
     enabled: true,
   },
@@ -28,4 +29,11 @@ export const auth = betterAuth({
   },
 
   trustedOrigins,
+
+  socialProviders: {
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    },
+  },
 })

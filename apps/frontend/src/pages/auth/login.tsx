@@ -82,6 +82,24 @@ function LoginForm() {
   )
 }
 
+function LoginSocial() {
+  return (
+    <div className="border-t pt-4">
+      <Button
+        className="w-full text-white bg-[#24292F] hover:bg-[#24292F]/90"
+        onClick={() =>
+          authClient.signIn.social({
+            provider: 'github',
+            callbackURL: window.location.href,
+          })
+        }
+      >
+        Login with GitHub
+      </Button>
+    </div>
+  )
+}
+
 export default function Login() {
   return (
     <div className="flex flex-col gap-6">
@@ -92,10 +110,12 @@ export default function Login() {
           </CardTitle>
           <CardDescription>Enter your email below to login to your account</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <LoginForm />
 
-          <div className="mt-4 text-center text-sm">
+          <LoginSocial />
+
+          <div className="text-center text-sm">
             Don&apos;t have an account?{' '}
             <NavLink to="/auth/signup" className="underline underline-offset-4">
               Sign up

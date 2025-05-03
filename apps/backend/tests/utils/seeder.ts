@@ -1,4 +1,26 @@
 import { db } from '@/db/client'
+import { encrypt, hash } from '@/shared/crypto'
+
+const rawUsers = [
+  {
+    id: 'admin',
+    name: 'Admin',
+    email: 'admin@tk.local',
+    role: 'admin',
+  },
+  {
+    id: 'john.doe',
+    name: 'John Doe',
+    email: 'john.doe@tk.local',
+    role: 'user',
+  },
+  {
+    id: 'jane.doe',
+    name: 'Jane Doe',
+    email: 'jane.doe@tk.local',
+    role: 'user',
+  },
+]
 
 const rawTickets = [
   {
@@ -52,12 +74,16 @@ export async function seed() {
   await db.execute(`
     -- DML for users table
     INSERT INTO "users" ("id", "name", "email", "email_verified", "role") VALUES
-    ('admin', 'Admin', 'admin@tk.local', FALSE, 'admin'),
-    ('john.doe', 'John Doe', 'john.doe@tk.local', FALSE, 'user'),
-    ('jane.doe', 'Jane Doe', 'jane.doe@tk.local', FALSE, 'user');
+    ${rawUsers.map((user) => `('${user.id}', '${hash(user.name.toLowerCase())}', '${hash(user.email.toLowerCase())}@tk.local', FALSE, '${user.role}')`).join(',')};
   `)
 
-  // Hashing is expensive >:(
+  await db.execute(`
+    -- DML for encrypted_users table
+    INSERT INTO "encrypted_users" ("id", "user_id", "name", "email") VALUES
+    ${rawUsers.map((user) => `('${user.id}', '${user.id}', '${encrypt(user.name)}', '${encrypt(user.email)}@tk.local')`).join(',')};
+  `)
+
+  // Hashing password is expensive >:(
   await db.execute(`
     -- DML for accounts table
     INSERT INTO "accounts" ("id", "account_id", "provider_id", "user_id", "password") VALUES

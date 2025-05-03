@@ -1,9 +1,10 @@
-import { users } from '@/auth/auth.schema'
+import { encryptedUsers, users } from '@/auth/auth.schema'
 import { withPagination } from '@/db/builder-utils'
 import { db } from '@/db/client'
 import type { PaginationParams } from '@/shared/validation'
 import { type SQL, aliasedTable, and, count, desc, eq, ilike } from 'drizzle-orm'
 import { ticketsTable } from './tickets.schema'
+import { decryptUser } from '@/auth/auth.utils'
 
 export async function getMyTickets(
   userId: string,
@@ -88,8 +89,8 @@ export async function getTicketById(ticketId: number, withUsers = false) {
 }
 
 export async function getTicketByIdWithUsers(ticketId: number) {
-  const assigneeTable = aliasedTable(users, 'assignee')
-  const reporterTable = aliasedTable(users, 'reporter')
+  const assigneeTable = aliasedTable(encryptedUsers, 'assignee')
+  const reporterTable = aliasedTable(encryptedUsers, 'reporter')
 
   const [ticket] = await db
     .select({
@@ -99,9 +100,14 @@ export async function getTicketByIdWithUsers(ticketId: number) {
     })
     .from(ticketsTable)
     .where(eq(ticketsTable.id, ticketId))
-    .leftJoin(assigneeTable, eq(ticketsTable.assigneeId, assigneeTable.id))
-    .leftJoin(reporterTable, eq(ticketsTable.reporterId, reporterTable.id))
+    .leftJoin(assigneeTable, eq(ticketsTable.assigneeId, assigneeTable.userId))
+    .leftJoin(reporterTable, eq(ticketsTable.reporterId, reporterTable.userId))
     .limit(1)
+
+  if (ticket) {
+    ticket.assignee = decryptUser(ticket.assignee)
+    ticket.reporter = decryptUser(ticket.reporter)
+  }
 
   return ticket
 }

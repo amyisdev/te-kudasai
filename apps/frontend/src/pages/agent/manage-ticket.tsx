@@ -127,15 +127,15 @@ function CustomerDetail({ ticket }: { ticket: TicketWithUsers }) {
       <CardContent className="space-y-4">
         <div>
           <Label className="text-sm">Reporter ID</Label>
-          <p>{ticket.reporterId}</p>
+          <p className="truncate">{ticket.reporterId}</p>
         </div>
         <div>
           <Label className="text-sm">Name</Label>
-          <p>{ticket.reporter.name}</p>
+          <p className="truncate">{ticket.reporter.name}</p>
         </div>
         <div>
           <Label className="text-sm">Email</Label>
-          <p>{ticket.reporter.email}</p>
+          <p className="truncate">{ticket.reporter.email}</p>
         </div>
       </CardContent>
     </Card>
