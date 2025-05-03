@@ -27,6 +27,13 @@ export const useTicket = (id: number, isAgent = false) => {
     queryKey: [path, id],
     queryFn: () => $fetch<SuccessResponse<TicketWithUsers>>(`${path}/${id}`),
     enabled: !!id,
+    retry(failureCount, error) {
+      if (error instanceof FetchError && error.status === 404) {
+        return false
+      }
+
+      return failureCount < 3
+    },
   })
 }
 
