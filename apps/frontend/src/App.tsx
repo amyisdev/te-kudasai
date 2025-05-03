@@ -9,6 +9,7 @@ import Login from './pages/auth/login'
 import SignUp from './pages/auth/signup'
 import MyTickets from './pages/customer/my-tickets'
 import NewTicket from './pages/customer/new-ticket'
+import NewTicketForm from './pages/customer/new-ticket-form'
 import ViewTicket from './pages/customer/view-ticket'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<RootLayout />}>
           <Route index element={<MyTickets />} />
           <Route path="new-ticket" element={<NewTicket />} />
+          <Route path="new-ticket-form" element={<NewTicketForm />} />
           <Route path="tickets/:id" element={<ViewTicket />} />
         </Route>
 
