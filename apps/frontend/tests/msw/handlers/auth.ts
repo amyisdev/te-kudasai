@@ -46,4 +46,8 @@ export const signUpFailed = http.post('http://localhost:3000/api/auth/sign-up/em
   )
 })
 
-export const handlers = [authenticated, loginSuccess, signUpSuccess]
+export const signOutSuccess = http.post('http://localhost:3000/api/auth/sign-out', () => {
+  return HttpResponse.json({ success: true })
+})
+
+export const handlers = [authenticated, loginSuccess, signUpSuccess, signOutSuccess]
