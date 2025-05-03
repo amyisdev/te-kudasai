@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils'
 import type { FormType } from '@te-kudasai/forms'
 import { ArrowRight } from 'lucide-react'
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { Link } from 'react-router'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
 
 const variants = [
   {

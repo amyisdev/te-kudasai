@@ -1,6 +1,6 @@
+import { decrypt, encrypt, hash } from '@/shared/crypto'
 import type { BetterAuthPlugin, User } from 'better-auth'
 import { createAuthMiddleware } from 'better-auth/api'
-import { decrypt, encrypt, hash } from '@/shared/crypto'
 import { getEndpointResponse } from './_utils'
 
 export interface EncryptedUser {

@@ -1,10 +1,10 @@
-import { encryptedUsers, users } from '@/auth/auth.schema'
+import { encryptedUsers } from '@/auth/auth.schema'
+import { decryptUser } from '@/auth/auth.utils'
 import { withPagination } from '@/db/builder-utils'
 import { db } from '@/db/client'
 import type { PaginationParams } from '@/shared/validation'
 import { type SQL, aliasedTable, and, count, desc, eq, ilike } from 'drizzle-orm'
 import { ticketsTable } from './tickets.schema'
-import { decryptUser } from '@/auth/auth.utils'
 
 export async function getMyTickets(
   userId: string,

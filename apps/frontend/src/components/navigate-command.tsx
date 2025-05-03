@@ -1,5 +1,3 @@
-import { List, ListTodo, Plus } from 'lucide-react'
-import * as React from 'react'
 import {
   CommandDialog,
   CommandEmpty,
@@ -9,6 +7,8 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command'
+import { List, ListTodo, Plus } from 'lucide-react'
+import * as React from 'react'
 import { useNavigate } from 'react-router'
 
 const navigations = [

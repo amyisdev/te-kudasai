@@ -132,14 +132,18 @@ export const getTicket = http.get('http://localhost:3000/api/tickets/:id', ({ pa
 
 export const getTicketAssigned = http.get('http://localhost:3000/api/tickets/:id', ({ params }) => {
   return HttpResponse.json({
-    data: ticketFactory({ id: Number(params.id), assigneeId: 'assigned-to-agent', assignee: {
-      id: 'assigned-to-agent',
-      name: 'Assigned Agent',
-      email: 'assigned-to-agent@tk.local',
-      emailVerified: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    } }),
+    data: ticketFactory({
+      id: Number(params.id),
+      assigneeId: 'assigned-to-agent',
+      assignee: {
+        id: 'assigned-to-agent',
+        name: 'Assigned Agent',
+        email: 'assigned-to-agent@tk.local',
+        emailVerified: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    }),
     status: 'success',
   })
 })

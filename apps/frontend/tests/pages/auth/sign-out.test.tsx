@@ -1,9 +1,9 @@
 import App from '@/App'
 import { screen, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { renderWithRouter } from '../../utils'
-import { server } from '../../msw/server'
 import { unauthenticated } from '../../msw/handlers/auth'
+import { server } from '../../msw/server'
+import { renderWithRouter } from '../../utils'
 
 describe('Sign Out', () => {
   it('should render ticket detail', async () => {

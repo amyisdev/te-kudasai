@@ -8,7 +8,7 @@ import { Link, useParams } from 'react-router'
 
 export default function ViewTicket() {
   const { id } = useParams()
-  const { data: ticket, isPending } = useTicket(id!)
+  const { data: ticket, isPending } = useTicket(Number(id))
 
   if (isPending) return <PageLoader />
 
