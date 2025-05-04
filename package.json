@@ -16,5 +16,6 @@
     "test:watch": "turbo run test:watch",
     "coverage": "turbo run coverage"
   },
-  "workspaces": ["apps/*", "packages/*"]
+  "workspaces": ["apps/*", "packages/*"],
+  "license": "MIT"
 }
