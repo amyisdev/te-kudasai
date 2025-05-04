@@ -33,7 +33,7 @@ export default function FormCard({ type, variant = 0 }: { type: FormType; varian
   return (
     <Card
       className={cn(
-        'group relative overflow-hidden transition-all hover:shadow-md dark:hover:shadow-md dark:hover:shadow-primary/5 cursor-pointer border-2',
+        'group relative overflow-hidden transition-all hover:shadow-md dark:hover:shadow-md dark:hover:shadow-primary/5 cursor-pointer border-2 justify-between',
         variantClass.card,
       )}
     >

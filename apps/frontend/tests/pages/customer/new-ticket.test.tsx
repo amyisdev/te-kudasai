@@ -11,6 +11,8 @@ describe('New Ticket', () => {
       expect(screen.getByRole('heading', { level: 1, name: 'Create New Ticket' })).toBeInTheDocument()
     })
 
+    expect(screen.queryByRole('link', { name: 'Select Disabled Form' })).not.toBeInTheDocument()
+
     const link = screen.getByRole('link', { name: 'Select Sample Form' })
     expect(link).toBeInTheDocument()
 

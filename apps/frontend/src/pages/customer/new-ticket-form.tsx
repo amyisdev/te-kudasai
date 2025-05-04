@@ -18,7 +18,7 @@ export default function NewTicketForm() {
     navigate(`/tickets/${ticket.id}`)
   }
 
-  if (!formType) return <Navigate to="/new-ticket" />
+  if (!formType || formType.disabled) return <Navigate to="/new-ticket" />
 
   return (
     <div className="py-6 px-4 md:px-6 lg:px-8 max-w-3xl mx-auto">

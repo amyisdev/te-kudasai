@@ -61,4 +61,12 @@ describe('New Ticket Form', () => {
       expect(screen.getByText('Invalid form data')).toBeInTheDocument()
     })
   })
+
+  it('should redirect to new ticket when form is disabled', async () => {
+    renderWithRouter(<App />, { route: '/new-ticket-form?type=disabled-form' })
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { level: 1, name: 'Create New Ticket' })).toBeInTheDocument()
+    })
+  })
 })

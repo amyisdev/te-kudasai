@@ -28,4 +28,6 @@ export interface FormType {
   icon: LucideIcon
   validator: z.ZodObject<z.ZodRawShape>
   fields: FieldType[]
+  hasAutomation?: boolean
+  disabled?: boolean
 }

@@ -10,13 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useQueryClient } from '@tanstack/react-query'
-import formTypes from '@te-kudasai/forms'
+import formTypes, { type FormType } from '@te-kudasai/forms'
 import { ArrowLeft, FolderX, X } from 'lucide-react'
 import { FetchError } from 'ofetch'
 import { Link, useParams } from 'react-router'
 import { toast } from 'sonner'
 
-function TicketStatusCard({ ticket }: { ticket: TicketWithUsers }) {
+function TicketActionsCard({ ticket, formType }: { ticket: TicketWithUsers; formType: FormType }) {
   const queryClient = useQueryClient()
   const { mutate: updateTicket } = useUpdateTicket({
     onSuccess({ status }) {
@@ -57,13 +57,15 @@ function TicketStatusCard({ ticket }: { ticket: TicketWithUsers }) {
   const onStatusChange = (status: string) => updateTicket({ id: ticket.id, status })
   const onToggleAssign = () => updateTicketAssignment({ id: ticket.id })
   const onOpenForm = () => openForm({ id: ticket.id })
+  const onRunAutomation = () => toast.warning('Automation is not yet implemented')
 
   const canUpdateForm = ticket.formOpen === false && ['open', 'pending'].includes(ticket.status)
+  const canRunAutomation = formType.hasAutomation === true && ['open', 'pending'].includes(ticket.status)
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Ticket Status</CardTitle>
+        <CardTitle>Ticket Actions</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
@@ -89,7 +91,7 @@ function TicketStatusCard({ ticket }: { ticket: TicketWithUsers }) {
           {ticket.assignee ? (
             <div className="flex items-center gap-2 p-2 border rounded-md">
               <Avatar className="h-6 w-6">
-                <AvatarDiceBear seed={ticket.assignee.id} />
+                <AvatarDiceBear seed={ticket.assignee.userId} />
                 <AvatarFallbackInitials name={ticket.assignee.name} />
               </Avatar>
               <span className="flex-1 truncate">{ticket.assignee.name}</span>
@@ -111,6 +113,15 @@ function TicketStatusCard({ ticket }: { ticket: TicketWithUsers }) {
             <Label className="mb-2">Form</Label>
             <Button onClick={onOpenForm} variant="outline" className="w-full">
               Open form for update
+            </Button>
+          </div>
+        )}
+
+        {canRunAutomation && (
+          <div>
+            <Label className="mb-2">Automation</Label>
+            <Button onClick={onRunAutomation} variant="outline" className="w-full">
+              Run automation
             </Button>
           </div>
         )}
@@ -143,9 +154,7 @@ function CustomerDetail({ ticket }: { ticket: TicketWithUsers }) {
   )
 }
 
-function UpdateForm({ ticket }: { ticket: Ticket }) {
-  const formType = formTypes[ticket.formId]
-
+function UpdateForm({ ticket, formType }: { ticket: Ticket; formType: FormType }) {
   const queryClient = useQueryClient()
   const onSuccess = (ticket: Ticket) => {
     toast.success('Ticket has been updated')
@@ -167,6 +176,7 @@ function UpdateForm({ ticket }: { ticket: Ticket }) {
 export default function ManageTicket() {
   const { id } = useParams()
   const { data: ticket, isPending } = useTicket(Number(id!), true)
+  const formType = ticket?.data ? formTypes[ticket.data.formId] : undefined
 
   if (isPending) return <PageLoader />
 
@@ -186,10 +196,10 @@ export default function ManageTicket() {
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-6">
             <TicketDetail ticket={ticket.data} />
-            {ticket.data.formOpen && <UpdateForm ticket={ticket.data} />}
+            {ticket.data.formOpen && <UpdateForm ticket={ticket.data} formType={formType!} />}
           </div>
           <div className="space-y-6">
-            <TicketStatusCard ticket={ticket.data} />
+            <TicketActionsCard ticket={ticket.data} formType={formType!} />
             <CustomerDetail ticket={ticket.data} />
           </div>
         </div>

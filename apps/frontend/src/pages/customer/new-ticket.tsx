@@ -9,9 +9,9 @@ export default function NewTicket() {
       <p className="text-muted-foreground dark:text-gray-400 mb-8">Select the type of ticket you'd like to create</p>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {objectKeys(formTypes).map((formId, i) => (
-          <FormCard key={formId} type={formTypes[formId]} variant={i} />
-        ))}
+        {objectKeys(formTypes).map((formId, i) =>
+          formTypes[formId].disabled ? null : <FormCard key={formId} type={formTypes[formId]} variant={i} />,
+        )}
       </div>
     </div>
   )
