@@ -84,7 +84,7 @@ function LoginForm() {
 
 function LoginSocial() {
   return (
-    <div className="border-t pt-4">
+    <div className="border-t pt-4 space-y-4">
       <Button
         className="w-full text-white bg-[#24292F] hover:bg-[#24292F]/90"
         onClick={() =>
@@ -95,6 +95,18 @@ function LoginSocial() {
         }
       >
         Login with GitHub
+      </Button>
+
+      <Button
+        className="w-full text-white bg-[#FC6D26] hover:bg-[#FC6D26]/90"
+        onClick={() =>
+          authClient.signIn.social({
+            provider: 'gitlab',
+            callbackURL: window.location.href,
+          })
+        }
+      >
+        Login with GitLab
       </Button>
     </div>
   )
