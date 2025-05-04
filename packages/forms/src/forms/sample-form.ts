@@ -1,4 +1,3 @@
-import { z } from 'zod'
 import { Code } from 'lucide-react'
 import type { FieldType } from '../types'
 
@@ -6,13 +5,6 @@ export const id = 'sample-form'
 export const name = 'Sample Form'
 export const description = 'Create a sample ticket'
 export const icon = Code
-
-export const validator = z.object({
-  NAME: z.string().min(1),
-  EMAIL: z.string().email().min(1),
-  MESSAGE: z.string().min(1),
-  PRIORITY: z.enum(['low', 'medium', 'high']),
-})
 
 export const fields = [
   {
@@ -24,11 +16,14 @@ export const fields = [
     name: 'EMAIL',
     label: 'Email',
     type: 'text',
+
+    format: 'email',
   },
   {
     name: 'MESSAGE',
     label: 'Message',
     type: 'long-text',
+    optional: true,
   },
   {
     name: 'PRIORITY',

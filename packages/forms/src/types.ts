@@ -1,13 +1,15 @@
 import type { LucideIcon } from 'lucide-react'
-import type { z } from 'zod'
 
 interface BaseFieldType {
   name: string
   label: string
+
+  optional?: boolean
 }
 
 interface TextFieldType extends BaseFieldType {
   type: 'text'
+  format?: 'email'
 }
 
 interface LongTextFieldType extends BaseFieldType {
@@ -26,7 +28,6 @@ export interface FormType {
   name: string
   description: string
   icon: LucideIcon
-  validator: z.ZodObject<z.ZodRawShape>
   fields: FieldType[]
   hasAutomation?: boolean
   disabled?: boolean

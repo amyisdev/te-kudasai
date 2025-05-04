@@ -5,14 +5,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { FormType } from '@te-kudasai/forms'
+import { type FormType, generateZodSchema } from '@te-kudasai/forms'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Textarea } from './ui/textarea'
-
-export const baseSchema = z.object({
-  summary: z.string().min(1),
-})
 
 const generateDefaultValues = (formType: FormType, ticket?: Ticket) => {
   const defaultValues: Record<string, string> = {}
@@ -36,6 +32,11 @@ const generateDefaultValues = (formType: FormType, ticket?: Ticket) => {
   return defaultValues
 }
 
+interface FormSubmitData {
+  summary: string
+  form: Record<string, string | undefined>
+}
+
 export interface RenderProps {
   formType: FormType
   ticket?: Ticket
@@ -47,7 +48,11 @@ export function RenderForm({ formType, ticket, onSuccess, onError }: RenderProps
   const { mutate: createTicket, isPending: isCreating } = useCreateTicket({ onSuccess, onError })
   const { mutate: updateTicket, isPending: isUpdating } = useUpdateTicket({ onSuccess, onError })
 
-  const schema = baseSchema.extend({ form: formType.validator })
+  const schema = z.object({
+    summary: z.string().min(1),
+    form: generateZodSchema(formType),
+  })
+
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -56,7 +61,7 @@ export function RenderForm({ formType, ticket, onSuccess, onError }: RenderProps
     },
   })
 
-  const onSubmit = (data: z.infer<typeof schema>) => {
+  const onSubmit = (data: FormSubmitData) => {
     if (ticket) {
       updateTicket({ ...data, id: ticket.id })
     } else {

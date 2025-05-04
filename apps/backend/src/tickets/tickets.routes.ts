@@ -2,7 +2,7 @@ import { adminOnly, needAuth } from '@/auth/auth.middleware'
 import { BadRequestError, NotFoundError } from '@/shared/app-error'
 import { paginatedResponse, successResponse } from '@/shared/response'
 import { sValidator } from '@hono/standard-validator'
-import forms from '@te-kudasai/forms'
+import forms, { generateZodSchema } from '@te-kudasai/forms'
 import { Hono } from 'hono'
 import * as service from './tickets.service'
 import { createTicketSchema, listTicketsSchema, ticketIdSchema, updateTicketSchema } from './tickets.validation'
@@ -29,7 +29,7 @@ ticketsRoutes
       throw new NotFoundError('Form not found')
     }
 
-    const validatedForm = form.validator.safeParse(data.form)
+    const validatedForm = generateZodSchema(form).safeParse(data.form)
     if (!validatedForm.success) {
       throw new BadRequestError('Invalid form data', 'INVALID_FORM_DATA')
     }
