@@ -12,5 +12,20 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - BETTER_AUTH_SECRET=secret-value-here
+      - BETTER_AUTH_URL=http://localhost:3000
+      - DATABASE_URL=postgresql://postgres:password@db:5432/postgres
+      - GITHUB_CLIENT_ID=Ov23liU20lQUv0mHMRRB
+      - GITHUB_CLIENT_SECRET=ff76b5f5527a6cc190214d2f33ac541b7c1eafb5
+    depends_on:
+      - db
+
 volumes:
   postgres_data:

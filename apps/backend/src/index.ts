@@ -7,14 +7,14 @@ import ticketsRoutes from './tickets/tickets.routes'
 
 const app = new Hono()
   .onError(errorHandler)
-  .use('*', cors({ origin: trustedOrigins, credentials: true }))
+  .use('/api/*', cors({ origin: trustedOrigins, credentials: true }))
   .get('/api/health', (c) => c.json({ status: 'success' }))
 
   .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
 
   .route('/api/tickets', ticketsRoutes)
 
-  .get('*', (c) => {
+  .get('/api/*', (c) => {
     throw new NotFoundError('Page not found')
   })
 

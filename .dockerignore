@@ -1,0 +1,17 @@
+.turbo/
+coverage/
+dist/
+node_modules/
+*/*/turbo/
+*/*/coverage/
+*/*/dist/
+*/*/node_modules/
+
+*.local
+*/*/*.local
+
+.cursor/
+.git/
+
+*Dockerfile*
+*docker-compose*
