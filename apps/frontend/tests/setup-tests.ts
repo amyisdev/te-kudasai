@@ -7,6 +7,7 @@ import { server } from './msw/server'
 window.HTMLElement.prototype.hasPointerCapture = vi.fn()
 
 beforeAll(() => {
+  vi.stubEnv('VITE_API_URL', 'http://localhost:3000')
   server.listen()
 })
 
