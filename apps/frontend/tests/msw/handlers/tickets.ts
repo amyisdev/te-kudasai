@@ -16,12 +16,9 @@ function ticketFactory(overrides: Partial<TicketWithUsers> = {}): TicketWithUser
     assignee: null,
     reporter: {
       id: 'jane.doe',
+      userId: 'jane.doe',
       name: 'Jane Doe',
       email: 'jane.doe@tk.local',
-      emailVerified: true,
-      image: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     },
     ...overrides,
   }
@@ -137,11 +134,9 @@ export const getTicketAssigned = http.get('http://localhost:3000/api/tickets/:id
       assigneeId: 'assigned-to-agent',
       assignee: {
         id: 'assigned-to-agent',
+        userId: 'assigned-to-agent',
         name: 'Assigned Agent',
         email: 'assigned-to-agent@tk.local',
-        emailVerified: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
     }),
     status: 'success',

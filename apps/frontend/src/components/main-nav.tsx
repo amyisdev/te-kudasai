@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useTheme } from '@/hooks/use-theme'
 import { authClient } from '@/lib/auth-client'
-import { Laptop, LogOut, Moon, Palette, ShieldUser, Sun } from 'lucide-react'
+import { Laptop, LogOut, Moon, Palette, Sun } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { Avatar, AvatarDiceBear, AvatarFallbackInitials } from './ui/avatar'
