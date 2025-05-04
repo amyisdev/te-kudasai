@@ -25,7 +25,7 @@ ticketsRoutes
     const data = c.req.valid('json')
 
     const form = forms[data.formId]
-    if (!form) {
+    if (!form || form.disabled) {
       throw new NotFoundError('Form not found')
     }
 

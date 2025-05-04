@@ -151,6 +151,26 @@ describe('Create ticket', () => {
     })
   })
 
+  it('should return 404 when form is disabled', async () => {
+    const res = await app.request('/api/tickets/my', {
+      method: 'POST',
+      headers: {
+        ...(await signedInAs('jane.doe@tk.local')),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        formId: 'disabled-form',
+        summary: 'New Ticket',
+        form: {
+          NAME: 'Jane Doe',
+          EMAIL: 'jane.doe@tk.local',
+        },
+      }),
+    })
+
+    expect(res.status).toBe(404)
+  })
+
   it('should return 400 when form data is invalid', async () => {
     const res = await app.request('/api/tickets/my', {
       method: 'POST',
