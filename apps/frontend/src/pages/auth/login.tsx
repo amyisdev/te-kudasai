@@ -55,7 +55,7 @@ function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="idp@example.com" {...field} />
+                <Input placeholder="user@tk.local" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
