@@ -94,6 +94,8 @@ describe('Create ticket', () => {
         form: {
           NAME: 'Jane Doe',
           EMAIL: 'jane.doe@tk.local',
+          MESSAGE: 'This is a test message',
+          PRIORITY: 'medium',
         },
       }),
     })
@@ -113,6 +115,8 @@ describe('Create ticket', () => {
         form: {
           NAME: 'Jane Doe',
           EMAIL: 'jane.doe@tk.local',
+          MESSAGE: 'This is a test message',
+          PRIORITY: 'medium',
         },
         formOpen: false,
         createdAt: expect.any(String),
