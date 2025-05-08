@@ -83,7 +83,7 @@ export async function getAllTickets({
   }
 }
 
-export async function getTicketById(ticketId: number, withUsers = false) {
+export async function getTicketById(ticketId: number) {
   const [ticket] = await db.select().from(ticketsTable).where(eq(ticketsTable.id, ticketId))
   return ticket
 }
