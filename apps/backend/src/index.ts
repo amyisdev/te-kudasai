@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { auth } from './auth/better-auth'
+import formsRoutes from './forms/forms.routes'
 import { NotFoundError, errorHandler } from './shared/app-error'
 import { trustedOrigins } from './shared/env'
 import ticketsRoutes from './tickets/tickets.routes'
@@ -13,6 +14,7 @@ const app = new Hono()
   .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
 
   .route('/api/tickets', ticketsRoutes)
+  .route('/api/forms', formsRoutes)
 
   .get('/api/*', (c) => {
     throw new NotFoundError('Page not found')

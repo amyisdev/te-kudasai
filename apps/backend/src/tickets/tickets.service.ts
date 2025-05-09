@@ -6,10 +6,12 @@ import type { PaginationParams } from '@/shared/validation'
 import { type SQL, aliasedTable, and, count, desc, eq, ilike } from 'drizzle-orm'
 import { ticketsTable } from './tickets.schema'
 
-export async function getMyTickets(
-  userId: string,
-  { page = 1, limit = 10, search, status }: PaginationParams & { search?: string; status?: string },
-) {
+type ListTicketsParams = PaginationParams & {
+  search?: string
+  status?: string
+}
+
+export async function getMyTickets(userId: string, { page = 1, limit = 10, search, status }: ListTicketsParams) {
   const conditions = [eq(ticketsTable.reporterId, userId)]
 
   if (search) {
@@ -51,12 +53,7 @@ export async function createTicket(data: typeof ticketsTable.$inferInsert) {
   return ticket
 }
 
-export async function getAllTickets({
-  page = 1,
-  limit = 10,
-  search,
-  status,
-}: PaginationParams & { search?: string; status?: string }) {
+export async function getAllTickets({ page = 1, limit = 10, search, status }: ListTicketsParams) {
   const conditions: SQL[] = []
 
   if (search) {

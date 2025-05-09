@@ -5,6 +5,7 @@ import * as sampleForm from './forms/sample-form'
 import type { FormType } from './types'
 
 export * from './types'
+export * from './schema'
 
 type NonEmptyArray<T> = [T, ...T[]]
 type ValidZodString = z.ZodString | z.ZodOptional<z.ZodString>

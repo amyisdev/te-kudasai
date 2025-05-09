@@ -1,5 +1,6 @@
 import { db } from '@/db/client'
 import { encrypt, hash } from '@/shared/crypto'
+import { CreateFormSchema } from '@te-kudasai/forms'
 
 const rawUsers = [
   {
@@ -70,6 +71,33 @@ const rawTickets = [
   },
 ]
 
+const rawForms = [
+  {
+    id: 'sample-form',
+    creatorId: 'admin',
+    name: 'Sample Form',
+    description: 'This is a sample form',
+    disabled: false,
+    elements: [
+      {
+        id: 'sample-text-field',
+        type: 'text-field',
+        name: 'sample-text-field',
+        label: 'Sample Text Field',
+        required: true,
+      },
+    ],
+  },
+  {
+    id: 'disabled-form',
+    creatorId: 'admin',
+    name: 'Disabled Form',
+    description: 'This is a disabled form',
+    disabled: true,
+    elements: [],
+  },
+]
+
 export async function seed() {
   await db.execute(`
     -- DML for users table
@@ -99,4 +127,10 @@ export async function seed() {
   `)
 
   await db.execute('ALTER SEQUENCE tickets_id_seq RESTART WITH 6')
+
+  await db.execute(`
+    -- DML for forms table
+    INSERT INTO "forms" ("id", "creator_id", "name", "description", "disabled", "elements") VALUES
+    ${rawForms.map((form) => `('${form.id}', '${form.creatorId}', '${form.name}', '${form.description}', ${form.disabled}, '${JSON.stringify(form.elements)}')`).join(',')};
+  `)
 }

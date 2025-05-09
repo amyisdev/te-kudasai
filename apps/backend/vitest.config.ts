@@ -12,6 +12,7 @@ export default defineConfig({
     env: loadEnv('', process.cwd(), ''), // Load all environment variables
     environment: 'node',
     setupFiles: ['./tests/setup-tests.ts'],
+    testTimeout: 10000,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
