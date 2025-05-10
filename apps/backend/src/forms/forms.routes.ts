@@ -76,6 +76,7 @@ formsRoutes
       throw new BadRequestError('Form must be disabled before deleting', 'FORM_NOT_DISABLED')
     }
 
+    // TODO: Disallow deletion of forms that have tickets
     const deletedForm = await deleteForm(id)
     return c.json(successResponse(deletedForm))
   })

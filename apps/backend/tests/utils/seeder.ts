@@ -31,7 +31,7 @@ const rawTickets = [
     summary: 'Billing Issue',
     status: 'open',
     formId: 'sample-form',
-    form: '{ "NAME": "John Doe", "EMAIL": "john.doe@tk.local" }',
+    form: '{ "sample-text-field": "John Doe" }',
   },
   {
     id: 2,
@@ -40,7 +40,7 @@ const rawTickets = [
     summary: 'Account Suspension',
     status: 'resolved',
     formId: 'sample-form',
-    form: '{ "NAME": "John Doe", "EMAIL": "john.doe@tk.local" }',
+    form: '{ "sample-text-field": "John Doe" }',
   },
   {
     id: 3,
@@ -49,7 +49,7 @@ const rawTickets = [
     summary: 'Feature Request',
     status: 'in_progress',
     formId: 'sample-form',
-    form: '{ "NAME": "John Doe", "EMAIL": "john.doe@tk.local" }',
+    form: '{ "sample-text-field": "John Doe" }',
   },
   {
     id: 4,
@@ -58,7 +58,7 @@ const rawTickets = [
     summary: 'Bug Report',
     status: 'in_progress',
     formId: 'sample-form',
-    form: '{ "NAME": "Jane Doe", "EMAIL": "jane.doe@tk.local" }',
+    form: '{ "sample-text-field": "Jane Doe" }',
   },
   {
     id: 5,
@@ -67,7 +67,7 @@ const rawTickets = [
     summary: 'Feature Request',
     status: 'open',
     formId: 'sample-form',
-    form: '{ "NAME": "Jane Doe", "EMAIL": "jane.doe@tk.local" }',
+    form: '{ "sample-text-field": "Jane Doe" }',
   },
 ]
 

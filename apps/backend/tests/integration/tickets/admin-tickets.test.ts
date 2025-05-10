@@ -32,8 +32,7 @@ describe('Admin: List all tickets', () => {
       status: 'open',
       formId: 'sample-form',
       form: {
-        NAME: 'Jane Doe',
-        EMAIL: 'jane.doe@tk.local',
+        'sample-text-field': 'Jane Doe',
       },
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
@@ -256,8 +255,7 @@ describe('Admin: Delete ticket', () => {
       status: TICKET_STATUS.RESOLVED,
       formId: 'sample-form',
       form: {
-        NAME: 'John Doe',
-        EMAIL: 'john.doe@tk.local',
+        'sample-text-field': 'John Doe',
       },
       createdAt: new Date(),
       updatedAt: new Date(),

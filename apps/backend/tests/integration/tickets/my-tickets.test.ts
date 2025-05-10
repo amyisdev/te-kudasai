@@ -92,10 +92,7 @@ describe('Create ticket', () => {
         summary: 'New Ticket',
         formId: 'sample-form',
         form: {
-          NAME: 'Jane Doe',
-          EMAIL: 'jane.doe@tk.local',
-          MESSAGE: 'This is a test message',
-          PRIORITY: 'medium',
+          'sample-text-field': 'Jane Doe',
         },
       }),
     })
@@ -113,10 +110,7 @@ describe('Create ticket', () => {
         status: 'open',
         formId: 'sample-form',
         form: {
-          NAME: 'Jane Doe',
-          EMAIL: 'jane.doe@tk.local',
-          MESSAGE: 'This is a test message',
-          PRIORITY: 'medium',
+          'sample-text-field': 'Jane Doe',
         },
         formOpen: false,
         createdAt: expect.any(String),
@@ -136,8 +130,7 @@ describe('Create ticket', () => {
         formId: 'non-existent-form',
         summary: 'New Ticket',
         form: {
-          NAME: 'Jane Doe',
-          EMAIL: 'jane.doe@tk.local',
+          'sample-text-field': 'Jane Doe',
         },
       }),
     })
@@ -162,8 +155,7 @@ describe('Create ticket', () => {
         formId: 'disabled-form',
         summary: 'New Ticket',
         form: {
-          NAME: 'Jane Doe',
-          EMAIL: 'jane.doe@tk.local',
+          'sample-text-field': 'Jane Doe',
         },
       }),
     })
@@ -182,8 +174,8 @@ describe('Create ticket', () => {
         formId: 'sample-form',
         summary: 'New Ticket',
         form: {
-          NAME: 'Jane Doe',
-          // missing EMAIL
+          // Missing value
+          'sample-text-field': '',
         },
       }),
     })
