@@ -51,7 +51,9 @@ export const errorHandler: ErrorHandler = (err, c) => {
       responseBody.code = err.errorCode
     }
   } else {
-    // console.error(`Unhandled Error: ${err.message}`, { error: err, stack: err.stack, path: c.req.path })
+    if (process.env.NODE_ENV === 'production') {
+      console.error(`Unhandled Error: ${err.message}`, { error: err, stack: err.stack, path: c.req.path })
+    }
 
     // In development, show the original message
     if (process.env.NODE_ENV === 'development') {
