@@ -16,7 +16,7 @@ export default function NewTicket() {
 
       <div className="grid gap-6 md:grid-cols-2">
         {tkForms.data.map((form, i) => (
-          <FormCard key={form.id} form={form} variant={i} />
+          <FormCard key={form.id} tkForm={form} variant={i} />
         ))}
       </div>
     </div>

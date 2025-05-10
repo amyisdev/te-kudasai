@@ -1,4 +1,4 @@
-import type { TKForm } from '@/api/types'
+import type { TKForm } from '@te-kudasai/forms'
 import { cn } from '@/lib/utils'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router'
@@ -27,7 +27,7 @@ const variants = [
   },
 ]
 
-export default function FormCard({ form, variant = 0 }: { form: TKForm; variant?: number }) {
+export default function FormCard({ tkForm, variant = 0 }: { tkForm: TKForm; variant?: number }) {
   const variantClass = variant >= 0 ? variants[variant % variants.length] : variants[0]
 
   return (
@@ -40,8 +40,8 @@ export default function FormCard({ form, variant = 0 }: { form: TKForm; variant?
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
-            <CardTitle className="text-xl">{form.name}</CardTitle>
-            <CardDescription className="mt-2">{form.description}</CardDescription>
+            <CardTitle className="text-xl">{tkForm.name}</CardTitle>
+            <CardDescription className="mt-2">{tkForm.description}</CardDescription>
           </div>
           {/* TODO: Add icon */}
           {/* <div className="p-2 rounded-full bg-white dark:bg-white/10 border dark:border-transparent shadow-sm">
@@ -55,8 +55,8 @@ export default function FormCard({ form, variant = 0 }: { form: TKForm; variant?
         </p>
       </CardFooter>
 
-      <Link to={`/new-ticket-form?type=${form.id}`} className="absolute inset-0">
-        <span className="sr-only">Select {form.name}</span>
+      <Link to={`/new-ticket-form?type=${tkForm.id}`} className="absolute inset-0">
+        <span className="sr-only">Select {tkForm.name}</span>
       </Link>
     </Card>
   )

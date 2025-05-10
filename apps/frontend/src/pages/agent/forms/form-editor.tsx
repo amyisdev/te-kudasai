@@ -7,7 +7,7 @@ import { Navigate, useNavigate, useParams } from 'react-router'
 export default function FormEditor() {
   const { formId } = useParams()
 
-  const { data: form, isLoading, error } = useForm(formId)
+  const { data: form, isLoading, error } = useForm(formId ?? null)
   const { mutate: createForm } = useCreateForm()
   const { mutate: updateForm } = useUpdateForm()
 

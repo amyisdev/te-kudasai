@@ -1,4 +1,4 @@
-import type { FormElement } from '@/api/types'
+import type { FormElement } from '@te-kudasai/forms'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useSortable } from '@dnd-kit/sortable'

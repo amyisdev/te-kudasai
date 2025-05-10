@@ -1,4 +1,4 @@
-import type { FormElementType } from '@/api/types'
+import type { FormElementType } from '@te-kudasai/forms'
 import { AlignLeft, FileText, List, Type } from 'lucide-react'
 
 export default function FormTypeIcon({ type, className }: { type: FormElementType; className?: string }) {
