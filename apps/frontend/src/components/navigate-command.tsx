@@ -7,7 +7,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command'
-import { List, ListTodo, Plus } from 'lucide-react'
+import { FileText, List, ListTodo, Plus } from 'lucide-react'
 import * as React from 'react'
 import { useNavigate } from 'react-router'
 
@@ -15,6 +15,7 @@ const navigations = [
   { label: 'My Tickets', to: '/', icon: ListTodo, onlyAgent: false },
   { label: 'New Ticket', to: '/new-ticket', icon: Plus, onlyAgent: false },
   { label: 'All Tickets', to: '/agent', icon: List, onlyAgent: true },
+  { label: 'Form Builder', to: '/agent/forms', icon: FileText, onlyAgent: true },
 ]
 
 export function NavigateCommand({ isAgent }: { isAgent?: boolean }) {

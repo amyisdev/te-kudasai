@@ -38,6 +38,11 @@ const navItems = {
       href: '/agent',
       description: 'View all tickets and status',
     },
+    {
+      title: 'Form Builder',
+      href: '/agent/forms',
+      description: 'Create and manage forms',
+    },
   ],
 }
 

@@ -91,7 +91,7 @@ export default function FormList() {
   return (
     <div className="py-6 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Forms</h1>
+        <h1 className="text-3xl font-bold">Form List</h1>
         <Button asChild>
           <Link to="/agent/forms/new">
             <Plus className="size-4" />
