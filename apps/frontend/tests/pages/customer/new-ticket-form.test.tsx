@@ -15,7 +15,6 @@ describe('New Ticket Form', () => {
 
     expect(screen.getByLabelText('Summary')).toBeInTheDocument()
     expect(screen.getByLabelText('Name')).toBeInTheDocument()
-    expect(screen.getByLabelText('Email')).toBeInTheDocument()
     expect(screen.getByLabelText('Message')).toBeInTheDocument()
     expect(screen.getByLabelText('Priority')).toBeInTheDocument()
   })
@@ -25,13 +24,11 @@ describe('New Ticket Form', () => {
 
     const summary = await screen.findByLabelText('Summary')
     const name = await screen.findByLabelText('Name')
-    const email = await screen.findByLabelText('Email')
     const message = await screen.findByLabelText('Message')
     const submitButton = await screen.findByRole('button', { name: 'Submit' })
 
     await user.type(summary, 'Test Summary')
     await user.type(name, 'Test Name')
-    await user.type(email, 'test@example.com')
     await user.type(message, 'Test Message')
     await user.click(submitButton)
 
@@ -47,13 +44,11 @@ describe('New Ticket Form', () => {
 
     const summary = await screen.findByLabelText('Summary')
     const name = await screen.findByLabelText('Name')
-    const email = await screen.findByLabelText('Email')
     const message = await screen.findByLabelText('Message')
     const submitButton = await screen.findByRole('button', { name: 'Submit' })
 
     await user.type(summary, 'Test Summary')
     await user.type(name, 'Test Name')
-    await user.type(email, 'test@example.com')
     await user.type(message, 'Test Message')
     await user.click(submitButton)
 

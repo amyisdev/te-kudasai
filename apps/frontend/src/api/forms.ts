@@ -1,17 +1,17 @@
 import { type UseMutationOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { CreateFormSchema, UpdateFormSchema } from '@te-kudasai/forms'
+import type { CreateFormSchema, TKForm, UpdateFormSchema } from '@te-kudasai/forms'
 import { toast } from 'sonner'
 import { $fetch } from './client'
-import type { PaginatedResponse, SuccessResponse, TKForm } from './types'
+import type { SuccessResponse } from './types'
 
 export const useForms = () => {
   return useQuery({
     queryKey: ['/api/forms'],
-    queryFn: () => $fetch<PaginatedResponse<TKForm[]>>('/api/forms'),
+    queryFn: () => $fetch<SuccessResponse<TKForm[]>>('/api/forms'),
   })
 }
 
-export const useForm = (id?: string) => {
+export const useForm = (id: string | null) => {
   return useQuery({
     queryKey: ['/api/forms', id],
     queryFn: () => $fetch<SuccessResponse<TKForm>>(`/api/forms/${id}`),
@@ -68,5 +68,20 @@ export const useDeleteForm = (props?: UseMutationOptions<TKForm, unknown, string
       queryClient.invalidateQueries({ queryKey: ['/api/forms'] })
       toast.success(`Form ${data.name} has been deleted`)
     },
+  })
+}
+
+export const useEnabledForms = () => {
+  return useQuery({
+    queryKey: ['/api/forms', 'enabled'],
+    queryFn: () => $fetch<SuccessResponse<TKForm[]>>('/api/forms/enabled'),
+  })
+}
+
+export const useEnabledForm = (id: string | null) => {
+  return useQuery({
+    queryKey: ['/api/forms/enabled', id],
+    queryFn: () => $fetch<SuccessResponse<TKForm>>(`/api/forms/enabled/${id}`),
+    enabled: !!id,
   })
 }

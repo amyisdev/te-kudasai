@@ -1,8 +1,9 @@
+import { useEnabledForm } from '@/api/forms'
 import { useOpenForm, useTicket, useToggleAssignment, useUpdateTicket } from '@/api/tickets'
 import type { Ticket, TicketWithUsers } from '@/api/types'
 import { EmptyState } from '@/components/empty-state'
 import { PageLoader } from '@/components/loader'
-import { RenderForm } from '@/components/render-form'
+import { type FormSubmitData, RenderForm } from '@/components/render-form'
 import TicketDetail from '@/components/tickets/ticket-detail'
 import { Avatar, AvatarDiceBear, AvatarFallbackInitials } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -10,13 +11,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useQueryClient } from '@tanstack/react-query'
-import formTypes, { type FormType } from '@te-kudasai/forms'
+import type { TKForm } from '@te-kudasai/forms'
 import { ArrowLeft, FolderX, X } from 'lucide-react'
 import { FetchError } from 'ofetch'
 import { Link, useParams } from 'react-router'
 import { toast } from 'sonner'
 
-function TicketActionsCard({ ticket, formType }: { ticket: TicketWithUsers; formType: FormType }) {
+function TicketActionsCard({ ticket }: { ticket: TicketWithUsers }) {
   const queryClient = useQueryClient()
   const { mutate: updateTicket } = useUpdateTicket({
     onSuccess({ status }) {
@@ -57,10 +58,11 @@ function TicketActionsCard({ ticket, formType }: { ticket: TicketWithUsers; form
   const onStatusChange = (status: string) => updateTicket({ id: ticket.id, status })
   const onToggleAssign = () => updateTicketAssignment({ id: ticket.id })
   const onOpenForm = () => openForm({ id: ticket.id })
-  const onRunAutomation = () => toast.warning('Automation is not yet implemented')
+  // const onRunAutomation = () => toast.warning('Automation is not yet implemented')
 
   const canUpdateForm = ticket.formOpen === false && ['open', 'pending'].includes(ticket.status)
-  const canRunAutomation = formType.hasAutomation === true && ['open', 'pending'].includes(ticket.status)
+  // TODO: Has Automation
+  // const canRunAutomation = tkForm.hasAutomation === true && ['open', 'pending'].includes(ticket.status)
 
   return (
     <Card>
@@ -117,14 +119,14 @@ function TicketActionsCard({ ticket, formType }: { ticket: TicketWithUsers; form
           </div>
         )}
 
-        {canRunAutomation && (
+        {/* {canRunAutomation && (
           <div>
             <Label className="mb-2">Automation</Label>
             <Button onClick={onRunAutomation} variant="outline" className="w-full">
               Run automation
             </Button>
           </div>
-        )}
+        )} */}
       </CardContent>
     </Card>
   )
@@ -154,11 +156,18 @@ function CustomerDetail({ ticket }: { ticket: TicketWithUsers }) {
   )
 }
 
-function UpdateForm({ ticket, formType }: { ticket: Ticket; formType: FormType }) {
+function UpdateForm({ ticket, tkForm }: { ticket: Ticket; tkForm: TKForm }) {
   const queryClient = useQueryClient()
-  const onSuccess = (ticket: Ticket) => {
-    toast.success('Ticket has been updated')
-    queryClient.invalidateQueries({ queryKey: ['/api/tickets', ticket.id] })
+
+  const { mutate, isPending } = useUpdateTicket({
+    onSuccess(ticket) {
+      toast.success('Ticket has been updated')
+      queryClient.invalidateQueries({ queryKey: ['/api/tickets', ticket.id] })
+    },
+  })
+
+  const onSubmit = (data: FormSubmitData) => {
+    mutate({ ...data, id: ticket.id })
   }
 
   return (
@@ -167,7 +176,7 @@ function UpdateForm({ ticket, formType }: { ticket: Ticket; formType: FormType }
         <CardTitle>Update Form</CardTitle>
       </CardHeader>
       <CardContent>
-        <RenderForm formType={formType} ticket={ticket} onSuccess={onSuccess} />
+        <RenderForm tkForm={tkForm} ticket={ticket} onSubmit={onSubmit} disabled={isPending} />
       </CardContent>
     </Card>
   )
@@ -176,9 +185,9 @@ function UpdateForm({ ticket, formType }: { ticket: Ticket; formType: FormType }
 export default function ManageTicket() {
   const { id } = useParams()
   const { data: ticket, isPending } = useTicket(Number(id!), true)
-  const formType = ticket?.data ? formTypes[ticket.data.formId] : undefined
+  const { data: tkForm, isLoading: isFormLoading } = useEnabledForm(ticket?.data.formId ?? null)
 
-  if (isPending) return <PageLoader />
+  if (isPending || isFormLoading) return <PageLoader />
 
   return (
     <div className="py-6 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -192,14 +201,14 @@ export default function ManageTicket() {
         <h1 className="text-3xl font-bold tracking-tight">Manage Ticket</h1>
       </div>
 
-      {ticket ? (
+      {ticket && tkForm ? (
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-6">
             <TicketDetail ticket={ticket.data} />
-            {ticket.data.formOpen && <UpdateForm ticket={ticket.data} formType={formType!} />}
+            {ticket.data.formOpen && <UpdateForm ticket={ticket.data} tkForm={tkForm.data} />}
           </div>
           <div className="space-y-6">
-            <TicketActionsCard ticket={ticket.data} formType={formType!} />
+            <TicketActionsCard ticket={ticket.data} />
             <CustomerDetail ticket={ticket.data} />
           </div>
         </div>

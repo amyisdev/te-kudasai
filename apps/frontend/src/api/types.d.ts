@@ -47,31 +47,3 @@ export interface TicketFilters {
   status: string
   page: number
 }
-
-export interface TKForm {
-  id: string
-  name: string
-  description: string
-  disabled?: boolean
-  elements: FormElement[]
-}
-
-export interface FormElement {
-  id: string
-  type: FormElementType
-  name: string
-  label?: string
-
-  required?: boolean
-  placeholder?: string
-  options?: FormElementOption[]
-  content?: string
-}
-
-export interface FormElementOption {
-  id: string
-  label: string
-  value: string
-}
-
-export type FormElementType = 'text-field' | 'textarea' | 'dropdown' | 'text-panel'

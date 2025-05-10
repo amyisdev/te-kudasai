@@ -1,11 +1,11 @@
 import { useDeleteForm, useForms, useUpdateForm } from '@/api/forms'
-import type { TKForm } from '@/api/types'
 import { EmptyState } from '@/components/empty-state'
 import { PageLoader } from '@/components/loader'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
+import type { TKForm } from '@te-kudasai/forms'
 import { Check, Edit2, Eye, FileX, MoreVertical, Plus, Trash2, XCircle } from 'lucide-react'
 import { Link, Navigate } from 'react-router'
 

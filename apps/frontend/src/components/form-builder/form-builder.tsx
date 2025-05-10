@@ -1,4 +1,3 @@
-import type { FormElement, FormElementType, TKForm } from '@/api/types'
 import { EmptyState } from '@/components/empty-state'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -16,6 +15,7 @@ import {
 import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { zodResolver } from '@hookform/resolvers/zod'
+import type { FormElement, FormElementType, TKForm } from '@te-kudasai/forms'
 import {
   type CreateElementSchema,
   type CreateFormSchema,

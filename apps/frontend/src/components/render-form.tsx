@@ -1,29 +1,75 @@
-import { useCreateTicket, useUpdateTicket } from '@/api/tickets'
 import type { Ticket } from '@/api/types'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type FormType, generateZodSchema } from '@te-kudasai/forms'
-import { useForm } from 'react-hook-form'
+import { type FormElement, type TKForm, generateZodSchema } from '@te-kudasai/forms'
+import { useForm, useFormContext } from 'react-hook-form'
 import { z } from 'zod'
 import { Textarea } from './ui/textarea'
 
-const generateDefaultValues = (formType: FormType, ticket?: Ticket) => {
+function ElementFieldRenderer({ element }: { element: FormElement }) {
+  const { control } = useFormContext()
+
+  return (
+    <FormField
+      control={control}
+      name={`form.${element.name}`}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="capitalize">{element.label}</FormLabel>
+
+          {element.type === 'text-field' && (
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+          )}
+
+          {element.type === 'textarea' && (
+            <FormControl>
+              <Textarea {...field} />
+            </FormControl>
+          )}
+
+          {element.type === 'dropdown' && (
+            <Select onValueChange={field.onChange} value={field.value}>
+              <FormControl>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select an option" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {element.options?.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+const generateDefaultValues = (tkForm: TKForm, ticket?: Ticket) => {
   const defaultValues: Record<string, string> = {}
 
-  for (const formField of formType.fields) {
-    const ticketValue = ticket?.form?.[formField.name]
+  for (const element of tkForm.elements) {
+    const ticketValue = ticket?.form?.[element.name]
 
-    switch (formField.type) {
-      case 'text':
-      case 'long-text':
-        defaultValues[formField.name] = ticketValue ?? ''
+    switch (element.type) {
+      case 'text-field':
+      case 'textarea':
+        defaultValues[element.name] = ticketValue ?? ''
         break
-      case 'select': {
-        const firstOption = formField.options[0]
-        defaultValues[formField.name] = ticketValue ?? firstOption.value
+      case 'dropdown': {
+        const firstOption = element.options?.[0]
+        defaultValues[element.name] = ticketValue ?? firstOption?.value ?? ''
         break
       }
     }
@@ -32,42 +78,31 @@ const generateDefaultValues = (formType: FormType, ticket?: Ticket) => {
   return defaultValues
 }
 
-interface FormSubmitData {
+export interface FormSubmitData {
   summary: string
   form: Record<string, string | undefined>
 }
 
 export interface RenderProps {
-  formType: FormType
+  tkForm: TKForm
   ticket?: Ticket
-  onSuccess?: (data: Ticket) => void
-  onError?: (error: unknown) => void
+  onSubmit: (data: FormSubmitData) => void
+  disabled?: boolean
 }
 
-export function RenderForm({ formType, ticket, onSuccess, onError }: RenderProps) {
-  const { mutate: createTicket, isPending: isCreating } = useCreateTicket({ onSuccess, onError })
-  const { mutate: updateTicket, isPending: isUpdating } = useUpdateTicket({ onSuccess, onError })
-
+export function RenderForm({ tkForm, ticket, onSubmit, disabled = false }: RenderProps) {
   const schema = z.object({
     summary: z.string().min(1),
-    form: generateZodSchema(formType),
+    form: generateZodSchema(tkForm),
   })
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      summary: formType.name,
-      form: generateDefaultValues(formType, ticket),
+      summary: tkForm.name,
+      form: generateDefaultValues(tkForm, ticket),
     },
   })
-
-  const onSubmit = (data: FormSubmitData) => {
-    if (ticket) {
-      updateTicket({ ...data, id: ticket.id })
-    } else {
-      createTicket({ ...data, formId: formType.id })
-    }
-  }
 
   return (
     <Form {...form}>
@@ -86,51 +121,17 @@ export function RenderForm({ formType, ticket, onSuccess, onError }: RenderProps
           )}
         />
 
-        {formType.fields.map((formField) => (
-          <FormField
-            control={form.control}
-            key={formField.name}
-            name={`form.${formField.name}`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="capitalize">{formField.label}</FormLabel>
+        {tkForm.elements.map((element) =>
+          element.type === 'text-panel' ? (
+            <p key={element.id} className="rounded-lg p-4 bg-background border text-sm text-muted-foreground">
+              {element.content}
+            </p>
+          ) : (
+            <ElementFieldRenderer key={element.id} element={element} />
+          ),
+        )}
 
-                {formField.type === 'text' && (
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                )}
-
-                {formField.type === 'long-text' && (
-                  <FormControl>
-                    <Textarea {...field} />
-                  </FormControl>
-                )}
-
-                {formField.type === 'select' && (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select an option" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {formField.options.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))}
-
-        <Button type="submit" disabled={isCreating || isUpdating}>
+        <Button type="submit" disabled={disabled}>
           Submit
         </Button>
       </form>

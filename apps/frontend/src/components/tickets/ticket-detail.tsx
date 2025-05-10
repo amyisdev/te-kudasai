@@ -17,6 +17,7 @@ export default function TicketDetail({ ticket }: { ticket: Ticket }) {
             </CardDescription>
           </div>
           <div className="flex gap-2">
+            {/* TODO: form id is not a good way to display the form name */}
             <Badge variant="outline">{ticket.formId}</Badge>
             <StatusBadge status={ticket.status} />
           </div>
@@ -32,6 +33,7 @@ export default function TicketDetail({ ticket }: { ticket: Ticket }) {
           <div>
             <h3 className="font-medium mb-2">Form Answers</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* TODO: instead of displaying the key, maybe we should display the label */}
               {Object.entries(ticket.form).map(([key, value]) => (
                 <div key={key}>
                   <span className="text-sm font-medium capitalize">{key.toLowerCase()}: </span>

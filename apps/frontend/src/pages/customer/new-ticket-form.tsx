@@ -1,8 +1,9 @@
-import type { Ticket } from '@/api/types'
-import { RenderForm } from '@/components/render-form'
+import { useEnabledForm } from '@/api/forms'
+import { useCreateTicket } from '@/api/tickets'
+import { PageLoader } from '@/components/loader'
+import { type FormSubmitData, RenderForm } from '@/components/render-form'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import formTypes from '@te-kudasai/forms'
 import { ArrowLeft } from 'lucide-react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router'
 import { toast } from 'sonner'
@@ -10,15 +11,21 @@ import { toast } from 'sonner'
 export default function NewTicketForm() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const formId = searchParams.get('type')
-  const formType = formTypes[formId!]
+  const { data: tkform, isPending, error } = useEnabledForm(searchParams.get('type'))
 
-  const onSuccess = (ticket: Ticket) => {
-    toast.success('Ticket submitted successfully')
-    navigate(`/tickets/${ticket.id}`)
+  const { mutate, isPending: isCreating } = useCreateTicket({
+    onSuccess(ticket) {
+      toast.success('Ticket submitted successfully')
+      navigate(`/tickets/${ticket.id}`)
+    },
+  })
+
+  const onSubmit = (data: FormSubmitData) => {
+    mutate({ ...data, formId: tkform!.data.id })
   }
 
-  if (!formType || formType.disabled) return <Navigate to="/new-ticket" />
+  if (isPending) return <PageLoader />
+  if (!tkform || error) return <Navigate to="/new-ticket" />
 
   return (
     <div className="py-6 px-4 md:px-6 lg:px-8 max-w-3xl mx-auto">
@@ -29,16 +36,18 @@ export default function NewTicketForm() {
             <span className="sr-only">Back to select ticket type</span>
           </Link>
         </Button>
-        <h1 className="text-3xl font-bold tracking-tight">{formType.name}</h1>
+        <p className="text-3xl font-bold tracking-tight">New Ticket</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="tracking-tight">Ticket Information</CardTitle>
-          <CardDescription>Provide details about your request.</CardDescription>
+          <CardTitle className="tracking-tight">
+            <h1>{tkform.data.name}</h1>
+          </CardTitle>
+          <CardDescription>{tkform.data.description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <RenderForm formType={formType} onSuccess={onSuccess} />
+          <RenderForm tkForm={tkform.data} onSubmit={onSubmit} disabled={isCreating} />
         </CardContent>
       </Card>
     </div>

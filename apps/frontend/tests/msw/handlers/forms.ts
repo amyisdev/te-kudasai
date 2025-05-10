@@ -1,4 +1,4 @@
-import type { TKForm } from '@/api/types'
+import type { TKForm } from '@te-kudasai/forms'
 import { http, HttpResponse } from 'msw'
 
 function formFactory(overrides: Partial<TKForm> = {}): TKForm {
