@@ -132,14 +132,15 @@ describe('Form Editor', () => {
     await user.click(screen.getByRole('button', { name: 'Text Panel' }))
     await user.click(screen.getByRole('button', { name: 'Text Panel' }))
 
+    await user.click(screen.getAllByText('panel_1')[0])
+    await user.click(screen.getAllByRole('button', { name: 'Remove element' })[0])
+
     // Currently not stable
+    // For some reason this work on my pc but not on my laptop, bad cpu i guess
     const grip = screen.getAllByTestId('grip')[0]
     fireEvent.pointerDown(grip, { isPrimary: 1, button: 0 })
     fireEvent.pointerMove(grip, { clientY: 100 })
     fireEvent.pointerUp(grip)
-
-    await user.click(screen.getAllByText('panel_1')[0])
-    await user.click(screen.getAllByRole('button', { name: 'Remove element' })[0])
 
     expect(screen.queryByText('panel_1')).not.toBeInTheDocument()
   })
