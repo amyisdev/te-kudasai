@@ -31,7 +31,7 @@ describe('Admin: List all tickets', () => {
       summary: 'Feature Request',
       status: 'open',
       formId: 'sample-form',
-      form: {
+      formResponse: {
         'sample-text-field': 'Jane Doe',
       },
       createdAt: expect.any(String),
@@ -254,7 +254,7 @@ describe('Admin: Delete ticket', () => {
       summary: 'Account Suspension',
       status: TICKET_STATUS.RESOLVED,
       formId: 'sample-form',
-      form: {
+      formResponse: {
         'sample-text-field': 'John Doe',
       },
       createdAt: new Date(),

@@ -2,6 +2,7 @@ import { encryptedUsers } from '@/auth/auth.schema'
 import { decryptUser } from '@/auth/auth.utils'
 import { withPagination } from '@/db/builder-utils'
 import { db } from '@/db/client'
+import { formsTable } from '@/forms/forms.schema'
 import type { PaginationParams } from '@/shared/validation'
 import { type SQL, aliasedTable, and, count, desc, eq, ilike } from 'drizzle-orm'
 import { ticketsTable } from './tickets.schema'
@@ -31,9 +32,12 @@ export async function getMyTickets(userId: string, { page = 1, limit = 10, searc
     .select()
     .from(ticketsTable)
     .where(and(...conditions))
+    .leftJoin(formsTable, eq(ticketsTable.formId, formsTable.id))
+
+  const tickets = await withPagination(query.$dynamic(), desc(ticketsTable.id), page, limit)
 
   return {
-    data: await withPagination(query.$dynamic(), desc(ticketsTable.id), page, limit),
+    data: tickets.map((ticket) => ({ ...ticket.tickets, form: ticket.forms })),
     total,
   }
 }
@@ -42,6 +46,7 @@ export async function getMyTicketById(userId: string, ticketId: number) {
   const [ticket] = await db
     .select()
     .from(ticketsTable)
+    .leftJoin(formsTable, eq(ticketsTable.formId, formsTable.id))
     .where(and(eq(ticketsTable.id, ticketId), eq(ticketsTable.reporterId, userId)))
 
   return ticket
@@ -73,9 +78,12 @@ export async function getAllTickets({ page = 1, limit = 10, search, status }: Li
     .select()
     .from(ticketsTable)
     .where(and(...conditions))
+    .leftJoin(formsTable, eq(ticketsTable.formId, formsTable.id))
+
+  const tickets = await withPagination(query.$dynamic(), desc(ticketsTable.id), page, limit)
 
   return {
-    data: await withPagination(query.$dynamic(), desc(ticketsTable.id), page, limit),
+    data: tickets.map((ticket) => ({ ...ticket.tickets, form: ticket.forms })),
     total,
   }
 }
@@ -94,11 +102,13 @@ export async function getTicketByIdWithUsers(ticketId: number) {
       tickets: ticketsTable,
       assignee: assigneeTable,
       reporter: reporterTable,
+      forms: formsTable,
     })
     .from(ticketsTable)
     .where(eq(ticketsTable.id, ticketId))
     .leftJoin(assigneeTable, eq(ticketsTable.assigneeId, assigneeTable.userId))
     .leftJoin(reporterTable, eq(ticketsTable.reporterId, reporterTable.userId))
+    .leftJoin(formsTable, eq(ticketsTable.formId, formsTable.id))
     .limit(1)
 
   if (ticket) {

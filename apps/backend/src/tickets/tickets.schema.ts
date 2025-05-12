@@ -24,9 +24,9 @@ export const ticketsTable = pgTable(
       .notNull()
       .$default(() => TICKET_STATUS.OPEN),
 
-    formId: text('form_id').notNull(),
-    form: jsonb('form').notNull(),
     formOpen: boolean('form_open').notNull().default(false),
+    formId: text('form_id').notNull(),
+    formResponse: jsonb('form_response').notNull(),
 
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at').notNull().defaultNow(),

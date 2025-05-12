@@ -91,7 +91,7 @@ describe('Create ticket', () => {
       body: JSON.stringify({
         summary: 'New Ticket',
         formId: 'sample-form',
-        form: {
+        formResponse: {
           'sample-text-field': 'Jane Doe',
         },
       }),
@@ -109,7 +109,7 @@ describe('Create ticket', () => {
         summary: 'New Ticket',
         status: 'open',
         formId: 'sample-form',
-        form: {
+        formResponse: {
           'sample-text-field': 'Jane Doe',
         },
         formOpen: false,
@@ -129,7 +129,7 @@ describe('Create ticket', () => {
       body: JSON.stringify({
         formId: 'non-existent-form',
         summary: 'New Ticket',
-        form: {
+        formResponse: {
           'sample-text-field': 'Jane Doe',
         },
       }),
@@ -154,7 +154,7 @@ describe('Create ticket', () => {
       body: JSON.stringify({
         formId: 'disabled-form',
         summary: 'New Ticket',
-        form: {
+        formResponse: {
           'sample-text-field': 'Jane Doe',
         },
       }),
@@ -173,7 +173,7 @@ describe('Create ticket', () => {
       body: JSON.stringify({
         formId: 'sample-form',
         summary: 'New Ticket',
-        form: {
+        formResponse: {
           // Missing value
           'sample-text-field': '',
         },

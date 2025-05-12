@@ -12,7 +12,7 @@ function formFactory(overrides: Partial<TKForm> = {}): TKForm {
   }
 }
 
-const forms = [
+export const forms = [
   formFactory({
     id: 'disabled-form',
     name: 'Disabled Form',

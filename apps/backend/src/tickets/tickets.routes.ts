@@ -30,7 +30,7 @@ ticketsRoutes
       throw new NotFoundError('Form not found')
     }
 
-    const validatedForm = generateZodSchema(form as TKForm).safeParse(data.form)
+    const validatedForm = generateZodSchema(form as TKForm).safeParse(data.formResponse)
     if (!validatedForm.success) {
       throw new BadRequestError('Invalid form data', 'INVALID_FORM_DATA')
     }
@@ -38,7 +38,7 @@ ticketsRoutes
     const ticket = await service.createTicket({
       ...data,
       reporterId,
-      form: validatedForm.data,
+      formResponse: validatedForm.data,
     })
 
     return c.json(successResponse(ticket))
@@ -52,7 +52,7 @@ ticketsRoutes
       throw new NotFoundError('Ticket not found')
     }
 
-    return c.json(successResponse(ticket))
+    return c.json(successResponse({ ...ticket.tickets, form: ticket.forms }))
   })
 
   .use('*', adminOnly)
@@ -69,7 +69,14 @@ ticketsRoutes
     if (!ticket) {
       throw new NotFoundError('Ticket not found')
     }
-    return c.json(successResponse({ ...ticket.tickets, assignee: ticket.assignee, reporter: ticket.reporter }))
+    return c.json(
+      successResponse({
+        ...ticket.tickets,
+        assignee: ticket.assignee,
+        reporter: ticket.reporter,
+        form: ticket.forms,
+      }),
+    )
   })
 
   .patch('/:id', sValidator('param', ticketIdSchema), sValidator('json', updateTicketSchema), async (c) => {

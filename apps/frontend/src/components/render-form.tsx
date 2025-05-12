@@ -23,7 +23,7 @@ function ElementFieldRenderer({ element }: { element: FormElement }) {
   return (
     <FormField
       control={control}
-      name={`form.${element.name}`}
+      name={`formResponse.${element.name}`}
       render={({ field }) => (
         <FormItem>
           <FormLabel className="capitalize">{element.label}</FormLabel>
@@ -68,7 +68,7 @@ const generateDefaultValues = (tkForm: TKForm, ticket?: Ticket) => {
   const defaultValues: Record<string, string> = {}
 
   for (const element of tkForm.elements) {
-    const ticketValue = ticket?.form?.[element.name]
+    const ticketValue = ticket?.formResponse?.[element.name]
 
     switch (element.type) {
       case 'text-field':
@@ -88,7 +88,7 @@ const generateDefaultValues = (tkForm: TKForm, ticket?: Ticket) => {
 
 export interface FormSubmitData {
   summary: string
-  form: Record<string, string | undefined>
+  formResponse: Record<string, string | undefined>
 }
 
 export interface RenderProps {
@@ -101,14 +101,14 @@ export interface RenderProps {
 export function RenderForm({ tkForm, ticket, onSubmit, disabled = false }: RenderProps) {
   const schema = z.object({
     summary: z.string().min(1),
-    form: generateZodSchema(tkForm),
+    formResponse: generateZodSchema(tkForm),
   })
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       summary: tkForm.name,
-      form: generateDefaultValues(tkForm, ticket),
+      formResponse: generateDefaultValues(tkForm, ticket),
     },
   })
 

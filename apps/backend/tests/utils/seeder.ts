@@ -31,7 +31,7 @@ const rawTickets = [
     summary: 'Billing Issue',
     status: 'open',
     formId: 'sample-form',
-    form: '{ "sample-text-field": "John Doe" }',
+    formResponse: '{ "sample-text-field": "John Doe" }',
   },
   {
     id: 2,
@@ -40,7 +40,7 @@ const rawTickets = [
     summary: 'Account Suspension',
     status: 'resolved',
     formId: 'sample-form',
-    form: '{ "sample-text-field": "John Doe" }',
+    formResponse: '{ "sample-text-field": "John Doe" }',
   },
   {
     id: 3,
@@ -49,7 +49,7 @@ const rawTickets = [
     summary: 'Feature Request',
     status: 'in_progress',
     formId: 'sample-form',
-    form: '{ "sample-text-field": "John Doe" }',
+    formResponse: '{ "sample-text-field": "John Doe" }',
   },
   {
     id: 4,
@@ -58,7 +58,7 @@ const rawTickets = [
     summary: 'Bug Report',
     status: 'in_progress',
     formId: 'sample-form',
-    form: '{ "sample-text-field": "Jane Doe" }',
+    formResponse: '{ "sample-text-field": "Jane Doe" }',
   },
   {
     id: 5,
@@ -67,7 +67,7 @@ const rawTickets = [
     summary: 'Feature Request',
     status: 'open',
     formId: 'sample-form',
-    form: '{ "sample-text-field": "Jane Doe" }',
+    formResponse: '{ "sample-text-field": "Jane Doe" }',
   },
 ]
 
@@ -122,8 +122,8 @@ export async function seed() {
 
   await db.execute(`
     -- DML for tickets table
-    INSERT INTO "tickets" ("id", "reporter_id", "assignee_id", "summary", "status", "form_id", "form") VALUES
-    ${rawTickets.map((ticket) => `(${ticket.id}, '${ticket.reporterId}', ${ticket.assigneeId ? `'${ticket.assigneeId}'` : 'NULL'}, '${ticket.summary}', '${ticket.status}', '${ticket.formId}', '${ticket.form}')`).join(',')};
+    INSERT INTO "tickets" ("id", "reporter_id", "assignee_id", "summary", "status", "form_id", "form_response") VALUES
+    ${rawTickets.map((ticket) => `(${ticket.id}, '${ticket.reporterId}', ${ticket.assigneeId ? `'${ticket.assigneeId}'` : 'NULL'}, '${ticket.summary}', '${ticket.status}', '${ticket.formId}', '${ticket.formResponse}')`).join(',')};
   `)
 
   await db.execute('ALTER SEQUENCE tickets_id_seq RESTART WITH 6')

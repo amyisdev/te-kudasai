@@ -56,7 +56,7 @@ export function TicketList({ filters, onPageChange, isAgent = false }: Props) {
 
                 <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
                   <Badge variant="outline" className="text-xs">
-                    {ticket.formId}
+                    {ticket.form.name}
                   </Badge>
                   <StatusBadge status={ticket.status} />
                 </div>

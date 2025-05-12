@@ -1,10 +1,21 @@
-import type { Ticket } from '@/api/types'
+import type { TicketForUser } from '@/api/types'
 import { StatusBadge } from '@/components/status-badge'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { format, formatDistanceToNow } from 'date-fns'
 
-export default function TicketDetail({ ticket }: { ticket: Ticket }) {
+export default function TicketDetail({ ticket }: { ticket: TicketForUser }) {
+  const formResponse = ticket.form.elements
+    .map((element) =>
+      element.type === 'text-panel'
+        ? null
+        : {
+            key: element.label,
+            value: ticket.formResponse[element.name],
+          },
+    )
+    .filter((element) => element !== null)
+
   return (
     <Card>
       <CardHeader>
@@ -18,7 +29,7 @@ export default function TicketDetail({ ticket }: { ticket: Ticket }) {
           </div>
           <div className="flex gap-2">
             {/* TODO: form id is not a good way to display the form name */}
-            <Badge variant="outline">{ticket.formId}</Badge>
+            <Badge variant="outline">{ticket.form.name}</Badge>
             <StatusBadge status={ticket.status} />
           </div>
         </div>
@@ -29,20 +40,17 @@ export default function TicketDetail({ ticket }: { ticket: Ticket }) {
           <p className="text-muted-foreground whitespace-pre-line">{ticket.summary}</p>
         </div>
 
-        {Object.keys(ticket.form).length > 0 && (
-          <div>
-            <h3 className="font-medium mb-2">Form Answers</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* TODO: instead of displaying the key, maybe we should display the label */}
-              {Object.entries(ticket.form).map(([key, value]) => (
-                <div key={key}>
-                  <span className="text-sm font-medium capitalize">{key.toLowerCase()}: </span>
-                  <span className="text-muted-foreground">{value}</span>
-                </div>
-              ))}
-            </div>
+        <div>
+          <h3 className="font-medium mb-2">Form Answers</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {formResponse.map(({ key, value }) => (
+              <div key={key}>
+                <span className="text-sm font-medium">{key}: </span>
+                <span className="text-muted-foreground">{value}</span>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
       </CardContent>
     </Card>
   )

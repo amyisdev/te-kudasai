@@ -43,6 +43,13 @@
       "when": 1746722076840,
       "tag": "0005_cute_legion",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1747065729580,
+      "tag": "0006_bouncy_shape",
+      "breakpoints": true
     }
   ]
 }

@@ -2,7 +2,7 @@ import { type UseMutationOptions, keepPreviousData, useMutation, useQuery } from
 import { FetchError } from 'ofetch'
 import { toast } from 'sonner'
 import { $fetch } from './client'
-import type { PaginatedResponse, SuccessResponse, Ticket, TicketWithUsers } from './types'
+import type { PaginatedResponse, SuccessResponse, Ticket, TicketForAgent } from './types'
 
 interface TicketFilters {
   search: string
@@ -15,7 +15,7 @@ export const useTickets = (filters: TicketFilters, isAgent = false) => {
 
   return useQuery({
     queryKey: [path, filters],
-    queryFn: () => $fetch<PaginatedResponse<Ticket[]>>(path, { params: filters }),
+    queryFn: () => $fetch<PaginatedResponse<TicketForAgent[]>>(path, { params: filters }),
     placeholderData: keepPreviousData,
   })
 }
@@ -25,7 +25,7 @@ export const useTicket = (id: number, isAgent = false) => {
 
   return useQuery({
     queryKey: [path, id],
-    queryFn: () => $fetch<SuccessResponse<TicketWithUsers>>(`${path}/${id}`),
+    queryFn: () => $fetch<SuccessResponse<TicketForAgent>>(`${path}/${id}`),
     enabled: !!id,
     retry(failureCount, error) {
       if (error instanceof FetchError && error.status === 404) {
@@ -40,7 +40,7 @@ export const useTicket = (id: number, isAgent = false) => {
 interface CreateTicket {
   summary: string
   formId: string
-  form: unknown
+  formResponse: unknown
 }
 
 export const useCreateTicket = (props?: UseMutationOptions<Ticket, unknown, CreateTicket>) => {
@@ -60,7 +60,7 @@ interface UpdateTicket {
   id: number
   status?: string
   summary?: string
-  form?: unknown
+  formResponse?: unknown
 }
 
 export const useUpdateTicket = (props?: UseMutationOptions<Ticket, unknown, UpdateTicket>) => {

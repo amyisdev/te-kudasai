@@ -1,6 +1,5 @@
-import { useEnabledForm } from '@/api/forms'
 import { useOpenForm, useTicket, useToggleAssignment, useUpdateTicket } from '@/api/tickets'
-import type { Ticket, TicketWithUsers } from '@/api/types'
+import type { TicketForAgent } from '@/api/types'
 import { EmptyState } from '@/components/empty-state'
 import { PageLoader } from '@/components/loader'
 import { type FormSubmitData, RenderForm } from '@/components/render-form'
@@ -11,13 +10,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useQueryClient } from '@tanstack/react-query'
-import type { TKForm } from '@te-kudasai/forms'
 import { ArrowLeft, FolderX, X } from 'lucide-react'
 import { FetchError } from 'ofetch'
 import { Link, useParams } from 'react-router'
 import { toast } from 'sonner'
 
-function TicketActionsCard({ ticket }: { ticket: TicketWithUsers }) {
+function TicketActionsCard({ ticket }: { ticket: TicketForAgent }) {
   const queryClient = useQueryClient()
   const { mutate: updateTicket } = useUpdateTicket({
     onSuccess({ status }) {
@@ -132,7 +130,7 @@ function TicketActionsCard({ ticket }: { ticket: TicketWithUsers }) {
   )
 }
 
-function CustomerDetail({ ticket }: { ticket: TicketWithUsers }) {
+function CustomerDetail({ ticket }: { ticket: TicketForAgent }) {
   return (
     <Card>
       <CardHeader>
@@ -156,7 +154,7 @@ function CustomerDetail({ ticket }: { ticket: TicketWithUsers }) {
   )
 }
 
-function UpdateForm({ ticket, tkForm }: { ticket: Ticket; tkForm: TKForm }) {
+function UpdateForm({ ticket }: { ticket: TicketForAgent }) {
   const queryClient = useQueryClient()
 
   const { mutate, isPending } = useUpdateTicket({
@@ -176,7 +174,7 @@ function UpdateForm({ ticket, tkForm }: { ticket: Ticket; tkForm: TKForm }) {
         <CardTitle>Update Form</CardTitle>
       </CardHeader>
       <CardContent>
-        <RenderForm tkForm={tkForm} ticket={ticket} onSubmit={onSubmit} disabled={isPending} />
+        <RenderForm tkForm={ticket.form} ticket={ticket} onSubmit={onSubmit} disabled={isPending} />
       </CardContent>
     </Card>
   )
@@ -185,9 +183,8 @@ function UpdateForm({ ticket, tkForm }: { ticket: Ticket; tkForm: TKForm }) {
 export default function ManageTicket() {
   const { id } = useParams()
   const { data: ticket, isPending } = useTicket(Number(id!), true)
-  const { data: tkForm, isLoading: isFormLoading } = useEnabledForm(ticket?.data.formId ?? null)
 
-  if (isPending || isFormLoading) return <PageLoader />
+  if (isPending) return <PageLoader />
 
   return (
     <div className="py-6 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -201,11 +198,11 @@ export default function ManageTicket() {
         <h1 className="text-3xl font-bold tracking-tight">Manage Ticket</h1>
       </div>
 
-      {ticket && tkForm ? (
+      {ticket ? (
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-6">
             <TicketDetail ticket={ticket.data} />
-            {ticket.data.formOpen && <UpdateForm ticket={ticket.data} tkForm={tkForm.data} />}
+            {ticket.data.formOpen && <UpdateForm ticket={ticket.data} />}
           </div>
           <div className="space-y-6">
             <TicketActionsCard ticket={ticket.data} />

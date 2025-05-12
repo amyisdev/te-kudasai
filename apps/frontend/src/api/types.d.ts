@@ -1,3 +1,5 @@
+import type { TKForm } from '@te-kudasai/forms'
+
 export interface SuccessResponse<T> {
   status: 'success'
   data: T
@@ -33,13 +35,18 @@ export interface Ticket {
   updatedAt: string
 
   formId: string
-  form: Record<string, string>
+  formResponse: Record<string, string>
   formOpen: boolean
 }
 
-export interface TicketWithUsers extends Ticket {
+export interface TicketForUser extends Ticket {
+  form: TKForm
+}
+
+export interface TicketForAgent extends Ticket {
   reporter: EncryptedUser
   assignee: EncryptedUser | null
+  form: TKForm
 }
 
 export interface TicketFilters {
