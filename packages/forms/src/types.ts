@@ -6,23 +6,43 @@ export interface TKForm {
   elements: FormElement[]
 }
 
-// TODO: Should we separate each element type into its own interface?
-export interface FormElement {
+interface FormElementBase {
   id: string
-  type: FormElementType
   name: string
-  label?: string
-
-  required?: boolean
-  placeholder?: string
-  options?: FormElementOption[]
-  content?: string
 }
 
-export interface FormElementOption {
+interface TextFieldElement extends FormElementBase {
+  type: 'text-field'
+  label: string
+  required: boolean
+  placeholder: string
+  format: 'text' | 'email'
+}
+
+interface TextareaElement extends FormElementBase {
+  type: 'textarea'
+  label: string
+  required: boolean
+  placeholder: string
+}
+
+interface DropdownElement extends FormElementBase {
+  type: 'dropdown'
+  label: string
+  options: DropdownOption[]
+}
+
+interface DropdownOption {
   id: string
   label: string
   value: string
 }
 
-export type FormElementType = 'text-field' | 'textarea' | 'dropdown' | 'text-panel'
+interface TextPanelElement extends FormElementBase {
+  type: 'text-panel'
+  content: string
+}
+
+export type FormElement = TextFieldElement | TextareaElement | DropdownElement | TextPanelElement
+
+export type FormElementType = FormElement['type']

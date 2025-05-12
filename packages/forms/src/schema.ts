@@ -7,25 +7,52 @@ export const ELEMENT_TYPES = {
   TEXT_PANEL: 'text-panel',
 } as const
 
-export const createElementSchema = z.object({
+const textFieldSchema = z.object({
+  type: z.literal(ELEMENT_TYPES.TEXT_FIELD),
   id: z.string().min(1),
-  type: z.enum([ELEMENT_TYPES.TEXT_FIELD, ELEMENT_TYPES.TEXTAREA, ELEMENT_TYPES.DROPDOWN, ELEMENT_TYPES.TEXT_PANEL]),
   name: z.string().min(1),
-
-  label: z.string().optional(),
-  required: z.boolean().optional(),
-  placeholder: z.string().optional(),
-  options: z
-    .array(
-      z.object({
-        id: z.string(),
-        label: z.string().min(1),
-        value: z.string().min(1),
-      }),
-    )
-    .optional(),
-  content: z.string().optional(),
+  label: z.string(),
+  required: z.boolean(),
+  placeholder: z.string(),
+  format: z.enum(['text', 'email']),
 })
+
+const textareaSchema = z.object({
+  type: z.literal(ELEMENT_TYPES.TEXTAREA),
+  id: z.string().min(1),
+  name: z.string().min(1),
+  label: z.string(),
+  required: z.boolean(),
+  placeholder: z.string(),
+})
+
+const dropdownSchema = z.object({
+  type: z.literal(ELEMENT_TYPES.DROPDOWN),
+  id: z.string().min(1),
+  name: z.string().min(1),
+  label: z.string(),
+  options: z.array(
+    z.object({
+      id: z.string(),
+      label: z.string().min(1),
+      value: z.string().min(1),
+    }),
+  ),
+})
+
+const textPanelSchema = z.object({
+  type: z.literal(ELEMENT_TYPES.TEXT_PANEL),
+  id: z.string().min(1),
+  name: z.string().min(1),
+  content: z.string().min(1),
+})
+
+export const createElementSchema = z.discriminatedUnion('type', [
+  textFieldSchema,
+  textareaSchema,
+  dropdownSchema,
+  textPanelSchema,
+])
 
 export type CreateElementSchema = z.infer<typeof createElementSchema>
 

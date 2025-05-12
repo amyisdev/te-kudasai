@@ -28,25 +28,27 @@ import { useEffect, useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import { Link } from 'react-router'
 import { Label } from '../ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Switch } from '../ui/switch'
 import { Textarea } from '../ui/textarea'
 import FormTypeIcon from './form-type-icon'
 import SortableFormElement from './sortable-form-element'
 
 function generateElement(type: FormElementType) {
-  const baseElement: FormElement = {
+  const element: FormElement = {
     id: nanoid(11),
+    name: 'new_element',
     type,
     label: 'New Element',
-    name: 'new_element',
     required: false,
     placeholder: '',
+    format: 'text',
     options: [],
     content: '',
   }
 
-  if (type === 'dropdown') {
-    baseElement.options = [
+  if (element.type === 'dropdown') {
+    element.options = [
       {
         id: nanoid(11),
         label: 'Option 1',
@@ -60,7 +62,7 @@ function generateElement(type: FormElementType) {
     ]
   }
 
-  return baseElement
+  return element
 }
 
 function AddElementButtons({ createNewElement }: { createNewElement: (type: FormElementType) => void }) {
@@ -128,7 +130,8 @@ function ElementProperties({
 }: { element: FormElement; onSubmit: (data: CreateElementSchema) => void }) {
   const form = useForm<CreateElementSchema>({
     resolver: zodResolver(createElementSchema),
-    defaultValues: element,
+    // For form, we need to set the defaultValues with all properties from all element types
+    defaultValues: { ...generateElement(element.type), ...element },
   })
 
   const {
@@ -141,10 +144,8 @@ function ElementProperties({
   })
 
   useEffect(() => {
-    form.reset(element)
+    form.reset({ ...generateElement(element.type), ...element })
   }, [element, form.reset])
-
-  const isInput = element.type !== 'text-panel'
 
   const onAddOption = () => {
     append({
@@ -176,22 +177,24 @@ function ElementProperties({
             )}
           />
 
-          {isInput && (
-            <>
-              <FormField
-                control={form.control}
-                name="label"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Label</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          {element.type !== 'text-panel' && (
+            <FormField
+              control={form.control}
+              name="label"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Label</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
+          {(element.type === 'text-field' || element.type === 'textarea') && (
+            <>
               <FormField
                 control={form.control}
                 name="placeholder"
@@ -221,6 +224,30 @@ function ElementProperties({
                 )}
               />
             </>
+          )}
+
+          {element.type === 'text-field' && (
+            <FormField
+              control={form.control}
+              name="format"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Format</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select format" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="text">Text</SelectItem>
+                      <SelectItem value="email">Email</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           )}
 
           {element.type === 'text-panel' && (
@@ -346,6 +373,11 @@ function ElementsBuilder({
       const overIndex = over.data.current?.sortable?.index
       if (activeIndex !== undefined && overIndex !== undefined) {
         onMove(activeIndex, overIndex)
+
+        // When selecting an element we set the index
+        // After moving an element we need to reset the index or it will break dnd-kit
+        // FIXME: Right now im not sure how, so we just reset the active element
+        setActiveElement(null)
       }
     }
   }

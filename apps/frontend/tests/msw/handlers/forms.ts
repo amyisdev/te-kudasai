@@ -25,9 +25,17 @@ const forms = [
     name: 'Sample Form',
     description: 'This is a sample form',
     elements: [
-      { type: 'text-panel', name: 'announcement', label: 'Announcement', id: 'announcement' },
-      { type: 'text-field', name: 'name', label: 'Name', id: 'name' },
-      { type: 'textarea', name: 'message', label: 'Message', id: 'message' },
+      { type: 'text-panel', name: 'announcement', id: 'announcement', content: 'Announcement' },
+      {
+        type: 'text-field',
+        name: 'name',
+        label: 'Name',
+        id: 'name',
+        required: true,
+        placeholder: 'Name',
+        format: 'text',
+      },
+      { type: 'textarea', name: 'message', label: 'Message', id: 'message', required: true, placeholder: 'Message' },
       {
         type: 'dropdown',
         name: 'priority',

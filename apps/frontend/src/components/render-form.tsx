@@ -12,6 +12,14 @@ import { Textarea } from './ui/textarea'
 function ElementFieldRenderer({ element }: { element: FormElement }) {
   const { control } = useFormContext()
 
+  if (element.type === 'text-panel') {
+    return (
+      <p key={element.id} className="rounded-lg p-4 bg-background border text-sm text-muted-foreground">
+        {element.content}
+      </p>
+    )
+  }
+
   return (
     <FormField
       control={control}
@@ -40,7 +48,7 @@ function ElementFieldRenderer({ element }: { element: FormElement }) {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {element.options?.map((option) => (
+                {element.options.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
@@ -68,7 +76,7 @@ const generateDefaultValues = (tkForm: TKForm, ticket?: Ticket) => {
         defaultValues[element.name] = ticketValue ?? ''
         break
       case 'dropdown': {
-        const firstOption = element.options?.[0]
+        const firstOption = element.options[0]
         defaultValues[element.name] = ticketValue ?? firstOption?.value ?? ''
         break
       }
@@ -121,15 +129,9 @@ export function RenderForm({ tkForm, ticket, onSubmit, disabled = false }: Rende
           )}
         />
 
-        {tkForm.elements.map((element) =>
-          element.type === 'text-panel' ? (
-            <p key={element.id} className="rounded-lg p-4 bg-background border text-sm text-muted-foreground">
-              {element.content}
-            </p>
-          ) : (
-            <ElementFieldRenderer key={element.id} element={element} />
-          ),
-        )}
+        {tkForm.elements.map((element) => (
+          <ElementFieldRenderer key={element.id} element={element} />
+        ))}
 
         <Button type="submit" disabled={disabled}>
           Submit

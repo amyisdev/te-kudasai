@@ -91,8 +91,6 @@ describe('Form Editor', () => {
 
     expect(screen.getByLabelText('Name')).toBeInTheDocument()
     expect(screen.getByLabelText('Label')).toBeInTheDocument()
-    expect(screen.getByLabelText('Placeholder')).toBeInTheDocument()
-    expect(screen.getByRole('switch', { name: 'Required' })).toBeInTheDocument()
 
     expect(screen.getByText('Options')).toBeInTheDocument()
     expect(screen.getAllByRole('textbox', { name: 'Option Value' })).toHaveLength(2)

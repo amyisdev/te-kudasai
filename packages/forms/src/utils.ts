@@ -14,10 +14,9 @@ export function generateZodSchema(tkForm: TKForm) {
       case 'text-field':
       case 'textarea': {
         let schema: ValidZodString = z.string()
-        // TODO: Implement format
-        // if (element.type === 'text-field' && element.format === 'email') {
-        //   schema = schema.email()
-        // }
+        if (element.type === 'text-field' && element.format === 'email') {
+          schema = schema.email()
+        }
 
         if (element.required) {
           schema = schema.min(1)
@@ -30,7 +29,7 @@ export function generateZodSchema(tkForm: TKForm) {
       }
 
       case 'dropdown': {
-        formSchema[element.name] = z.enum(element.options?.map((option) => option.value) as NonEmptyArray<string>)
+        formSchema[element.name] = z.enum(element.options.map((option) => option.value) as NonEmptyArray<string>)
         break
       }
     }

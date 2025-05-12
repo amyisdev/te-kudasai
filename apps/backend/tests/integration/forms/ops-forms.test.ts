@@ -23,6 +23,8 @@ describe('Admin: Create form', () => {
             name: 'test-text-field',
             label: 'Test Text Field',
             required: true,
+            format: 'text',
+            placeholder: '',
           },
         ],
       }),

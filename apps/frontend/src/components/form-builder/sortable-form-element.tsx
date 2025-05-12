@@ -1,8 +1,8 @@
-import type { FormElement } from '@te-kudasai/forms'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import type { FormElement } from '@te-kudasai/forms'
 import { GripVertical, Trash2 } from 'lucide-react'
 import FormTypeIcon from './form-type-icon'
 
@@ -47,7 +47,7 @@ export default function SortableFormElement({ element, isActive, onClick, onRemo
           <p className="text-xs text-muted-foreground capitalize">
             {element.type.replace('-', ' ')}
             {element.type === 'dropdown' && ` • ${element.options?.length} options`}
-            {element.required && ' • Required'}
+            {(element.type === 'text-field' || element.type === 'textarea') && element.required && ' • Required'}
           </p>
         </div>
       </div>

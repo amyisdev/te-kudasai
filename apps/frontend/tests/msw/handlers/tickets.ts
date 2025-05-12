@@ -9,7 +9,7 @@ function ticketFactory(overrides: Partial<TicketWithUsers> = {}): TicketWithUser
     createdAt: '2021-01-01',
     updatedAt: '2021-01-01',
     formId: 'sample-form',
-    form: { NAME: 'Jane Doe', MESSAGE: 'Test Message', PRIORITY: 'high' },
+    form: { name: 'Jane Doe', message: 'Test Message', priority: 'high' },
     reporterId: 'jane.doe',
     assigneeId: null,
     formOpen: false,
