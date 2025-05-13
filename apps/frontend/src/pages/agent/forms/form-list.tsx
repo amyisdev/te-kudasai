@@ -46,7 +46,7 @@ function FormCard({
                 )}
               </DropdownMenuItem>
 
-              {form.disabled && (
+              {form.disabled && !form.hasTickets && (
                 <DropdownMenuItem variant="destructive" onClick={() => onDelete(form)}>
                   <Trash2 className="size-4" />
                   <span>Delete</span>

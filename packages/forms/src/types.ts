@@ -4,6 +4,7 @@ export interface TKForm {
   description: string
   disabled?: boolean
   elements: FormElement[]
+  hasTickets: boolean
 }
 
 interface FormElementBase {

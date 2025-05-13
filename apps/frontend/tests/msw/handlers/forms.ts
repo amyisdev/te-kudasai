@@ -8,6 +8,7 @@ function formFactory(overrides: Partial<TKForm> = {}): TKForm {
     description: 'Test Form Description',
     disabled: false,
     elements: [],
+    hasTickets: false,
     ...overrides,
   }
 }
@@ -18,6 +19,7 @@ export const forms = [
     name: 'Disabled Form',
     description: 'This is a disabled form',
     disabled: true,
+    hasTickets: false,
   }),
 
   formFactory({
@@ -48,6 +50,7 @@ export const forms = [
         ],
       },
     ],
+    hasTickets: true,
   }),
 ]
 

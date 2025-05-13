@@ -76,7 +76,10 @@ formsRoutes
       throw new BadRequestError('Form must be disabled before deleting', 'FORM_NOT_DISABLED')
     }
 
-    // TODO: Disallow deletion of forms that have tickets
+    if (form.hasTickets) {
+      throw new BadRequestError('Form already has tickets, cannot delete', 'FORM_HAS_TICKETS')
+    }
+
     const deletedForm = await deleteForm(id)
     return c.json(successResponse(deletedForm))
   })

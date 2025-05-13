@@ -130,4 +130,21 @@ describe('Admin: Delete form', () => {
     const body = await res.json()
     expect(body.code).toBe('FORM_NOT_DISABLED')
   })
+
+  it('should return 400 when form already has tickets', async () => {
+    const [sampleForm] = await db.select().from(formsTable).where(eq(formsTable.name, 'Sample Form'))
+    await db.update(formsTable).set({ disabled: true }).where(eq(formsTable.id, sampleForm.id))
+
+    const res = await app.request(`/api/forms/${sampleForm.id}`, {
+      method: 'DELETE',
+      headers: await signedInAs('admin@tk.local'),
+    })
+
+    expect(res.status).toBe(400)
+    const body = await res.json()
+    expect(body.code).toBe('FORM_HAS_TICKETS')
+
+    // cleanup
+    await db.update(formsTable).set({ disabled: false }).where(eq(formsTable.id, sampleForm.id))
+  })
 })

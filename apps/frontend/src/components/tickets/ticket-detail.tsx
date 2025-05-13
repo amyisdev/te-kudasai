@@ -28,7 +28,6 @@ export default function TicketDetail({ ticket }: { ticket: TicketForUser }) {
             </CardDescription>
           </div>
           <div className="flex gap-2">
-            {/* TODO: form id is not a good way to display the form name */}
             <Badge variant="outline">{ticket.form.name}</Badge>
             <StatusBadge status={ticket.status} />
           </div>
