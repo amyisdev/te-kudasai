@@ -27,3 +27,6 @@ coverage
 # Turborepo
 .turbo
 .cache
+
+# Backend query log
+query-log.sqlite
