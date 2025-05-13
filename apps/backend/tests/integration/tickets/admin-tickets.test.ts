@@ -1,7 +1,7 @@
 import { db } from '@/db/client'
 import app from '@/index'
-import { TICKET_STATUS, ticketsTable } from '@/tickets/tickets.schema'
-import { eq } from 'drizzle-orm'
+import { TICKET_STATUS, ticketLogsTable, ticketsTable } from '@/tickets/tickets.schema'
+import { desc, eq } from 'drizzle-orm'
 import { signedInAs } from 'tests/utils/auth'
 import { describe, expect, it } from 'vitest'
 
@@ -170,6 +170,17 @@ describe('Admin: Update ticket', () => {
         updatedAt: expect.any(String),
       }),
     })
+
+    // Check ticket log
+    const [log] = await db
+      .select()
+      .from(ticketLogsTable)
+      .where(eq(ticketLogsTable.ticketId, 1))
+      .orderBy(desc(ticketLogsTable.id))
+      .limit(1)
+
+    expect(log.userId).toBe('admin')
+    expect(log.actionType).toBe('update')
   })
 
   it('should set openForm to false after ticket updated', async () => {
@@ -197,6 +208,17 @@ describe('Admin: Update ticket', () => {
         updatedAt: expect.any(String),
       }),
     })
+
+    // Check ticket log
+    const [log] = await db
+      .select()
+      .from(ticketLogsTable)
+      .where(eq(ticketLogsTable.ticketId, 1))
+      .orderBy(desc(ticketLogsTable.id))
+      .limit(1)
+
+    expect(log.userId).toBe('admin')
+    expect(log.actionType).toBe('update')
   })
 
   it('should return 404 when ticket not found', async () => {
@@ -291,6 +313,17 @@ describe('Admin: Toggle ticket assignment', () => {
       }),
     })
 
+    // Check ticket log
+    const [log] = await db
+      .select()
+      .from(ticketLogsTable)
+      .where(eq(ticketLogsTable.ticketId, 1))
+      .orderBy(desc(ticketLogsTable.id))
+      .limit(1)
+
+    expect(log.userId).toBe('admin')
+    expect(log.actionType).toBe('assign')
+
     // Cleanup
     await db.update(ticketsTable).set({ assigneeId: null }).where(eq(ticketsTable.id, 1))
   })
@@ -312,6 +345,17 @@ describe('Admin: Toggle ticket assignment', () => {
         assigneeId: null,
       }),
     })
+
+    // Check ticket log
+    const [log] = await db
+      .select()
+      .from(ticketLogsTable)
+      .where(eq(ticketLogsTable.ticketId, 2))
+      .orderBy(desc(ticketLogsTable.id))
+      .limit(1)
+
+    expect(log.userId).toBe('admin')
+    expect(log.actionType).toBe('unassign')
 
     // Cleanup
     await db.update(ticketsTable).set({ assigneeId: 'admin' }).where(eq(ticketsTable.id, 2))
@@ -342,6 +386,17 @@ describe('Admin: Open ticket form', () => {
       status: 'success',
       data: expect.objectContaining({ id: 1, formOpen: true }),
     })
+
+    // Check ticket log
+    const [log] = await db
+      .select()
+      .from(ticketLogsTable)
+      .where(eq(ticketLogsTable.ticketId, 1))
+      .orderBy(desc(ticketLogsTable.id))
+      .limit(1)
+
+    expect(log.userId).toBe('admin')
+    expect(log.actionType).toBe('open_form')
 
     // Cleanup
     await db.update(ticketsTable).set({ formOpen: false }).where(eq(ticketsTable.id, 1))

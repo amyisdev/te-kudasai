@@ -1,4 +1,7 @@
+import { db } from '@/db/client'
 import app from '@/index'
+import { ticketLogsTable } from '@/tickets/tickets.schema'
+import { desc, eq } from 'drizzle-orm'
 import { signedInAs } from 'tests/utils/auth'
 import { describe, expect, it } from 'vitest'
 
@@ -117,6 +120,17 @@ describe('Create ticket', () => {
         updatedAt: expect.any(String),
       },
     })
+
+    // Check ticket log
+    const [log] = await db
+      .select()
+      .from(ticketLogsTable)
+      .where(eq(ticketLogsTable.ticketId, body.data.id))
+      .orderBy(desc(ticketLogsTable.id))
+      .limit(1)
+
+    expect(log.userId).toBe('jane.doe')
+    expect(log.actionType).toBe('create')
   })
 
   it('should return 404 when form not found', async () => {

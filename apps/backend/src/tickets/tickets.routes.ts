@@ -88,7 +88,22 @@ ticketsRoutes
       throw new NotFoundError('Ticket not found')
     }
 
-    const ticket = await service.updateTicket(ticketId, { ...data, formOpen: false })
+    let action: service.TicketAction = {
+      userId: c.var.user.id,
+      actionType: 'UPDATE',
+      action: 'Ticket updated',
+    }
+
+    if (data.status && data.status !== existingTicket.status) {
+      action = {
+        userId: c.var.user.id,
+        actionType: 'UPDATE',
+        action: `Ticket status updated from ${existingTicket.status} to ${data.status}`,
+      }
+    }
+
+    const ticket = await service.updateTicket(ticketId, { ...data, formOpen: false }, action)
+
     return c.json(successResponse(ticket))
   })
 
@@ -101,6 +116,7 @@ ticketsRoutes
     }
 
     const ticket = await service.deleteTicket(ticketId)
+
     return c.json(successResponse(ticket))
   })
 
@@ -111,9 +127,19 @@ ticketsRoutes
       throw new NotFoundError('Ticket not found')
     }
 
-    const updatedTicket = await service.updateTicket(ticketId, {
-      assigneeId: ticket.assigneeId ? null : c.var.user.id,
-    })
+    const isAssigned = ticket.assigneeId !== null
+
+    const updatedTicket = await service.updateTicket(
+      ticketId,
+      {
+        assigneeId: isAssigned ? null : c.var.user.id,
+      },
+      {
+        userId: c.var.user.id,
+        actionType: isAssigned ? 'UNASSIGN' : 'ASSIGN',
+        action: isAssigned ? 'Ticket unassigned' : 'Ticket assigned',
+      },
+    )
 
     return c.json(successResponse(updatedTicket))
   })
@@ -125,9 +151,17 @@ ticketsRoutes
       throw new NotFoundError('Ticket not found')
     }
 
-    const updatedTicket = await service.updateTicket(ticketId, {
-      formOpen: true,
-    })
+    const updatedTicket = await service.updateTicket(
+      ticketId,
+      {
+        formOpen: true,
+      },
+      {
+        userId: c.var.user.id,
+        actionType: 'OPEN_FORM',
+        action: 'Ticket form opened',
+      },
+    )
 
     return c.json(successResponse(updatedTicket))
   })

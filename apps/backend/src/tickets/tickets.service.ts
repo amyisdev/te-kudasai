@@ -5,11 +5,17 @@ import { db } from '@/db/client'
 import { formsTable } from '@/forms/forms.schema'
 import type { PaginationParams } from '@/shared/validation'
 import { type SQL, aliasedTable, and, count, desc, eq, ilike } from 'drizzle-orm'
-import { ticketsTable } from './tickets.schema'
+import { TICKET_ACTION_TYPES, ticketLogsTable, ticketsTable } from './tickets.schema'
 
 type ListTicketsParams = PaginationParams & {
   search?: string
   status?: string
+}
+
+export interface TicketAction {
+  userId: string
+  actionType: keyof typeof TICKET_ACTION_TYPES
+  action: string
 }
 
 export async function getMyTickets(userId: string, { page = 1, limit = 10, search, status }: ListTicketsParams) {
@@ -53,7 +59,18 @@ export async function getMyTicketById(userId: string, ticketId: number) {
 }
 
 export async function createTicket(data: typeof ticketsTable.$inferInsert) {
-  const [ticket] = await db.insert(ticketsTable).values(data).returning()
+  const ticket = await db.transaction(async (tx) => {
+    const [ticket] = await tx.insert(ticketsTable).values(data).returning()
+
+    await tx.insert(ticketLogsTable).values({
+      ticketId: ticket.id,
+      userId: data.reporterId,
+      actionType: TICKET_ACTION_TYPES.CREATE,
+      action: 'Ticket created',
+    })
+
+    return ticket
+  })
 
   return ticket
 }
@@ -119,17 +136,33 @@ export async function getTicketByIdWithUsers(ticketId: number) {
   return ticket
 }
 
-export async function updateTicket(ticketId: number, data: Partial<typeof ticketsTable.$inferInsert>) {
-  const [ticket] = await db
-    .update(ticketsTable)
-    .set({ ...data, updatedAt: new Date() })
-    .where(eq(ticketsTable.id, ticketId))
-    .returning()
+export async function updateTicket(
+  ticketId: number,
+  data: Partial<typeof ticketsTable.$inferInsert>,
+  action: TicketAction,
+) {
+  const ticket = await db.transaction(async (tx) => {
+    const [ticket] = await tx
+      .update(ticketsTable)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(ticketsTable.id, ticketId))
+      .returning()
+
+    await tx.insert(ticketLogsTable).values({
+      ticketId: ticket.id,
+      userId: action.userId,
+      actionType: TICKET_ACTION_TYPES[action.actionType],
+      action: action.action,
+    })
+
+    return ticket
+  })
 
   return ticket
 }
 
 export async function deleteTicket(ticketId: number) {
   const [ticket] = await db.delete(ticketsTable).where(eq(ticketsTable.id, ticketId)).returning()
+
   return ticket
 }

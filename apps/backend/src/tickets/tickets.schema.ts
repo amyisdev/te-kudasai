@@ -1,5 +1,5 @@
 import { users } from '@/auth/auth.schema'
-import { boolean, index, jsonb, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
+import { boolean, index, integer, jsonb, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
 
 export const TICKET_STATUS = {
   OPEN: 'open',
@@ -7,6 +7,15 @@ export const TICKET_STATUS = {
   PENDING: 'pending',
   CLOSED: 'closed',
   RESOLVED: 'resolved',
+} as const
+
+// Ticket action types based on current operations
+export const TICKET_ACTION_TYPES = {
+  CREATE: 'create',
+  UPDATE: 'update',
+  ASSIGN: 'assign',
+  UNASSIGN: 'unassign',
+  OPEN_FORM: 'open_form',
 } as const
 
 export const ticketsTable = pgTable(
@@ -37,3 +46,21 @@ export const ticketsTable = pgTable(
     index('form_id_idx').on(t.formId),
   ],
 )
+
+export const ticketLogsTable = pgTable('ticket_logs', {
+  id: serial('id').primaryKey(),
+  ticketId: integer('ticket_id')
+    .notNull()
+    .references(() => ticketsTable.id),
+
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id),
+
+  action: text('action').notNull(),
+  actionType: text('action_type')
+    .notNull()
+    .$default(() => TICKET_ACTION_TYPES.CREATE),
+
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+})
