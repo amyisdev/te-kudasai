@@ -1,9 +1,9 @@
 import { hash } from '@/shared/crypto'
 import type { Logger } from 'drizzle-orm/logger'
 
-const db = require('better-sqlite3')('query-log.sqlite')
+export const sqlite = require('better-sqlite3')(process.env.UNIQUE_LOGGER_PATH || ':memory:')
 
-db.exec(`CREATE TABLE IF NOT EXISTS sql_logs (
+sqlite.exec(`CREATE TABLE IF NOT EXISTS sql_logs (
   id TEXT PRIMARY KEY,
   query TEXT,
   params TEXT,
@@ -23,12 +23,9 @@ export class UniqueLogger implements Logger {
         }
       }
 
-      db.prepare('INSERT INTO sql_logs (id, query, params, query_with_params) VALUES (?, ?, ?, ?)').run(
-        id,
-        query,
-        JSON.stringify(params),
-        queryWithParams,
-      )
+      sqlite
+        .prepare('INSERT INTO sql_logs (id, query, params, query_with_params) VALUES (?, ?, ?, ?)')
+        .run(id, query, JSON.stringify(params), queryWithParams)
     } catch (error) {
       // Ignore errors
     }
