@@ -4,6 +4,8 @@ const user = {
   id: '1',
   name: 'John Doe',
   email: 'john.doe@tk.local',
+  role: 'user',
+  banned: false,
 }
 
 export const unauthenticated = http.get('http://localhost:3000/api/auth/get-session', () => {

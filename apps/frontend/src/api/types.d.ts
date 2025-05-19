@@ -54,3 +54,9 @@ export interface TicketFilters {
   status: string
   page: number
 }
+
+export interface UserFilters {
+  search: string
+  role: string
+  page: number
+}

@@ -3,6 +3,7 @@ import AuthLayout from './components/layouts/auth-layout'
 import RootLayout from './components/layouts/root-layout'
 import { Toaster } from './components/ui/sonner'
 import { ThemeProvider } from './hooks/use-theme'
+import AllUsers from './pages/admin/all-users'
 import AllTickets from './pages/agent/all-tickets'
 import FormEditor from './pages/agent/forms/form-editor'
 import FormList from './pages/agent/forms/form-list'
@@ -35,6 +36,10 @@ function App() {
           <Route path="tickets/:id" element={<ManageTicket />} />
           <Route path="forms" element={<FormList />} />
           <Route path="forms/:formId" element={<FormEditor />} />
+        </Route>
+
+        <Route path="admin" element={<RootLayout agentOnly={true} />}>
+          <Route path="users" element={<AllUsers />} />
         </Route>
       </Routes>
 

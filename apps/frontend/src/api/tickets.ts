@@ -2,13 +2,7 @@ import { type UseMutationOptions, keepPreviousData, useMutation, useQuery } from
 import { FetchError } from 'ofetch'
 import { toast } from 'sonner'
 import { $fetch } from './client'
-import type { PaginatedResponse, SuccessResponse, Ticket, TicketForAgent } from './types'
-
-interface TicketFilters {
-  search: string
-  status: string
-  page: number
-}
+import type { PaginatedResponse, SuccessResponse, Ticket, TicketFilters, TicketForAgent } from './types'
 
 export const useTickets = (filters: TicketFilters, isAgent = false) => {
   const path = isAgent ? '/api/tickets' : '/api/tickets/my'
