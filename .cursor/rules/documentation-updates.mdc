@@ -1,0 +1,71 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Documentation Update Reminders
+
+## When to Update Documentation
+
+After making any of the following changes, you should update the relevant documentation files:
+
+### Architecture Changes
+- Adding new dependencies or changing tech stack → Update [docs/architecture.md](mdc:docs/architecture.md)
+- Modifying system design or adding new services → Update [docs/architecture.md](mdc:docs/architecture.md)
+- Changing build tools or deployment strategy → Update [docs/architecture.md](mdc:docs/architecture.md)
+
+### API Changes
+- Adding, modifying, or removing API endpoints → Update [docs/api.md](mdc:docs/api.md)
+- Changing authentication flows → Update [docs/api.md](mdc:docs/api.md)
+- Modifying rate limiting or versioning → Update [docs/api.md](mdc:docs/api.md)
+
+### Backend Changes
+- Adding new features or modules → Update [docs/backend.md](mdc:docs/backend.md)
+- Changing directory structure → Update [docs/backend.md](mdc:docs/backend.md)
+- Modifying authentication or security measures → Update [docs/backend.md](mdc:docs/backend.md)
+
+### Frontend Changes
+- Adding new pages or major components → Update [docs/frontend.md](mdc:docs/frontend.md)
+- Changing routing or state management → Update [docs/frontend.md](mdc:docs/frontend.md)
+- Modifying UI library or styling approach → Update [docs/frontend.md](mdc:docs/frontend.md)
+
+### Database Changes
+- Schema modifications or new migrations → Update [docs/database.md](mdc:docs/database.md)
+- Changing database configuration → Update [docs/database.md](mdc:docs/database.md)
+- Adding new entities or relationships → Update [docs/database.md](mdc:docs/database.md)
+
+### Development Workflow Changes
+- Adding new commands or scripts → Update [docs/development.md](mdc:docs/development.md)
+- Changing environment setup → Update [docs/development.md](mdc:docs/development.md)
+- Modifying build or deployment process → Update [docs/development.md](mdc:docs/development.md)
+
+### Testing Changes
+- Adding new test types or tools → Update [docs/testing.md](mdc:docs/testing.md)
+- Changing testing strategy → Update [docs/testing.md](mdc:docs/testing.md)
+- Modifying CI/CD pipeline → Update [docs/testing.md](mdc:docs/testing.md)
+
+### Project Overview Changes
+- Major feature additions → Update [README.md](mdc:README.md)
+- Changing project description or goals → Update [README.md](mdc:README.md)
+- Adding new documentation files → Update [README.md](mdc:README.md) links section
+
+## Documentation Checklist
+
+Before completing your changes, verify:
+
+- [ ] All relevant documentation files have been updated
+- [ ] New features are documented with examples
+- [ ] Breaking changes are clearly noted
+- [ ] Directory structures match actual codebase
+- [ ] Commands and code examples are tested and accurate
+- [ ] Links between documentation files are updated if needed
+
+## Quick Documentation Tips
+
+1. **Be Specific**: Include actual file paths, command examples, and code snippets
+2. **Stay Current**: Remove outdated information when making updates
+3. **Cross-Reference**: Update related sections in other documentation files
+4. **Test Examples**: Ensure all code examples and commands actually work
+5. **User Perspective**: Write from the perspective of someone new to the project
+
+Remember: Good documentation is as important as good code!

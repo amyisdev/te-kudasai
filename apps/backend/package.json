@@ -7,7 +7,9 @@
     "dev": "bun run --hot src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.2.17",
