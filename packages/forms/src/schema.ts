@@ -1,10 +1,11 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 export const ELEMENT_TYPES = {
   TEXT_FIELD: 'text-field',
   TEXTAREA: 'textarea',
   DROPDOWN: 'dropdown',
   TEXT_PANEL: 'text-panel',
+  FILE_UPLOAD: 'file-upload',
 } as const
 
 const textFieldSchema = z.object({
@@ -47,11 +48,20 @@ const textPanelSchema = z.object({
   content: z.string().min(1),
 })
 
+const uploadFileSchema = z.object({
+  type: z.literal(ELEMENT_TYPES.FILE_UPLOAD),
+  id: z.string().min(1),
+  name: z.string().min(1),
+  label: z.string(),
+  required: z.boolean(),
+})
+
 export const createElementSchema = z.discriminatedUnion('type', [
   textFieldSchema,
   textareaSchema,
   dropdownSchema,
   textPanelSchema,
+  uploadFileSchema,
 ])
 
 export type CreateElementSchema = z.infer<typeof createElementSchema>

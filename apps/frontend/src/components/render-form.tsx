@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type FormElement, type TKForm, generateZodSchema } from '@te-kudasai/forms'
 import { useForm, useFormContext } from 'react-hook-form'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { Textarea } from './ui/textarea'
 
 function ElementFieldRenderer({ element }: { element: FormElement }) {
@@ -57,6 +57,12 @@ function ElementFieldRenderer({ element }: { element: FormElement }) {
             </Select>
           )}
 
+          {element.type === 'file-upload' && (
+            <FormControl>
+              <Input type="file" value={field.value?.filename} onChange={(e) => field.onChange(e.target.files?.[0])} />
+            </FormControl>
+          )}
+
           <FormMessage />
         </FormItem>
       )}
@@ -88,7 +94,7 @@ const generateDefaultValues = (tkForm: TKForm, ticket?: Ticket) => {
 
 export interface FormSubmitData {
   summary: string
-  formResponse: Record<string, string | undefined>
+  formResponse: unknown
 }
 
 export interface RenderProps {

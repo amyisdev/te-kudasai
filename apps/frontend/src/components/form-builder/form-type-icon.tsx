@@ -1,5 +1,5 @@
 import type { FormElementType } from '@te-kudasai/forms'
-import { AlignLeft, FileText, List, Type } from 'lucide-react'
+import { AlignLeft, FileText, FileUp, List, Type } from 'lucide-react'
 
 export default function FormTypeIcon({ type, className }: { type: FormElementType; className?: string }) {
   switch (type) {
@@ -11,5 +11,7 @@ export default function FormTypeIcon({ type, className }: { type: FormElementTyp
       return <List className={className} />
     case 'text-panel':
       return <FileText className={className} />
+    case 'file-upload':
+      return <FileUp className={className} />
   }
 }

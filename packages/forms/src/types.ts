@@ -44,6 +44,12 @@ interface TextPanelElement extends FormElementBase {
   content: string
 }
 
-export type FormElement = TextFieldElement | TextareaElement | DropdownElement | TextPanelElement
+interface FileUploadElement extends FormElementBase {
+  type: 'file-upload'
+  label: string
+  required: boolean
+}
+
+export type FormElement = TextFieldElement | TextareaElement | DropdownElement | TextPanelElement | FileUploadElement
 
 export type FormElementType = FormElement['type']

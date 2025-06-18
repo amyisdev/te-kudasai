@@ -84,6 +84,10 @@ function AddElementButtons({ createNewElement }: { createNewElement: (type: Form
         <FormTypeIcon type="text-panel" className="h-4 w-4" />
         Text Panel
       </Button>
+      <Button type="button" variant="outline" onClick={() => createNewElement('file-upload')}>
+        <FormTypeIcon type="file-upload" className="h-4 w-4" />
+        File Upload
+      </Button>
     </div>
   )
 }
@@ -193,7 +197,7 @@ function ElementProperties({
             />
           )}
 
-          {(element.type === 'text-field' || element.type === 'textarea') && (
+          {(element.type === 'text-field' || element.type === 'textarea' || element.type === 'file-upload') && (
             <>
               <FormField
                 control={form.control}
