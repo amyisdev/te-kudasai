@@ -10,7 +10,16 @@ function ticketFactory(overrides: Partial<TicketForAgent> = {}): TicketForAgent 
     createdAt: '2021-01-01',
     updatedAt: '2021-01-01',
     formId: 'sample-form',
-    formResponse: { name: 'Jane Doe', message: 'Test Message', priority: 'high' },
+    formResponse: {
+      name: 'Jane Doe',
+      message: 'Test Message',
+      priority: 'high',
+      attachment: {
+        filename: 'attachment.pdf',
+        originalName: 'attachment.pdf',
+        url: 'https://example.com/attachment.pdf',
+      },
+    },
     form: forms[1],
     reporterId: 'jane.doe',
     assigneeId: null,

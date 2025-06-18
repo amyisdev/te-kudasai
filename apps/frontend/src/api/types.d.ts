@@ -1,4 +1,4 @@
-import type { TKForm } from '@te-kudasai/forms'
+import type { FileUploadResponse, TKForm } from '@te-kudasai/forms'
 
 export interface SuccessResponse<T> {
   status: 'success'
@@ -35,7 +35,7 @@ export interface Ticket {
   updatedAt: string
 
   formId: string
-  formResponse: Record<string, string>
+  formResponse: Record<string, string | FileUploadResponse>
   formOpen: boolean
 }
 

@@ -53,3 +53,9 @@ interface FileUploadElement extends FormElementBase {
 export type FormElement = TextFieldElement | TextareaElement | DropdownElement | TextPanelElement | FileUploadElement
 
 export type FormElementType = FormElement['type']
+
+export type FileUploadResponse = {
+  filename: string
+  originalName: string
+  url: string
+}

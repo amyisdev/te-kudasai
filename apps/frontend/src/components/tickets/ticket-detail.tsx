@@ -45,7 +45,13 @@ export default function TicketDetail({ ticket }: { ticket: TicketForUser }) {
             {formResponse.map(({ key, value }) => (
               <div key={key}>
                 <span className="text-sm font-medium">{key}: </span>
-                <span className="text-muted-foreground">{value}</span>
+                {typeof value === 'string' ? (
+                  <span className="text-muted-foreground">{value}</span>
+                ) : (
+                  <a href={value.url} target="_blank" rel="noopener noreferrer">
+                    {value.originalName}
+                  </a>
+                )}
               </div>
             ))}
           </div>

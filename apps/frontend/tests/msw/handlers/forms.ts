@@ -49,6 +49,13 @@ export const forms = [
           { id: 'low', value: 'low', label: 'Low' },
         ],
       },
+      {
+        type: 'file-upload',
+        name: 'attachment',
+        label: 'Attachment',
+        id: 'attachment',
+        required: false,
+      },
     ],
     hasTickets: true,
   }),

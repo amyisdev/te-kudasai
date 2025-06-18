@@ -74,7 +74,7 @@ const generateDefaultValues = (tkForm: TKForm, ticket?: Ticket) => {
   const defaultValues: Record<string, string> = {}
 
   for (const element of tkForm.elements) {
-    const ticketValue = ticket?.formResponse?.[element.name]
+    const ticketValue = ticket?.formResponse?.[element.name] as string
 
     switch (element.type) {
       case 'text-field':

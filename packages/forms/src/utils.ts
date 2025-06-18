@@ -7,7 +7,7 @@ type ValidZodFile = z.ZodFile | z.ZodOptional<z.ZodFile>
 type ValidZodSchema = ValidZodString | ValidZodEnum | ValidZodFile
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
-const VALID_MIME_TYPES = ['image/jpeg', 'image/png', 'image/heic', 'application/pdf']
+const VALID_MIME_TYPES = ['image/jpeg', 'image/png', 'image/heic', 'application/pdf', 'text/plain']
 
 export function generateZodSchema(tkForm: TKForm) {
   const formSchema: Record<string, ValidZodSchema> = {}
